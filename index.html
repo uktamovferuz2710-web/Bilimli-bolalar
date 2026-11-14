@@ -205,7 +205,6 @@
             return array.sort(() => Math.random() - 0.5);
         }
 
-        // XP ga qarab Rank (Unvon)ni aniqlash funksiyasi
         function getRankInfo(xp) {
             if (xp >= 4000) return { name: "⚡ Daho (Grandmaster)", color: "bg-purple-100 text-purple-800 border-purple-300" };
             if (xp >= 2000) return { name: "👑 Professor (Master)", color: "bg-amber-100 text-amber-800 border-amber-300" };
@@ -228,13 +227,14 @@
             const grid = document.getElementById("subjectsGrid");
             grid.innerHTML = "";
             list.forEach(subj => {
-                let savedQ = localStorage.getItem(`subject_q_${subj.id}`) || 1;
+                // localStorage dan o'sha fan uchun saqlangan savol raqamini o'qiymiz
+                let savedQ = parseInt(localStorage.getItem(`subject_q_${subj.id}`)) || 1;
                 grid.innerHTML += `
                     <div onclick="openModal(${subj.id})" class="bg-white p-7 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-slate-100 hover:border-blue-500 flex flex-col justify-between group">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full group-hover:bg-blue-600 group-hover:text-white transition">Modul #${subj.id}</span>
-                                <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-lg">Savol: #${savedQ}</span>
+                                <span class="text-xs font-bold text-blue-800 bg-blue-100 px-2.5 py-1 rounded-lg">Savol: #${savedQ}</span>
                             </div>
                             <h3 class="text-xl font-black text-blue-950 mb-2">${subj.name}</h3>
                             <p class="text-slate-600 text-sm leading-relaxed mb-4">${subj.desc}</p>
@@ -256,6 +256,8 @@
 
         function openModal(id) {
             activeSubject = subjects.find(s => s.id === id);
+            
+            // Modal ochilganda saqlangan savol raqamini aniq yuklaymiz (masalan: 11)
             questionCount = parseInt(localStorage.getItem(`subject_q_${activeSubject.id}`)) || 1;
             
             document.getElementById("modalCategoryBadge").innerText = activeSubject.name;
@@ -337,10 +339,12 @@
                 currentXp += currentXpReward;
                 localStorage.setItem("portal_xp", currentXp);
                 
+                // Savol to'g'ri ishlangan zahoti o'sha fan uchun keyingi savol raqami dərhol saqlanadi
                 questionCount++;
                 localStorage.setItem(`subject_q_${activeSubject.id}`, questionCount);
 
                 updateUI();
+                renderSubjects(subjects); // Asosiy ekrandagi savol raqamini ham yangilash uchun
 
                 resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP qo'shildi. Keyingi savol...`;
                 resultEl.className = "font-bold text-sm text-emerald-600 text-center";
