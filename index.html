@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali PRO — To'liq Darslar va Mavzular</title>
+    <title>Bilimlar Portali PRO — Kvadrat Tenglama va Qisqa Ko'paytirish</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -29,7 +29,7 @@
                 <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
                 <div>
                     <h1 class="text-2xl font-black tracking-tight text-white">Bilimlar Portali PRO</h1>
-                    <p class="text-xs text-blue-300">15 ta fan • Barcha darslar va mavzular</p>
+                    <p class="text-xs text-blue-300">Algebra, Kvadrat Tenglamalar va Cheksiz Testlar</p>
                 </div>
             </div>
             
@@ -76,7 +76,7 @@
                 <h2 id="modalTitle" class="text-3xl font-black text-white mb-2"></h2>
                 <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
                 
-                <h3 class="font-bold text-lg text-yellow-400 mb-4">📚 Barcha Darslar va Mavzular:</h3>
+                <h3 class="font-bold text-lg text-yellow-400 mb-4">📚 Barcha Mavzular va Darslar:</h3>
                 <div id="topicsListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
 
@@ -150,110 +150,157 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // 15 ta Fan va ularning to'liq mavzular va darslar bazasi
         const subjects = [
             {
-                id: 1, name: "1. Matematika", desc: "Arifmetika, algebra, geometriya va tenglamalar.",
+                id: 1, name: "1. Matematika", desc: "Arifmetika, qisqa ko'paytirish va kvadrat tenglamalar.",
                 topics: [
-                    { title: "1-Dars: Natural sonlar va amallar", theory: "Natural sonlar buyumlarni sanashda ishlatiladi: 1, 2, 3... Ularni qo'shish va ayirish eng asosiy hisob-kitobdir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"15 + 25 nechiga teng?", a:"40", w:["35","45","50"]},{q:"8 × 7 nechiga teng?", a:"56", w:["48","64","54"]}] },
-                    { title: "2-Dars: Kasrlar bilan ishlash", theory: "Kasr sonlar butunning qismini bildiradi (masalan, 1/2 pirogning yarmi demakdir).", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"1/2 + 1/2 yig'indisi nechiga teng?", a:"1", w:["1/4","2","0.5"]},{q:"0.5 soni kasr ko'rinishida qanday yoziladi?", a:"1/2", w:["1/3","1/4","3/4"]}] },
-                    { title: "3-Dars: Oddiy tenglamalar", theory: "Tenglama — ichida noma'lum harf (masalan, x) bo'lgan tenglik. Maqsad x ning qiymatini topish.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"x + 10 = 25 tenglamasida x nechiga teng?", a:"15", w:["10","20","35"]},{q:"3x = 18 tenglamasida x nechiga teng?", a:"6", w:["5","7","8"]}] }
+                    { title: "1-Dars: Qo'shish va Ayirish (Cheksiz)", theory: "Natural sonlarni qo'shish va ayirish amallari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                    { title: "2-Dars: Qisqa ko'paytirish formulalari (Cheksiz)", theory: "(a+b)² = a² + 2ab + b² va boshqa formulalar yordamida hisoblash.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                    { title: "3-Dars: Kvadrat tenglamalar (Cheksiz)", theory: "ax² + bx + c = 0 ko'rinishidagi tenglamalar va diskriminant (D = b² - 4ac) usuli.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, elektr va optika.",
                 topics: [
-                    { title: "1-Dars: Tezlik, yo'l va vaqt", theory: "Jism ma'lum vaqt ichida qancha masofa o'tsa, uning yo'li topiladi. Formula: S = v * t.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Jism 20 m/s tezlik bilan 5 sekund harakatlandi. Yo'l qancha?", a:"100 m", w:["50 m","120 m","80 m"]}] },
-                    { title: "2-Dars: Kuch va Nyuton qonunlari", theory: "Kuch jismning harakat holatini o'zgartiruvchi ta'sirdir. U Nyuton (N) da o'lchanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Kuchning o'lchov birligi nima?", a:"Nyuton (N)", w:["Joul","Vatt","Paskal"]}] }
+                    { title: "1-Dars: Tezlik va Yo'l (Cheksiz)", theory: "S = v * t formulasi bo'yicha masalalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                    { title: "2-Dars: Kuch va Bosim (Cheksiz)", theory: "Nyuton qonunlari va bosim hisoblash.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 3, name: "3. Kimyo", desc: "Elementlar jadvali va reaksiyalar.",
                 topics: [
-                    { title: "1-Dars: Atomlar va molekulalar", theory: "Barcha moddalar juda kichik zarrachalar — atomlardan tashkil topgan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Vodorodning atom raqami nechiga teng?", a:"1", w:["2","4","8"]},{q:"Kislorodning kimyoviy belgisi nima?", a:"O", w:["C","N","H"]}] },
-                    { title: "2-Dars: Kimyoviy reaksiyalar", theory: "Moddalarning o'zaro ta'sirlashib boshqa yangi moddaga aylanishi reaksiya deyiladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Suvning kimyoviy formulasi qanday?", a:"H2O", w:["CO2","NaCl","CH4"]}] }
+                    { title: "1-Dars: Atomlar va Massalar", theory: "Kimyoviy elementlar va ularning massasi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                    { title: "2-Dars: Reaksiyalar va Formulalar", theory: "Moddalar almashinuvi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 4, name: "4. Biologiya", desc: "Hujayra, anatomiya va tabiat.",
                 topics: [
-                    { title: "1-Dars: Hujayra tuzilishi", theory: "Tirik organizmlarning asosiy qurilish birligi bu hujayradir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Hujayraning energetik stansiyasi qaysi?", a:"Mitoxondriya", w:["Yadro","Ribosoma","Vakuola"]}] },
-                    { title: "2-Dars: Odam anatomiyasi", theory: "Inson organizmida yurak qon aylanishini ta'minlaydigan asosiy organdir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Odam yuragi nechta kameradan iborat?", a:"4 ta", w:["2 ta","3 ta","5 ta"]}] }
+                    { title: "1-Dars: Hujayra tuzilishi", theory: "Tirik organizm hujayralari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                    { title: "2-Dars: Odam anatomiyasi", theory: "A'zolar tizimi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 5, name: "5. Informatika", desc: "Algoritmlar va kompyuter.",
                 topics: [
-                    { title: "1-Dars: Axborot o'lchov birliklari", theory: "Kompyuterda ma'lumotlar baytlar va kilobytlarda saqlanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"1 Kilobayt necha baytga teng?", a:"1024 bayt", w:["1000 bayt","512 bayt","2048 bayt"]}] }
+                    { title: "1-Dars: Axborot o'lchov birliklari", theory: "Bayt va kilobaytlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 6, name: "6. Tarix", desc: "O'zbekiston va jahon tarixi.",
                 topics: [
-                    { title: "1-Dars: Buyuk sarkardalar va sanalar", theory: "O'zbek xalqining boy tarixi davomida ko'plab buyuk davlatlar va allomalar o'tgan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Amir Temur qaysi yilda tug'ilgan?", a:"1336-yil", w:["1370-yil","1405-yil","1441-yil"]}] }
+                    { title: "1-Dars: Buyuk sarkardalar", theory: "Tarixiy sanalar va shaxslar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 7, name: "7. Geografiya", desc: "Materiklar, davlatlar va iqlim.",
                 topics: [
-                    { title: "1-Dars: Yer yuzining tuzilishi", theory: "Yer sharining asosiy qismini okeanlar va dengizlar tashkil qiladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Dunyodagi eng katta cho'l qaysi?", a:"Sahroi Kabir", w:["Qizilqum","Gobi","Karakum"]}] }
+                    { title: "1-Dars: Yer yuzining tuzilishi", theory: "Okeanlar va cho'llar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 8, name: "8. Ona tili", desc: "Imlo, fonetika va so'z turkumlari.",
                 topics: [
-                    { title: "1-Dars: So'z turkumlari", theory: "O'zbek tilida ot, sifat, son, olmosh va fe'l kabi so'z turkumlari bor.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Harakatni bildiruvchi so'z turkumi nima?", a:"Fe'l", w:["Ot","Sifat","Ravish"]}] }
+                    { title: "1-Dars: So'z turkumlari", theory: "Ot, sifat, fe'l.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 9, name: "9. Adabiyot", desc: "Mumtoz va zamonaviy asarlar.",
                 topics: [
-                    { title: "1-Dars: O'zbek mumtoz adabiyoti", theory: "Alisher Navoiy o'zbek adabiyotining ulug' namoyandasi hisoblanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'Xamsa' dostoni nechta qismdan iborat?", a:"5 ta", w:["4 ta","6 ta","3 ta"]}] }
+                    { title: "1-Dars: O'zbek mumtoz adabiyoti", theory: "Navoiy asarlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 10, name: "10. Ingliz tili", desc: "Grammar, Vocabulary va Tenses.",
                 topics: [
-                    { title: "1-Dars: English Basics", theory: "Ingliz tilida gaplar asosan ega, kesim va to'ldiruvchi tartibida tuziladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'Knowledge' so'zining tarjimasi?", a:"Bilim", w:["Kitob","Maktab","Kuch"]}] }
+                    { title: "1-Dars: English Basics", theory: "Ingliz tili asoslari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 11, name: "11. Astronomiya", desc: "Koinot va sayyoralar.",
                 topics: [
-                    { title: "1-Dars: Quyosh sistemasi", theory: "Quyosh atrofida 8 ta asosiy sayyora aylanib yuradi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Quyoshga eng yaqin sayyora qaysi?", a:"Merkuriy", w:["Venera","Yer","Mars"]}] }
+                    { title: "1-Dars: Quyosh sistemasi", theory: "Sayyoralar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 12, name: "12. Iqtisodiyot", desc: "Moliya, bozor va soliqlar.",
                 topics: [
-                    { title: "1-Dars: Bozor va narxlar", theory: "Bozorda narxlar talab va taklif asosida belgilanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Mahsulotga 20% chegirma berilsa nima bo'ladi?", a:"Narxi arzonlashadi", w:["Qimmatlashadi","O'zgarmaydi","Yo'qoladi"]}] }
+                    { title: "1-Dars: Bozor va narxlar", theory: "Chegirmalar va foizlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya va qonunlar.",
                 topics: [
-                    { title: "1-Dars: Asosiy qonunimiz", theory: "O'zbekiston Respublikasining Konstitutsiyasi davlatning bosh qonunidir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Konstitutsiya qachon qabul qilingan?", a:"1992-yil 8-dekabr", w:["1991-yil 1-sentabr","1993-yil 2-iyul","1990-yil"]}] }
+                    { title: "1-Dars: Asosiy qonunimiz", theory: "Konstitutsiya moddalari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 14, name: "14. Falsafa", desc: "Tafakkur va dunyoqarash.",
                 topics: [
-                    { title: "1-Dars: Qadimgi dunyo falsafasi", theory: "Falsafa insonning dunyoqarashi va tafakkurini rivojlantiradi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'O'zingni angla' hikmati kimga tegishli?", a:"Suqrot", w:["Arastu","Platon","Pifagor"]}] }
+                    { title: "1-Dars: Qadimgi dunyo falsafasi", theory: "Suqrot qarashlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
                 id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati va temperament.",
                 topics: [
-                    { title: "1-Dars: Temperament turlari", theory: "Insonlarning xulq-atvori ularning temperamentiga qarab farqlanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Tez jahli chiqadigan temperament turi?", a:"Xolerik", w:["Flegmatik","Sangvinik","Melanxolik"]}] }
+                    { title: "1-Dars: Temperament turlari", theory: "Xolerik va flegmatik.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             }
         ];
+
+        const factBanks = {
+            3: [
+                { q: "Vodorod (H) atom raqami nechiga teng?", a: "1", w: ["2", "4", "8"] },
+                { q: "Kislorod (O) atom massasi taxminan nechiga teng?", a: "16", w: ["8", "12", "32"] },
+                { q: "Oltin elementining kimyoviy belgisi nima?", a: "Au", w: ["Ag", "Fe", "Cu"] }
+            ],
+            4: [
+                { q: "Odam yuragi nechta kameradan iborat?", a: "4 ta", w: ["2 ta", "3 ta", "5 ta"] },
+                { q: "Hujayraning energetik stansiyasi qaysi?", a: "Mitoxondriya", w: ["Ribosoma", "Yadro", "Vakuola"] }
+            ],
+            6: [
+                { q: "Amir Temur qaysi yilda tavallud topgan?", a: "1336-yil", w: ["1370-yil", "1405-yil", "1441-yil"] },
+                { q: "Alisher Navoiy qaysi yilda tug'ilgan?", a: "1441-yil", w: ["1483-yil", "1336-yil", "1501-yil"] }
+            ],
+            7: [
+                { q: "Yaponiyaning poytaxti qaysi shahar?", a: "Tokio", w: ["Seul", "Pekin", "Kioto"] },
+                { q: "Dunyodagi eng katta cho'l qaysi?", a: "Sahroi Kabir", w: ["Qizilqum", "Gobi", "Atakama"] }
+            ],
+            8: [
+                { q: "Qaysi so'z turkumi harakatni bildiradi?", a: "Fe'l", w: ["Ot", "Sifat", "Ravish"] },
+                { q: "'Go'zal' so'zining ma'nodoshi qaysi?", a: "Chiroyli", w: ["Xunuk", "Katta", "Tez"] }
+            ],
+            9: [
+                { q: "'Xamsa'ning birinchi dostoni qaysi?", a: "Hayrat ul-abror", w: ["Farhod va Shirin", "Layli va Majnun", "Sab'ai sayyor"] },
+                { q: "'Mehrobdan chayon' romanini kim yozgan?", a: "Abdulla Qodiriy", w: ["Oybek", "G'afur G'ulom", "Cho'lpon"] }
+            ],
+            10: [
+                { q: "'Knowledge' so'zining tarjimasi?", a: "Bilim", w: ["Kuch", "Kitob", "Maktab"] },
+                { q: "'They ___ students' gapiga mosini qo'ying:", a: "are", w: ["is", "am", "was"] }
+            ],
+            11: [
+                { q: "Quyosh sistemasida nechta sayyora bor?", a: "8 ta", w: ["9 ta", "7 ta", "10 ta"] },
+                { q: "Halqalari bor gigant sayyora qaysi?", a: "Saturn", w: ["Mars", "Merkuriy", "Venera"] }
+            ],
+            13: [
+                { q: "O'zbekiston Konstitutsiyasi nechta moddadan iborat?", a: "155 modda", w: ["128 modda", "100 modda", "200 modda"] },
+                { q: "Davlat hokimiyatining birdan-bir manbai?", a: "Xalq", w: ["Prezident", "Vazirlar", "Sud"] }
+            ],
+            14: [
+                { q: "'O'zingni angla' hikmati kimga tegishli?", a: "Suqrot", w: ["Arastu", "Platon", "Pifagor"] },
+                { q: "Mantiq fanining asoschisi kim?", a: "Arastu", w: ["Demokrit", "Geraklit", "Epikur"] }
+            ],
+            15: [
+                { q: "Tez jahli chiqadigan temperament turi?", a: "Xolerik", w: ["Sangvinik", "Flegmatik", "Melanxolik"] },
+                { q: "Og'ir-bosiq temperament turi qaysi?", a: "Flegmatik", w: ["Xolerik", "Sangvinik", "Melanxolik"] }
+            ]
+        };
 
         let currentUserId = localStorage.getItem("portal_user_id") || "";
         let currentUser = localStorage.getItem("portal_user") || "Mehmon";
         let currentXp = parseInt(localStorage.getItem("portal_xp")) || 0;
         let activeSubject = null;
-        let activeTopic = null;
+        let activeTopicIndex = 0;
         let questionCount = 1;
         let currentLevel = 1;
         let currentCorrectAnswer = "";
@@ -318,22 +365,36 @@
                     localStorage.setItem("portal_xp", currentXp);
                     localStorage.setItem("portal_user", currentUser);
                     localStorage.setItem("portal_user_id", currentUserId);
+
+                    if (data.progress) {
+                        for (let key in data.progress) {
+                            localStorage.setItem(key, data.progress[key]);
+                        }
+                    }
                     statusEl.innerText = "✅ Profil yuklandi!";
                 } else {
-                    db.ref('users/' + userId).set({ name: currentUser, xp: currentXp });
+                    db.ref('users/' + userId).set({ name: currentUser, xp: currentXp, progress: {} });
                     localStorage.setItem("portal_user", currentUser);
                     localStorage.setItem("portal_user_id", currentUserId);
                     statusEl.innerText = "🎉 Yangi profil ochildi!";
                 }
                 statusEl.className = "text-xs font-semibold text-emerald-400";
                 updateUI();
+                renderSubjects(subjects);
                 setTimeout(() => closeAuthModal(), 1200);
             });
         }
 
         function syncDataToCloud() {
             if (!currentUserId) return;
-            db.ref('users/' + currentUserId).update({ name: currentUser, xp: currentXp });
+            let progress = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if (key.startsWith("subj_")) {
+                    progress[key] = localStorage.getItem(key);
+                }
+            }
+            db.ref('users/' + currentUserId).update({ name: currentUser, xp: currentXp, progress: progress });
         }
 
         function syncDataFromCloud(userId) {
@@ -344,7 +405,13 @@
                     currentUser = data.name || currentUser;
                     localStorage.setItem("portal_xp", currentXp);
                     localStorage.setItem("portal_user", currentUser);
+                    if (data.progress) {
+                        for (let key in data.progress) {
+                            localStorage.setItem(key, data.progress[key]);
+                        }
+                    }
                     updateUI();
+                    renderSubjects(subjects);
                 }
             });
         }
@@ -364,7 +431,7 @@
                             <p class="text-slate-300 text-sm leading-relaxed mb-4">${subj.desc}</p>
                         </div>
                         <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-yellow-400">
-                            <span>📚 Mavzular va Darslar</span>
+                            <span>📚 Cheksiz Testlar</span>
                             <span>O'rganish →</span>
                         </div>
                     </div>
@@ -388,13 +455,14 @@
             const container = document.getElementById("topicsListContainer");
             container.innerHTML = "";
             activeSubject.topics.forEach((top, index) => {
+                let savedQ = parseInt(localStorage.getItem(`subj_${activeSubject.id}_top_${index}`)) || 1;
                 container.innerHTML += `
                     <div onclick="openLesson(${index})" class="bg-slate-800/80 p-4 rounded-2xl border border-white/10 hover:border-yellow-400 cursor-pointer transition flex items-center justify-between">
                         <div>
                             <h4 class="font-bold text-white text-sm mb-1">${top.title}</h4>
-                            <p class="text-xs text-slate-400">Sodda tushuntirish va test</p>
+                            <p class="text-xs text-yellow-400">Savol: #${savedQ} • Cheksiz rejim</p>
                         </div>
-                        <span class="text-yellow-400 font-bold text-sm">O'qish →</span>
+                        <span class="text-yellow-400 font-bold text-sm">Davom etish →</span>
                     </div>
                 `;
             });
@@ -406,15 +474,17 @@
         }
 
         function openLesson(topicIndex) {
-            activeTopic = activeSubject.topics[topicIndex];
-            questionCount = 1;
+            activeTopicIndex = topicIndex;
+            let top = activeSubject.topics[topicIndex];
+            
+            questionCount = parseInt(localStorage.getItem(`subj_${activeSubject.id}_top_${topicIndex}`)) || 1;
 
             document.getElementById("subjectTopicsView").classList.add("hidden");
             document.getElementById("lessonQuizView").classList.remove("hidden");
 
-            document.getElementById("lessonTitle").innerText = activeTopic.title;
-            document.getElementById("lessonTheory").innerText = activeTopic.theory;
-            document.getElementById("lessonVideo").src = activeTopic.video;
+            document.getElementById("lessonTitle").innerText = top.title;
+            document.getElementById("lessonTheory").innerText = top.theory;
+            document.getElementById("lessonVideo").src = top.video;
 
             loadNextQuestion();
         }
@@ -423,19 +493,87 @@
             document.getElementById("lessonQuizView").classList.add("hidden");
             document.getElementById("subjectTopicsView").classList.remove("hidden");
             document.getElementById("lessonVideo").src = "";
+            openSubjectModal(activeSubject.id);
         }
 
         function loadNextQuestion() {
             let rewardTier = Math.floor((questionCount - 1) / 10) + 1;
             currentXpReward = rewardTier;
 
-            document.getElementById("quizCounter").innerText = `Savol #${questionCount}`;
+            document.getElementById("quizCounter").innerText = `Savol #${questionCount} • Cheksiz rejim`;
             document.getElementById("quizXpReward").innerText = `+${currentXpReward} XP Mukofot`;
 
-            let qItem = activeTopic.qList[rand(0, activeTopic.qList.length - 1)];
-            let q = qItem.q;
-            let correct = qItem.a;
-            let options = shuffle([correct, ...qItem.w]);
+            let q = "", correct = "", options = [];
+
+            // 1. MATEMATIKA - QISQA KO'PAYTIRISHLAR, KVADRAT TENGLAMALAR VA ARIFMETIKA
+            if (activeSubject.id === 1) {
+                if (activeTopicIndex === 0) {
+                    // Oddiy arifmetika (qo'shish/ayirish)
+                    let a = rand(10 * rewardTier, 100 * rewardTier), b = rand(5 * rewardTier, 80 * rewardTier);
+                    q = `${a} + ${b} nechiga teng?`;
+                    correct = String(a + b);
+                    let num = Number(correct);
+                    options = shuffle([correct, String(num + rand(2, 15)), String(num - rand(2, 10)), String(num + rand(20, 35))]);
+                } 
+                else if (activeTopicIndex === 1) {
+                    // Qisqa ko'paytirish formulalari (Masalan: (a+b)^2 yoki a^2 - b^2)
+                    let a = rand(2, 9), b = rand(1, 8);
+                    let type = rand(1, 3);
+                    if (type === 1) {
+                        // (a + b)^2 = a^2 + 2ab + b^2
+                        let res = (a + b) * (a + b);
+                        q = `(${a} + ${b})² ifodaning qiymatini toping:`;
+                        correct = String(res);
+                        options = shuffle([correct, String(res + rand(2, 10)), String(res - rand(2, 6)), String(res + rand(12, 20))]);
+                    } else if (type === 2) {
+                        // a^2 - b^2 = (a-b)(a+b)
+                        let res = (a * a) - (b * b);
+                        q = `${a}² - ${b}² ifodaning qiymatini toping:`;
+                        correct = String(res);
+                        options = shuffle([correct, String(res + rand(3, 11)), String(res - rand(2, 7)), String(res + rand(15, 25))]);
+                    } else {
+                        // (a - b)^2
+                        let res = (a - b) * (a - b);
+                        q = `(${a} - ${b})² ifodaning qiymatini toping:`;
+                        correct = String(res);
+                        options = shuffle([correct, String(res + rand(2, 8)), String(res + rand(10, 18)), String(Math.abs(res - rand(1, 5)) || 4)]);
+                    }
+                } 
+                else {
+                    // Kvadrat tenglamalar (x^2 - sum*x + prod = 0 -> ildizlari x1 va x2)
+                    let x1 = rand(1, 6 + rewardTier);
+                    let x2 = rand(1, 6 + rewardTier);
+                    let bCoeff = -(x1 + x2);
+                    let cCoeff = x1 * x2;
+                    let bStr = bCoeff >= 0 ? `+ ${bCoeff}x` : `- ${Math.abs(bCoeff)}x`;
+                    let cStr = cCoeff >= 0 ? `+ ${cCoeff}` : `- ${Math.abs(cCoeff)}`;
+                    q = `x² ${bStr} ${cStr} = 0 kvadrat tenglamaning ildizlaridan birini toping:`;
+                    correct = String(x1);
+                    options = shuffle([correct, String(x2), String(x1 + 2), String(Math.abs(x1 - 3) || 5)]);
+                }
+            } 
+            // 2. FIZIKA - CHEKSIZ GENERATOR
+            else if (activeSubject.id === 2) {
+                let v = rand(10, 25 * rewardTier), t = rand(2, 10);
+                q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. Bosib o'tgan yo'li qancha?`;
+                correct = `${v * t} m`;
+                options = shuffle([correct, `${v * t + 15} m`, `${v + t} m`, `${Math.abs(v * t - 10)} m`]);
+            }
+            // 5. INFORMATIKA - CHEKSIZ GENERATOR
+            else if (activeSubject.id === 5) {
+                let kb = rand(2, 16 * rewardTier);
+                q = `${kb} Kilobayt (KB) necha Baytga teng?`;
+                correct = `${kb * 1024} bayt`;
+                options = shuffle([correct, `${kb * 1000} bayt`, `${kb * 512} bayt`, `${kb * 8} bayt`]);
+            }
+            // BOSHQA FANLAR (Faktlar bazasidan)
+            else {
+                const bank = factBanks[activeSubject.id] || [{ q: "O'zbekiston poytaxti qaysi shahar?", a: "Toshkent", w: ["Samarqand", "Buxoro", "Xiva"] }];
+                const item = bank[rand(0, bank.length - 1)];
+                q = item.q;
+                correct = item.a;
+                options = shuffle([item.a, ...item.w]);
+            }
 
             currentCorrectAnswer = correct;
             document.getElementById("quizQuestion").innerText = q;
@@ -456,6 +594,8 @@
                 localStorage.setItem("portal_xp", currentXp);
                 
                 questionCount++;
+                localStorage.setItem(`subj_${activeSubject.id}_top_${activeTopicIndex}`, questionCount);
+
                 updateUI();
                 syncDataToCloud();
 
