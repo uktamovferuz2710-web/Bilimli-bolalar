@@ -3,39 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali — Cheksiz Testlar va XP</title>
+    <title>Bilimlar Portali Pro — Cheksiz Ta'lim va Reyting</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800">
+<body class="bg-slate-50 min-h-screen text-slate-800 font-sans selection:bg-blue-600 selection:text-white">
 
-    <!-- HEADER & USER STATS -->
-    <header class="bg-blue-900 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-                <h1 class="text-2xl font-bold">Bilimlar Portali ∞</h1>
-                <p class="text-sm text-blue-200">15 ta fan • Cheksiz savollar • Borgan sari qiyinlashuvchi tizim</p>
+    <!-- HEADER & NAVBAR -->
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white shadow-xl sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
+                <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight">Bilimlar Portali PRO</h1>
+                    <p class="text-xs text-blue-200">15 ta fan • Cheksiz intellektual ta'lim tizimi</p>
+                </div>
             </div>
             
-            <div class="flex items-center gap-4 bg-blue-800 px-4 py-2 rounded-xl shadow-inner">
-                <div>
-                    <span id="userNameDisplay" class="font-semibold block">Mehmon</span>
-                    <span class="text-xs text-yellow-300 font-bold" id="userXpDisplay">XP: 0</span>
+            <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 shadow-inner">
+                <div class="text-right">
+                    <span id="userNameDisplay" class="font-bold text-sm block text-yellow-300">Mehmon</span>
+                    <span class="text-xs text-blue-200" id="userXpDisplay">XP: 0 • Daraja 1</span>
                 </div>
-                <button onclick="openAuthModal()" class="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-semibold px-3 py-1.5 rounded-lg text-sm transition">Kirish / Profil</button>
+                <button onclick="openAuthModal()" class="bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold px-4 py-2 rounded-xl text-sm transition shadow-md">Profil</button>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN CONTAINER -->
     <main class="max-w-7xl mx-auto px-4 py-8">
         
-        <!-- SEARCH & LEADERBOARD BUTTON -->
+        <!-- SEARCH & LEADERBOARD BAR -->
         <div class="flex flex-col md:flex-row gap-4 mb-8">
-            <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Matematika, Ingliz tili)..." 
-                class="flex-grow px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm"
-                onkeyup="searchSubjects()">
-            <button onclick="openLeaderboard()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
-                🏆 Global Reyting (XP)
+            <div class="relative flex-grow">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">🔍</span>
+                <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Matematika, Fizika, Ingliz tili)..." 
+                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm transition"
+                    onkeyup="searchSubjects()">
+            </div>
+            <button onclick="openLeaderboard()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
+                🏆 Global Reyting
             </button>
         </div>
 
@@ -43,146 +49,142 @@
         <div id="subjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- MODAL (DETAILS, VIDEO, INFINITE QUIZ) -->
-    <div id="subjectModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
-            <h2 id="modalTitle" class="text-2xl font-bold text-blue-900 mb-1"></h2>
-            <p id="modalDesc" class="text-slate-600 text-sm mb-4"></p>
+    <!-- MODAL (SUBJECT LEARNING HUB) -->
+    <div id="subjectModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-3xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl border border-slate-100">
+            <button onclick="closeModal()" class="absolute top-5 right-5 bg-slate-100 hover:bg-slate-200 text-slate-600 w-10 h-10 rounded-full font-bold flex items-center justify-center transition">✕</button>
             
-            <!-- Video dars bo'limi -->
-            <div class="mb-5">
-                <h3 class="font-semibold text-base text-blue-800 mb-2">📺 Video Dars</h3>
-                <div class="bg-slate-900 rounded-xl overflow-hidden">
-                    <iframe id="modalVideo" class="w-full h-56 rounded-xl" src="" title="Video dars" frameborder="0" allowfullscreen></iframe>
+            <div class="flex items-center gap-3 mb-2">
+                <span id="modalCategoryBadge" class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">Fan</span>
+                <span id="modalLevelBadge" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">Daraja: 1</span>
+            </div>
+            <h2 id="modalTitle" class="text-3xl font-black text-blue-950 mb-2"></h2>
+            <p id="modalDesc" class="text-slate-600 mb-6 leading-relaxed"></p>
+            
+            <!-- Video Dars -->
+            <div class="mb-8">
+                <h3 class="font-bold text-lg text-slate-800 mb-3 flex items-center gap-2">📺 Video Qo'llanma Darsi</h3>
+                <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-lg aspect-video flex items-center justify-center">
+                    <iframe id="modalVideo" class="w-full h-full" src="" title="Video dars" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
 
-            <!-- Cheksiz Test bo'limi -->
-            <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
-                <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
-                    <span id="levelBadge" class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">Daraja (Level): 1</span>
-                    <span id="questionCounter" class="text-xs bg-blue-200 text-blue-900 font-bold px-3 py-1 rounded-full">Savol #1 • ∞ cheksiz</span>
-                    <span id="xpRewardBadge" class="text-xs bg-green-200 text-green-900 font-bold px-3 py-1 rounded-full">+20 XP</span>
+            <!-- Cheksiz Test Tizimi -->
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100 shadow-inner">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+                    <span id="quizCounter" class="text-xs font-bold bg-white text-blue-900 px-3 py-1.5 rounded-xl shadow-sm border border-blue-100">Savol #1 • Cheksiz</span>
+                    <span id="quizXpReward" class="text-xs font-bold bg-green-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+20 XP Mukofot</span>
                 </div>
                 
-                <p id="quizQuestion" class="font-bold text-lg text-slate-800 mb-4"></p>
-                <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
-                <p id="quizResult" class="mt-3 font-semibold text-sm min-h-[20px]"></p>
+                <p id="quizQuestion" class="font-bold text-xl text-slate-900 mb-6 leading-snug"></p>
+                <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"></div>
+                <p id="quizResult" class="font-bold text-sm min-h-[24px] text-center"></p>
             </div>
         </div>
     </div>
 
     <!-- AUTH MODAL -->
-    <div id="authModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 relative shadow-2xl">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
-            <h2 class="text-xl font-bold text-blue-900 mb-4">Profilga kirish</h2>
-            <input type="text" id="usernameInput" placeholder="Ismingizni kiriting..." class="w-full px-4 py-2 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
-            <button onclick="saveUser()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition">Saqlash va Boshlash</button>
+    <div id="authModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
+            <div class="text-center mb-6">
+                <div class="bg-blue-100 text-blue-600 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black mb-3">👤</div>
+                <h2 class="text-2xl font-black text-slate-900">Profilni Sozlash</h2>
+                <p class="text-xs text-slate-500 mt-1">Ismingizni kiriting va XP ballaringizni saqlang</p>
+            </div>
+            <input type="text" id="usernameInput" placeholder="Ismingiz (masalan: Alisher)..." class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium">
+            <button onclick="saveUser()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-blue-600/30 transition">Saqlash va Boshlash</button>
         </div>
     </div>
 
     <!-- LEADERBOARD MODAL -->
-    <div id="leaderboardModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 relative shadow-2xl">
-            <button onclick="closeLeaderboard()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
-            <h2 class="text-2xl font-bold text-blue-900 mb-4 text-center">🏆 Dunyo bo'yicha XP Reytingi</h2>
-            <ul id="leaderboardList" class="space-y-2"></ul>
+    <div id="leaderboardModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
+            <button onclick="closeLeaderboard()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
+            <div class="text-center mb-6">
+                <span class="text-4xl">🏆</span>
+                <h2 class="text-2xl font-black text-slate-900 mt-2">Global XP Reytingi</h2>
+                <p class="text-xs text-slate-500">Eng faol bilimdonlar jadvali</p>
+            </div>
+            <ul id="leaderboardList" class="space-y-3 max-h-80 overflow-y-auto pr-1"></ul>
         </div>
     </div>
 
     <script>
         const subjects = [
-            { id: 1, name: "1. Matematika", desc: "Arifmetika, algebra, geometriya va mantiqiy misollar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 2, name: "2. Fizika", desc: "Tezlik, kuch, energiya, bosim va elektr qonunlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 3, name: "3. Kimyo", desc: "Kimyoviy elementlar, valentlik, massalar va reaksiyalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 4, name: "4. Biologiya", desc: "Hujayra, odam anatomiyasi, botanika va genetika.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 5, name: "5. Informatika", desc: "Sanoq sistemalari (ikkilik/o'nlik), baytlar va dasturlash.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 6, name: "6. Tarix", desc: "Jahon va O'zbekiston tarixi, asrlar va buyuk sanalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 7, name: "7. Geografiya", desc: "Davlatlar, poytaxtlar, okeanlar, tog'lar va iqlim.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 8, name: "8. Ona tili", desc: "Imlo qoidalari, so'z turkumlari, sintaksis va ma'nodosh so'zlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 9, name: "9. Adabiyot", desc: "Shoir va yozuvchilar, dostonlar va badiiy asarlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 10, name: "10. Ingliz tili", desc: "So'z boyligi, grammatika, zamonlar va tarjimalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 11, name: "11. Astronomiya", desc: "Sayyoralar, yulduzlar, yorug'lik yili va koinot masofalari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 12, name: "12. Iqtisodiyot", desc: "Foizlar, foyda-zarar hisobi, valyuta va bozor qonunlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya moddalari, fuqarolik huquqlari va qonunlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 14, name: "14. Falsafa", desc: "Mutafakkirlar, mantiq qonunlari va falsafiy tushunchalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 15, name: "15. Psixologiya", desc: "Xotira, temperament turlari, hissiyotlar va muloqot.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+            { id: 1, name: "1. Matematika", desc: "Arifmetika, algebra, tenglamalar va mantiqiy hisob-kitoblar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, elektr va mexanik qonunlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 3, name: "3. Kimyo", desc: "Elementlar jadvali, atom massalari va kimyoviy reaksiyalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 4, name: "4. Biologiya", desc: "Hujayra tuzilishi, genetika, odam anatomiyasi va botanika.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 5, name: "5. Informatika", desc: "Algoritmlar, ikkilik sanoq sistemasi va axborot texnologiyalari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 6, name: "6. Tarix", desc: "O'zbekiston va jahon tarixi, buyuk sarkardalar va sanalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 7, name: "7. Geografiya", desc: "Materiklar, davlatlar, poytaxtlar, okeanlar va iqlim.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 8, name: "8. Ona tili", desc: "Imlo qoidalari, so'z turkumlari, fonetika va sintaksis.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 9, name: "9. Adabiyot", desc: "Mumtoz va zamonaviy o'zbek adabiyoti, dostonlar va romanlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 10, name: "10. Ingliz tili", desc: "Vocabulary, English grammar, tenses and translations.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 11, name: "11. Astronomiya", desc: "Koinot, sayyoralar sistemasi, yulduzlar va galaktikalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 12, name: "12. Iqtisodiyot", desc: "Bozor munosabatlari, foizlar, inflatsiya va moliyaviy savodxonlik.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya, fuqarolik huquqlari va qonunchilik asoslari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 14, name: "14. Falsafa", desc: "Borliq falsafasi, tafakkur va buyuk mutafakkirlar qarashlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati, temperament turlari va muloqot sirlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
         ];
 
-        // Boshqa fanlar uchun katta faktlar bazasi (har safar aralashtirib millionlab kombinatsiya yasaydi)
         const factBanks = {
-            3: [ // Kimyo
-                { q: "Vodorod (H) ning atom raqami nechiga teng?", a: "1", w: ["2", "4", "8"] },
-                { q: "Kislorod (O) ning atom massasi taxminan nechiga teng?", a: "16", w: ["8", "12", "32"] },
-                { q: "Uglerod (C) ning atom raqami nechiga teng?", a: "6", w: ["12", "14", "4"] },
+            3: [
+                { q: "Vodorod (H) atom raqami nechiga teng?", a: "1", w: ["2", "4", "8"] },
+                { q: "Kislorod (O) atom massasi taxminan nechiga teng?", a: "16", w: ["8", "12", "32"] },
                 { q: "Oltin elementining kimyoviy belgisi nima?", a: "Au", w: ["Ag", "Fe", "Cu"] },
                 { q: "Temir elementining kimyoviy belgisi nima?", a: "Fe", w: ["Te", "Tm", "Pb"] },
-                { q: "Kumush elementining kimyoviy belgisi nima?", a: "Ag", w: ["Au", "Al", "Si"] },
-                { q: "Karbonat angidrid gazining formulasi qanday?", a: "CO2", w: ["CO", "H2O", "CH4"] },
-                { q: "Sulfat kislotaning formulasi qaysi?", a: "H2SO4", w: ["HCl", "HNO3", "NaOH"] }
+                { q: "Karbonat angidrid gazining formulasi qanday?", a: "CO2", w: ["CO", "H2O", "CH4"] }
             ],
-            4: [ // Biologiya
+            4: [
                 { q: "Odam yuragi nechta kameradan iborat?", a: "4 ta", w: ["2 ta", "3 ta", "5 ta"] },
-                { q: "Hujayraning energetik stansiyasi qaysi organoid?", a: "Mitoxondriya", w: ["Ribosoma", "Yadro", "Vakuola"] },
-                { q: "Qonning qizil rangini beruvchi oqsil nima?", a: "Gemoglobin", w: ["Insulin", "Keratin", "Kollagen"] },
-                { q: "DNK molekulasining tuzilishi qanday shaklda?", a: "Qo'sh spiral", w: ["Yassi doira", "Kub", "To'g'ri chiziq"] },
-                { q: "O'simlik barglariga yashil rang beruvchi modda?", a: "Xlorofill", w: ["Karotin", "Kraxmal", "Sellyuloza"] }
+                { q: "Hujayraning energetik stansiyasi qaysi?", a: "Mitoxondriya", w: ["Ribosoma", "Yadro", "Vakuola"] },
+                { q: "Qonning qizil rangini beruvchi oqsil?", a: "Gemoglobin", w: ["Insulin", "Keratin", "Kollagen"] },
+                { q: "O'simlikka yashil rang beruvchi modda?", a: "Xlorofill", w: ["Karotin", "Kraxmal", "Sellyuloza"] }
             ],
-            6: [ // Tarix
+            6: [
                 { q: "Amir Temur qaysi yilda tavallud topgan?", a: "1336-yil", w: ["1370-yil", "1405-yil", "1441-yil"] },
                 { q: "Alisher Navoiy qaysi yilda tug'ilgan?", a: "1441-yil", w: ["1483-yil", "1336-yil", "1501-yil"] },
-                { q: "Zahiriddin Muhammad Bobur qaysi yilda tug'ilgan?", a: "1483-yil", w: ["1441-yil", "1526-yil", "1394-yil"] },
                 { q: "Mirzo Ulug'bek qaysi yilda tug'ilgan?", a: "1394-yil", w: ["1449-yil", "1336-yil", "1405-yil"] },
                 { q: "O'zbekiston Mustaqilligi qachon e'lon qilingan?", a: "1991-yil 31-avgust", w: ["1992-yil 8-dekabr", "1991-yil 1-yanvar", "1990-yil 20-iyun"] }
             ],
-            7: [ // Geografiya
+            7: [
                 { q: "Yaponiyaning poytaxti qaysi shahar?", a: "Tokio", w: ["Seul", "Pekin", "Kioto"] },
                 { q: "Dunyodagi eng katta cho'l qaysi?", a: "Sahroi Kabir", w: ["Qizilqum", "Gobi", "Atakama"] },
-                { q: "Eng chuqur ko'l qaysi?", a: "Baykal", w: ["Orol", "Kaspiy", "Viktoriya"] },
-                { q: "Braziliyaning poytaxti qaysi shahar?", a: "Braziliya", w: ["Rio-de-Janeyro", "San-Paulu", "Buenos-Ayres"] },
-                { q: "Dunyodagi eng baland sharshara qaysi?", a: "Anxel", w: ["Niagara", "Viktoriya", "Iguasu"] }
+                { q: "Eng chuqur ko'l qaysi?", a: "Baykal", w: ["Orol", "Kaspiy", "Viktoriya"] }
             ],
-            8: [ // Ona tili
-                { q: "'Kitob' so'ziga qaysi kelishik qo'shimchasi qo'shilsa tushum kelishigi bo'ladi?", a: "-ni (kitobni)", w: ["-ning (kitobning)", "-ga (kitobga)", "-da (kitobda)"] },
-                { q: "Qaysi so'z turkumi shaxs va narsaning harakatini bildiradi?", a: "Fe'l", w: ["Ot", "Sifat", "Ravish"] },
-                { q: "'Chiroyli' so'zining ma'nodoshi (sinonimi) qaysi?", a: "Go'zal", w: ["Xunuk", "Katta", "Tez"] },
-                { q: "'Oq' so'zining zid ma'nosi (antonimi) qaysi?", a: "Qora", w: ["Sariq", "Ko'k", "Yorug'"] }
+            8: [
+                { q: "Qaysi so'z turkumi harakatni bildiradi?", a: "Fe'l", w: ["Ot", "Sifat", "Ravish"] },
+                { q: "'Go'zal' so'zining ma'nodoshi qaysi?", a: "Chiroyli", w: ["Xunuk", "Katta", "Tez"] },
+                { q: "'Oq' so'zining antonimi (zid ma'nosi)?", a: "Qora", w: ["Sariq", "Ko'k", "Yorug'"] }
             ],
-            9: [ // Adabiyot
+            9: [
                 { q: "'Xamsa'ning birinchi dostoni qaysi?", a: "Hayrat ul-abror", w: ["Farhod va Shirin", "Layli va Majnun", "Sab'ai sayyor"] },
-                { q: "'Mehrobdan chayon' romanining muallifi kim?", a: "Abdulla Qodiriy", w: ["Oybek", "G'afur G'ulom", "Cho'lpon"] },
-                { q: "'Kecha va kunduz' romanini kim yozgan?", a: "Abdulhamid Cho'lpon", w: ["Abdurauf Fitrat", "Abdulla Qahhor", "Usmon Nosir"] },
+                { q: "'Mehrobdan chayon' romanini kim yozgan?", a: "Abdulla Qodiriy", w: ["Oybek", "G'afur G'ulom", "Cho'lpon"] },
                 { q: "'Shum bola' qissasining muallifi kim?", a: "G'afur G'ulom", w: ["O'tkir Hoshimov", "Xudoyberdi To'xtaboyev", "Pirimqul Qodirov"] }
             ],
-            10: [ // Ingliz tili
-                { q: "'Knowledge' so'zining o'zbekcha tarjimasi nima?", a: "Bilim", w: ["Kuch", "Kitob", "Maktab"] },
-                { q: "'Success' so'zining tarjimasi qaysi?", a: "Muvaffaqiyat", w: ["Mag'lubiyat", "Harakat", "Vaqt"] },
-                { q: "'They ___ students' gapiga mos so'zni qo'ying:", a: "are", w: ["is", "am", "was"] },
-                { q: "'Beautiful' so'zining ma'nosi nima?", a: "Chiroyli", w: ["Aqlli", "Kuchli", "Tez"] },
-                { q: "'Yesterday I ___ to school' (borgan edim):", a: "went", w: ["go", "gone", "going"] }
+            10: [
+                { q: "'Knowledge' so'zining tarjimasi?", a: "Bilim", w: ["Kuch", "Kitob", "Maktab"] },
+                { q: "'They ___ students' gapiga mosini qo'ying:", a: "are", w: ["is", "am", "was"] },
+                { q: "'Beautiful' so'zining ma'nosi?", a: "Chiroyli", w: ["Aqlli", "Kuchli", "Tez"] }
             ],
-            11: [ // Astronomiya
-                { q: "Quyosh sistemasida nechta asosiy sayyora bor?", a: "8 ta", w: ["9 ta", "7 ta", "10 ta"] },
-                { q: "Halqalari bilan mashhur bo'lgan gigant sayyora qaysi?", a: "Saturn", w: ["Mars", "Merkuriy", "Venera"] },
-                { q: "Quyoshga eng yaqin sayyora qaysi?", a: "Merkuriy", w: ["Venera", "Yer", "Mars"] },
-                { q: "Bizning galaktikamiz qanday nomlanadi?", a: "Somon yo'li", w: ["Andromeda", "Orion", "Katta Ayiq"] }
+            11: [
+                { q: "Quyosh sistemasida nechta sayyora bor?", a: "8 ta", w: ["9 ta", "7 ta", "10 ta"] },
+                { q: "Halqalari bor gigant sayyora qaysi?", a: "Saturn", w: ["Mars", "Merkuriy", "Venera"] },
+                { q: "Quyoshga eng yaqin sayyora?", a: "Merkuriy", w: ["Venera", "Yer", "Mars"] }
             ],
-            13: [ // Huquqshunoslik
-                { q: "O'zbekiston Respublikasi Konstitutsiyasi nechta moddadan iborat (yangi tahrir)?", a: "155 modda", w: ["128 modda", "100 modda", "200 modda"] },
-                { q: "O'zbekistonda davlat hokimiyatining birdan-bir manbai kim?", a: "Xalq", w: ["Prezident", "Vazirlar", "Sud"] },
-                { q: "Voyaga yetish yoshi necha yosh etib belgilangan?", a: "18 yosh", w: ["16 yosh", "20 yosh", "21 yosh"] }
+            13: [
+                { q: "O'zbekiston Konstitutsiyasi nechta moddadan iborat?", a: "155 modda", w: ["128 modda", "100 modda", "200 modda"] },
+                { q: "Davlat hokimiyatining birdan-bir manbai?", a: "Xalq", w: ["Prezident", "Vazirlar", "Sud"] }
             ],
-            14: [ // Falsafa
+            14: [
                 { q: "'O'zingni angla' hikmati kimga tegishli?", a: "Suqrot (Sokrat)", w: ["Arastu", "Aflotun", "Pifagor"] },
-                { q: "Mantiq fanining asoschisi deb kim tan olingan?", a: "Arastu (Aristotel)", w: ["Demokrit", "Geraklit", "Epikur"] },
-                { q: "Borliq va bilishning eng umumiy qonunlarini o'rganuvchi fan?", a: "Falsafa", w: ["Sotsiologiya", "Psixologiya", "Tarix"] }
+                { q: "Mantiq fanining asoschisi kim?", a: "Arastu (Aristotel)", w: ["Demokrit", "Geraklit", "Epikur"] }
             ],
-            15: [ // Psixologiya
-                { q: "Tez jahli chiqadigan, lekin tez hovridan tushadigan temperament turi?", a: "Xolerik", w: ["Sangvinik", "Flegmatik", "Melanxolik"] },
-                { q: "Og'ir-bosiq, shoshilmaydigan temperament turi qaysi?", a: "Flegmatik", w: ["Xolerik", "Sangvinik", "Melanxolik"] },
-                { q: "Quvnoq, kirishimli va faol temperament turi qaysi?", a: "Sangvinik", w: ["Melanxolik", "Flegmatik", "Xolerik"] }
+            15: [
+                { q: "Tez jahli chiqadigan temperament turi?", a: "Xolerik", w: ["Sangvinik", "Flegmatik", "Melanxolik"] },
+                { q: "Og'ir-bosiq temperament turi qaysi?", a: "Flegmatik", w: ["Xolerik", "Sangvinik", "Melanxolik"] }
             ]
         };
 
@@ -202,102 +204,10 @@
             return array.sort(() => Math.random() - 0.5);
         }
 
-        // CHEKSIZ VA QIYINLASHIB BORUVCHI SAVOL GENERATORI
-        function generateInfiniteQuestion(subjectId, level) {
-            let q = "", correct = "", options = [];
-
-            // 1. MATEMATIKA — Darajaga qarab sonlar va amallar qiyinlashadi!
-            if (subjectId === 1) {
-                if (level === 1) {
-                    let a = rand(5, 30), b = rand(5, 30);
-                    q = `${a} + ${b} nechiga teng?`;
-                    correct = String(a + b);
-                } else if (level === 2) {
-                    let a = rand(6, 15), b = rand(6, 15);
-                    q = `${a} × ${b} nechiga teng?`;
-                    correct = String(a * b);
-                } else if (level === 3) {
-                    let a = rand(10, 25), b = rand(3, 9), c = rand(5, 20);
-                    q = `${a} × ${b} + ${c} nechiga teng?`;
-                    correct = String(a * b + c);
-                } else if (level === 4) {
-                    let x = rand(5, 25), k = rand(3, 8), b = rand(10, 40);
-                    let res = k * x + b;
-                    q = `Tenglamani yeching: ${k}x + ${b} = ${res}. (x = ?)`;
-                    correct = String(x);
-                } else {
-                    // Level 5 va undan yuqori — cheksiz murakkab kvadrat va foiz misollar!
-                    let base = rand(11, 20 + level * 2);
-                    let add = rand(15, 50 * level);
-                    q = `${base}² + ${add} nechiga teng?`;
-                    correct = String(base * base + add);
-                }
-                let num = Number(correct);
-                options = shuffle([correct, String(num + rand(2, 12)), String(num - rand(2, 10)), String(num + rand(13, 25))]);
-            }
-
-            // 2. FIZIKA — Tezlik, kuch, energiya va bosim masalalari (cheksiz sonlar bilan)
-            else if (subjectId === 2) {
-                let type = rand(1, 3);
-                if (type === 1) {
-                    let v = rand(10, 25 * level), t = rand(2, 10 + level);
-                    q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. U qancha yo'l (metr) bosib o'tgan?`;
-                    correct = `${v * t} m`;
-                    options = shuffle([correct, `${v * t + 10} m`, `${v + t} m`, `${Math.abs(v * t - 15)} m`]);
-                } else if (type === 2) {
-                    let m = rand(5, 20 * level), a = rand(2, 10);
-                    q = `Massasi ${m} kg bo'lgan jismga ${a} m/s² tezlanish berish uchun qancha kuch (Nyuton) kerak?`;
-                    correct = `${m * a} N`;
-                    options = shuffle([correct, `${m + a} N`, `${m * a + 20} N`, `${m * 2} N`]);
-                } else {
-                    let u = rand(10, 50 * level), r = rand(2, 10);
-                    let i = u * r;
-                    q = `Zanjirdagi tok kuchi ${r} A, qarshilik ${u} Om bo'lsa, kuchlanish necha Volt?`;
-                    correct = `${i} V`;
-                    options = shuffle([correct, `${i + 12} V`, `${u + r} V`, `${Math.abs(i - 8)} V`]);
-                }
-            }
-
-            // 5. INFORMATIKA — Ikkilik sanoq sistemasi va axborot o'lchov birliklari (cheksiz!)
-            else if (subjectId === 5) {
-                if (level <= 2) {
-                    let kb = rand(2, 16 * level);
-                    q = `${kb} Kilobayt (KB) necha Baytga teng?`;
-                    correct = `${kb * 1024} bayt`;
-                    options = shuffle([correct, `${kb * 1000} bayt`, `${kb * 512} bayt`, `${kb * 8} bayt`]);
-                } else {
-                    let dec = rand(10, 30 + level * 15);
-                    q = `O'nlik sanoq sistemasidagi ${dec} soni ikkilik sanoq sistemasida qanday yoziladi?`;
-                    correct = dec.toString(2);
-                    options = shuffle([correct, (dec + 1).toString(2), (dec - 1).toString(2), (dec + 3).toString(2)]);
-                }
-            }
-
-            // 12. IQTISODIYOT — Foiz, foyda va valyuta hisoblari (cheksiz!)
-            else if (subjectId === 12) {
-                let sum = rand(10, 50 * level) * 1000;
-                let perc = [10, 15, 20, 25, 30][rand(0, 4)];
-                let ans = (sum * perc) / 100;
-                q = `${sum.toLocaleString()} so'mlik mahsulotga ${perc}% chegirma berilsa, necha so'm tejaladi?`;
-                correct = `${ans.toLocaleString()} so'm`;
-                options = shuffle([correct, `${(ans + 2000).toLocaleString()} so'm`, `${(ans / 2).toLocaleString()} so'm`, `${(ans + 5000).toLocaleString()} so'm`]);
-            }
-
-            // QOLGAN BARCHA FANLAR — Faktlar bazasidan + darajaga qarab aralashtirilgan savollar
-            else {
-                const bank = factBanks[subjectId];
-                const item = bank[rand(0, bank.length - 1)];
-                q = `[Daraja ${level}] ${item.q}`;
-                correct = item.a;
-                options = shuffle([item.a, ...item.w]);
-            }
-
-            return { q, correct, options };
-        }
-
         function updateUI() {
+            currentLevel = Math.floor(currentXp / 200) + 1;
             document.getElementById("userNameDisplay").innerText = currentUser;
-            document.getElementById("userXpDisplay").innerText = "XP: " + currentXp;
+            document.getElementById("userXpDisplay").innerText = `XP: ${currentXp} • Daraja ${currentLevel}`;
         }
 
         function renderSubjects(list) {
@@ -305,13 +215,19 @@
             grid.innerHTML = "";
             list.forEach(subj => {
                 grid.innerHTML += `
-                    <div onclick="openModal(${subj.id})" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition cursor-pointer border border-slate-200 hover:border-blue-500 flex flex-col justify-between">
+                    <div onclick="openModal(${subj.id})" class="bg-white p-7 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-slate-100 hover:border-blue-500 flex flex-col justify-between group">
                         <div>
-                            <h3 class="text-xl font-bold text-blue-900 mb-2">${subj.name}</h3>
-                            <p class="text-slate-600 text-sm mb-4">${subj.desc}</p>
-                            <span class="text-xs bg-indigo-100 text-indigo-800 font-semibold px-2.5 py-1 rounded-md">∞ Cheksiz testlar • Level tizimi</span>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full group-hover:bg-blue-600 group-hover:text-white transition">Modul #${subj.id}</span>
+                                <span class="text-slate-300 group-hover:text-blue-600 transition text-lg">➔</span>
+                            </div>
+                            <h3 class="text-xl font-black text-blue-950 mb-2">${subj.name}</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">${subj.desc}</p>
                         </div>
-                        <span class="mt-4 text-blue-600 font-semibold text-sm flex items-center gap-1">Darsni boshlash →</span>
+                        <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
+                            <span>∞ Cheksiz Testlar</span>
+                            <span>Boshlash →</span>
+                        </div>
                     </div>
                 `;
             });
@@ -326,37 +242,86 @@
         function openModal(id) {
             activeSubject = subjects.find(s => s.id === id);
             questionCount = 1;
-            currentLevel = 1;
             
+            document.getElementById("modalCategoryBadge").innerText = activeSubject.name;
             document.getElementById("modalTitle").innerText = activeSubject.name;
             document.getElementById("modalDesc").innerText = activeSubject.desc;
             document.getElementById("modalVideo").src = activeSubject.video;
             
-            loadNextInfiniteQuestion();
+            loadNextQuestion();
 
             document.getElementById("subjectModal").classList.remove("hidden");
             document.getElementById("subjectModal").classList.add("flex");
         }
 
-        function loadNextInfiniteQuestion() {
-            // Har 3 ta savolda daraja (Level) oshadi va qiyinlashadi!
-            currentLevel = Math.floor((questionCount - 1) / 3) + 1;
-            currentXpReward = currentLevel * 20;
+        function loadNextQuestion() {
+            let qLevel = Math.floor((questionCount - 1) / 3) + 1;
+            currentXpReward = qLevel * 20;
 
-            const generated = generateInfiniteQuestion(activeSubject.id, currentLevel);
-            currentCorrectAnswer = generated.correct;
+            document.getElementById("modalLevelBadge").innerText = `Daraja: ${qLevel}`;
+            document.getElementById("quizCounter").innerText = `Savol #${questionCount} • Cheksiz rejim`;
+            document.getElementById("quizXpReward").innerText = `+${currentXpReward} XP Mukofot`;
 
-            document.getElementById("levelBadge").innerText = `Daraja (Level): ${currentLevel}`;
-            document.getElementById("questionCounter").innerText = `Savol #${questionCount} • ∞ cheksiz`;
-            document.getElementById("xpRewardBadge").innerText = `+${currentXpReward} XP`;
-            document.getElementById("quizQuestion").innerText = generated.q;
+            let q = "", correct = "", options = [];
+
+            // 1. Matematika Generator
+            if (activeSubject.id === 1) {
+                if (qLevel === 1) {
+                    let a = rand(10, 50), b = rand(10, 50);
+                    q = `${a} + ${b} nechiga teng?`;
+                    correct = String(a + b);
+                } else if (qLevel === 2) {
+                    let a = rand(5, 20), b = rand(5, 20);
+                    q = `${a} × ${b} nechiga teng?`;
+                    correct = String(a * b);
+                } else {
+                    let a = rand(10, 30), b = rand(2, 9), c = rand(10, 50);
+                    q = `${a} × ${b} + ${c} nechiga teng?`;
+                    correct = String(a * b + c);
+                }
+                let num = Number(correct);
+                options = shuffle([correct, String(num + rand(2, 10)), String(num - rand(2, 8)), String(num + rand(12, 20))]);
+            } 
+            // 2. Fizika Generator
+            else if (activeSubject.id === 2) {
+                let v = rand(10, 30 * qLevel), t = rand(2, 10);
+                q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. Bosib o'tgan yo'li qancha?`;
+                correct = `${v * t} m`;
+                options = shuffle([correct, `${v * t + 15} m`, `${v + t} m`, `${Math.abs(v * t - 10)} m`]);
+            }
+            // 5. Informatika Generator
+            else if (activeSubject.id === 5) {
+                let kb = rand(2, 16 * qLevel);
+                q = `${kb} Kilobayt (KB) necha Baytga teng?`;
+                correct = `${kb * 1024} bayt`;
+                options = shuffle([correct, `${kb * 1000} bayt`, `${kb * 512} bayt`, `${kb * 8} bayt`]);
+            }
+            // 12. Iqtisodiyot Generator
+            else if (activeSubject.id === 12) {
+                let sum = rand(10, 40 * qLevel) * 1000;
+                let ans = sum * 0.2;
+                q = `${sum.toLocaleString()} so'mlik mahsulotga 20% chegirma berilsa, qancha tejaladi?`;
+                correct = `${ans.toLocaleString()} so'm`;
+                options = shuffle([correct, `${(ans + 3000).toLocaleString()} so'm`, `${(ans / 2).toLocaleString()} so'm`, `${(ans + 5000).toLocaleString()} so'm`]);
+            }
+            // Boshqa fanlar uchun factBank
+            else {
+                const bank = factBanks[activeSubject.id] || [{ q: "O'zbekiston poytaxti qaysi shahar?", a: "Toshkent", w: ["Samarqand", "Buxoro", "Xiva"] }];
+                const item = bank[rand(0, bank.length - 1)];
+                q = item.q;
+                correct = item.a;
+                options = shuffle([item.a, ...item.w]);
+            }
+
+            currentCorrectAnswer = correct;
+            document.getElementById("quizQuestion").innerText = q;
             document.getElementById("quizResult").innerText = "";
 
             const optionsDiv = document.getElementById("quizOptions");
             optionsDiv.innerHTML = "";
-            generated.options.forEach(opt => {
+            options.forEach(opt => {
                 const safeOpt = opt.replace(/'/g, "\\'");
-                optionsDiv.innerHTML += `<button onclick="checkAnswer('${safeOpt}')" class="w-full text-left bg-white p-3 rounded-xl border border-slate-200 hover:bg-blue-100 hover:border-blue-400 transition font-medium shadow-sm">${opt}</button>`;
+                optionsDiv.innerHTML += `<button onclick="checkAnswer('${safeOpt}')" class="w-full text-left bg-white p-3.5 rounded-2xl border border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition font-bold shadow-sm">${opt}</button>`;
             });
         }
 
@@ -367,16 +332,16 @@
                 localStorage.setItem("portal_xp", currentXp);
                 updateUI();
 
-                resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP qo'shildi! Keyingi savol yuklanmoqda...`;
-                resultEl.className = "mt-3 font-semibold text-sm text-green-600";
+                resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP qo'shildi. Keyingi savol...`;
+                resultEl.className = "font-bold text-sm text-emerald-600 text-center";
                 
                 questionCount++;
                 setTimeout(() => {
-                    loadNextInfiniteQuestion();
+                    loadNextQuestion();
                 }, 800);
             } else {
                 resultEl.innerText = "❌ Xato javob! Qayta urinib ko'ring.";
-                resultEl.className = "mt-3 font-semibold text-sm text-red-600";
+                resultEl.className = "font-bold text-sm text-rose-600 text-center";
             }
         }
 
@@ -410,15 +375,23 @@
             const list = document.getElementById("leaderboardList");
             const players = [
                 { name: currentUser, xp: currentXp },
-                { name: "Azizbek (Uzbekistan)", xp: 1450 },
-                { name: "Madina (Uzbekistan)", xp: 980 },
-                { name: "Jasur (Kazakhstan)", xp: 640 },
-                { name: "Feruza (Uzbekistan)", xp: 320 }
+                { name: "Azizbek (Toshkent)", xp: 1850 },
+                { name: "Madina (Samarqand)", xp: 1420 },
+                { name: "Jasur (Buxoro)", xp: 960 },
+                { name: "Feruza (Farg'ona)", xp: 740 }
             ].sort((a, b) => b.xp - a.xp);
 
             list.innerHTML = "";
             players.forEach((p, index) => {
-                list.innerHTML += `<li class="flex justify-between items-center p-3 bg-slate-50 rounded-xl border font-medium"><span>${index + 1}. ${p.name}</span><span class="text-blue-600 font-bold">${p.xp} XP</span></li>`;
+                let badgeColor = index === 0 ? "bg-yellow-100 text-yellow-800 border-yellow-300" : index === 1 ? "bg-slate-100 text-slate-800 border-slate-300" : index === 2 ? "bg-amber-100 text-amber-800 border-amber-300" : "bg-white text-slate-700 border-slate-100";
+                list.innerHTML += `
+                    <li class="flex justify-between items-center p-3.5 rounded-2xl border ${badgeColor} font-bold shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 text-center">${index + 1}.</span>
+                            <span>${p.name}</span>
+                        </div>
+                        <span class="text-blue-600">${p.xp} XP</span>
+                    </li>`;
             });
 
             document.getElementById("leaderboardModal").classList.remove("hidden");
@@ -428,6 +401,12 @@
         function closeLeaderboard() {
             document.getElementById("leaderboardModal").classList.remove("flex");
             document.getElementById("leaderboardModal").classList.add("hidden");
+        }
+
+        function goHome() {
+            closeModal();
+            closeAuthModal();
+            closeLeaderboard();
         }
 
         updateUI();
