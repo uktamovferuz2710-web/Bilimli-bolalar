@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali PRO — Progressiv XP Tizimi</title>
+    <title>Bilimlar Portali PRO — To'liq Mavzular va Darslar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -29,7 +29,7 @@
                 <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
                 <div>
                     <h1 class="text-2xl font-black tracking-tight text-white">Bilimlar Portali PRO</h1>
-                    <p class="text-xs text-blue-300">15 ta fan • Progressiv XP • Jonli fon</p>
+                    <p class="text-xs text-blue-300">15 ta fan • To'liq mavzular bazasi • Progressiv XP</p>
                 </div>
             </div>
             
@@ -64,42 +64,52 @@
         <div id="subjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- MODAL (SUBJECT LEARNING HUB) -->
+    <!-- MODAL (SUBJECT TOPICS HUB) -->
     <div id="subjectModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50 overflow-y-auto">
-        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-3xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl">
+        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-4xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl">
             <button onclick="closeModal()" class="absolute top-5 right-5 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full font-bold flex items-center justify-center transition">✕</button>
             
-            <div class="flex items-center gap-3 mb-2">
-                <span id="modalCategoryBadge" class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30">Fan</span>
-                <span id="modalLevelBadge" class="bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-500/30">Daraja: 1</span>
-            </div>
-            <h2 id="modalTitle" class="text-3xl font-black text-white mb-2"></h2>
-            <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
-            
-            <!-- Yozma Tushuntirish / Nazariya -->
-            <div class="bg-slate-800/60 border border-white/10 p-5 rounded-2xl mb-6">
-                <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Mavzu bo'yicha qisqacha tushuntirish</h3>
-                <p id="modalTheory" class="text-sm text-slate-300 leading-relaxed"></p>
-            </div>
-
-            <!-- Video Dars -->
-            <div class="mb-8">
-                <h3 class="font-bold text-lg text-white mb-3 flex items-center gap-2">📺 Video Qo'llanma Darsi</h3>
-                <div class="bg-slate-950 rounded-2xl overflow-hidden shadow-lg aspect-video flex items-center justify-center border border-white/10">
-                    <iframe id="modalVideo" class="w-full h-full" src="" title="Video dars" frameborder="0" allowfullscreen></iframe>
+            <div id="subjectTopicsView">
+                <div class="flex items-center gap-3 mb-2">
+                    <span id="modalCategoryBadge" class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30">Fan</span>
                 </div>
-            </div>
-
-            <!-- Cheksiz Test Tizimi -->
-            <div class="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
-                <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol #1</span>
-                    <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+1 XP Mukofot</span>
-                </div>
+                <h2 id="modalTitle" class="text-3xl font-black text-white mb-2"></h2>
+                <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
                 
-                <p id="quizQuestion" class="font-bold text-xl text-white mb-6 leading-snug"></p>
-                <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"></div>
-                <p id="quizResult" class="font-bold text-sm min-h-[24px] text-center"></p>
+                <h3 class="font-bold text-lg text-yellow-400 mb-4">📚 Barcha Mavzular va Darslar (Tanlang):</h3>
+                <div id="topicsListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+
+            <!-- SINGLE LESSON & QUIZ VIEW -->
+            <div id="lessonQuizView" class="hidden">
+                <button onclick="backToTopics()" class="mb-4 text-xs font-bold bg-slate-800 text-yellow-400 px-4 py-2 rounded-xl border border-white/10 hover:bg-slate-700 transition">← Mavzular ro'yxatiga qaytish</button>
+                <h2 id="lessonTitle" class="text-2xl font-black text-white mb-3"></h2>
+                
+                <!-- Sodda Tushuntirish -->
+                <div class="bg-slate-800/60 border border-white/10 p-5 rounded-2xl mb-6">
+                    <h3 class="font-bold text-base text-yellow-400 mb-2">📖 Sodda va tushunarli tushuntirish</h3>
+                    <p id="lessonTheory" class="text-sm text-slate-300 leading-relaxed"></p>
+                </div>
+
+                <!-- Video Dars -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-lg text-white mb-3">📺 Video Dars</h3>
+                    <div class="bg-slate-950 rounded-2xl overflow-hidden shadow-lg aspect-video flex items-center justify-center border border-white/10">
+                        <iframe id="lessonVideo" class="w-full h-full" src="" title="Video dars" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Test Qismi -->
+                <div class="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
+                    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+                        <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol #1</span>
+                        <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+1 XP Mukofot</span>
+                    </div>
+                    
+                    <p id="quizQuestion" class="font-bold text-xl text-white mb-6 leading-snug"></p>
+                    <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"></div>
+                    <p id="quizResult" class="font-bold text-sm min-h-[24px] text-center"></p>
+                </div>
             </div>
         </div>
     </div>
@@ -140,92 +150,114 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // 15 ta Fan va ularning barcha mavzulari to'liq ro'yxati
         const subjects = [
-            { id: 1, name: "1. Matematika", desc: "Arifmetika, algebra, geometriya, tenglamalar va ehtimollar.", theory: "Matematika — sonlar, tuzilmalar va fazo haqidagi fan bo'lib, mantiqiy fikrlashni rivojlantiradi. Arifmetik amallar, tenglamalar tizimi va geometrik shakllar tahlili asosiy o'rin tutadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, termodinamika, elektr va optika.", theory: "Fizika tabiatning eng umumiy qonunlarini, materiya va energiyaning o'zaro aylanishlarini o'rganadi. Tezlik, kuch, bosim va elektr toki asosiy tushunchalardir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 3, name: "3. Kimyo", desc: "Noorganik va organik kimyo, elementlar jadvali, reaksiyalar.", theory: "Kimyo moddalar, ularning xossalari, tuzilishi va kimyoviy reaksiyalar natijasida o'zgarishini o'rganuvchi fan hisoblanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 4, name: "4. Biologiya", desc: "Botanika, zoologiya, odam anatomiyasi, genetika va ekologiya.", theory: "Biologiya tirik organizmlarning tuzilishi, rivojlanishi, hayot faoliyati va tabiatdagi o'rnini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 5, name: "5. Informatika", desc: "Algoritmlar, dasturlash asoslari, sanoq sistemalari va tarmoqlar.", theory: "Informatika axborotni to'plash, saqlash, qayta ishlash va uzatish usullarini hamda kompyuter texnologiyalarini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 6, name: "6. Tarix", desc: "O'zbekiston tarixi, jahon tarixi, qadimgi sivilizatsiyalar va sanalar.", theory: "Tarix insoniyatning o'tmishdagi hayoti, muhim voqealari, sivilizatsiyalar taraqqiyoti va ularning merosini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 7, name: "7. Geografiya", desc: "Fizik geografiya, iqtisodiy geografiya, materiklar va okeanlar.", theory: "Geografiya Yer yuzining tabiati, aholisi, uning xo'jalik faoliyati va hududiy tuzilishini tadqiq etadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 8, name: "8. Ona tili", desc: "Fonetika, leksikologiya, so'z turkumlari, sintaksis va imlo.", theory: "Ona tili xalqning madaniy merosi va muloqot quroli bo'lib, uning grammatik qoidalari va yozuv me'yorlarini o'rgatadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 9, name: "9. Adabiyot", desc: "Mumtoz adabiyot, o'zbek mumtoz va zamonaviy dostonlar, romanlar.", theory: "Adabiyot so'z san'ati orqali inson qalbiga yo'l topadi, estetik zavq beradi va jamiyatdagi ma'naviy qadriyatlarni targ'ib qiladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 10, name: "10. Ingliz tili", desc: "Grammar, Vocabulary, Tenses, Phrasal verbs va tarjimalar.", theory: "Ingliz tili xalqaro muloqot, fan, texnologiya va biznes tilidir. Grammatika va so'z boyligini oshirish asosiy vazifadir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 11, name: "11. Astronomiya", desc: "Koinot, yulduzlar turkumi, sayyoralar va galaktikalar.", theory: "Astronomiya koinotdagi osmon jismlari, yulduzlar, sayyoralar tizimi va ularning harakat qonuniyatlarini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 12, name: "12. Iqtisodiyot", desc: "Bozor iqtisodiyoti, mikro/makroiqtisodiyot, moliya va soliqlar.", theory: "Iqtisodiyot cheklangan resurslardan jamiyat ehtiyojlarini qondirish uchun samarali foydalanish yo'llarini o'rgatadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya, fuqarolik, mehnat va jinoyat huquqi asoslari.", theory: "Huquqshunoslik jamiyatdagi huquqiy munosabatlarni, qonunlar tizimini va fuqarolarning burch hamda huquqlarini belgilaydi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 14, name: "14. Falsafa", desc: "Ontologiya, gnoseologiya, etika, estetika va mutafakkirlar.", theory: "Falsafa borliq, tafakkur, bilim va insonning dunyoqarashiga oid eng umumiy qonuniyatlarni tadqiq etadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 15, name: "15. Psixologiya", desc: "Umumiy psixologiya, temperament, xotir va shaxs psixologiyasi.", theory: "Psixologiya inson ruhiyati, uning ichki kechinmalari, xulq-atvori va boshqalar bilan o'zaro munosabatlarini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+            {
+                id: 1, name: "1. Matematika", desc: "Arifmetika, algebra, geometriya va tenglamalar.",
+                topics: [
+                    { title: "1. Natural sonlar va arifmetik amallar", theory: "Natural sonlar sanash uchun ishlatiladi. Qo'shish, ayirish, ko'paytirish va bo'lish arifmaning asosidir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"15 + 25 nechiga teng?", a:"40", w:["35","45","50"]},{q:"8 × 7 nechiga teng?", a:"56", w:["48","64","54"]}] },
+                    { title: "2. Oddiy va o'nli kasrlar", theory: "Kasrlar butunning qismini bildiradi. Masalan, 1/2 bu yarim demakdir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"1/2 + 1/2 yig'indisi nechiga teng?", a:"1", w:["1/4","2","0.5"]},{q:"0.5 soni kasr ko'rinishida qanday yoziladi?", a:"1/2", w:["1/3","1/4","3/4"]}] },
+                    { title: "3. Oddiy tenglamalar", theory: "Noma'lum miqdorni topish uchun tenglamalar tuziladi (masalan: x + 5 = 10).", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"x + 10 = 25 tenglamasida x nechiga teng?", a:"15", w:["10","20","35"]},{q:"3x = 18 tenglamasida x nechiga teng?", a:"6", w:["5","7","8"]}] }
+                ]
+            },
+            {
+                id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, elektr va optika.",
+                topics: [
+                    { title: "1. Tezlik, yo'l va vaqt", theory: "Jismning ma'lum vaqt ichida bosib o'tgan masofasi yo'l deyiladi. V = S / t.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Jism 20 m/s tezlik bilan 5 sekund harakatlandi. Yo'l qancha?", a:"100 m", w:["50 m","120 m","80 m"]}] },
+                    { title: "2. Nyuton qonunlari", theory: "Kuch jismga ta'sir qilib uning tezligini o'zgartiradi. F = m * a.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Kuch o'lchov birligi nima?", a:"Nyuton (N)", w:["Joul","Vatt","Paskal"]}] }
+                ]
+            },
+            {
+                id: 3, name: "3. Kimyo", desc: "Elementlar jadvali va reaksiyalar.",
+                topics: [
+                    { title: "1. Atom va molekula", theory: "Moddalarning eng kichik zarrachasi atom deb ataladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Vodorod atom raqami nechiga teng?", a:"1", w:["2","4","8"]},{q:"Kislorod kimyoviy belgisi nima?", a:"O", w:["C","N","H"]}] },
+                    { title: "2. Kimyoviy reaksiyalar", theory: "Moddalarning bir-biri bilan birikib yangi modda hosil qilishi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Suv formulasi qanday?", a:"H2O", w:["CO2","NaCl","CH4"]}] }
+                ]
+            },
+            {
+                id: 4, name: "4. Biologiya", desc: "Hujayra, anatomiya va tabiat.",
+                topics: [
+                    { title: "1. Hujayra tuzilishi", theory: "Barcha tirik organizmlar hujayralardan tashkil topgan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Hujayraning energetik stansiyasi?", a:"Mitoxondriya", w:["Yadro","Ribosoma","Vakuola"]}] },
+                    { title: "2. Odam anatomiyasi", theory: "Inson tanasining tuzilishi va organlar faoliyati.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Odam yuragi nechta kamerali?", a:"4 ta", w:["2 ta","3 ta","5 ta"]}] }
+                ]
+            },
+            {
+                id: 5, name: "5. Informatika", desc: "Algoritmlar va kompyuter.",
+                topics: [
+                    { title: "1. Axborot o'lchov birliklari", theory: "Kompyuterda axborot baytlar va bitlarda o'lchanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"1 Kilobayt necha bayt?", a:"1024 bayt", w:["1000 bayt","512 bayt","2048 bayt"]}] }
+                ]
+            },
+            {
+                id: 6, name: "6. Tarix", desc: "O'zbekiston va jahon tarixi.",
+                topics: [
+                    { title: "1. Buyuk siymolar va sanalar", theory: "O'zbekiston tarixida Amir Temur va Alisher Navoiy kabi buyuklar o'tgan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Amir Temur qachon tug'ilgan?", a:"1336-yil", w:["1370-yil","1405-yil","1441-yil"]}] }
+                ]
+            },
+            {
+                id: 7, name: "7. Geografiya", desc: "Materiklar, davlatlar va iqlim.",
+                topics: [
+                    { title: "1. Dunyo xaritasi va okeanlar", theory: "Yer yuzining asosiy qismi suvdan iborat.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Dunyodagi eng katta cho'l?", a:"Sahroi Kabir", w:["Qizilqum","Gobi","Karakum"]}] }
+                ]
+            },
+            {
+                id: 8, name: "8. Ona tili", desc: "Imlo, fonetika va so'z turkumlari.",
+                topics: [
+                    { title: "1. So'z turkumlari", theory: "Ot, sifat, fe'l va son asosiy so'z turkumlaridir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Harakatni bildiruvchi so'z turkumi?", a:"Fe'l", w:["Ot","Sifat","Ravish"]}] }
+                ]
+            },
+            {
+                id: 9, name: "9. Adabiyot", desc: "Mumtoz va zamonaviy asarlar.",
+                topics: [
+                    { title: "1. O'zbek mumtoz adabiyoti", theory: "Alisher Navoiyning Xamsa dostoni jahon adabiyoti durdonasidir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Xamsa nechta dostondan iborat?", a:"5 ta", w:["4 ta","6 ta","3 ta"]}] }
+                ]
+            },
+            {
+                id: 10, name: "10. Ingliz tili", desc: "Grammar, Vocabulary va Tenses.",
+                topics: [
+                    { title: "1. English Grammar basics", theory: "Present Simple zamoni odatiy takrorlanuvchi harakatlarni bildiradi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'Knowledge' so'zining tarjimasi?", a:"Bilim", w:["Kitob","Maktab","Kuch"]}] }
+                ]
+            },
+            {
+                id: 11, name: "11. Astronomiya", desc: "Koinot va sayyoralar.",
+                topics: [
+                    { title: "1. Quyosh sistemasi", theory: "Quyosh atrofida 8 ta sayyora aylanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Quyoshga eng yaqin sayyora?", a:"Merkuriy", w:["Venera","Yer","Mars"]}] }
+                ]
+            },
+            {
+                id: 12, name: "12. Iqtisodiyot", desc: "Moliya, bozor va soliqlar.",
+                topics: [
+                    { title: "1. Bozor iqtisodiyoti asoslari", theory: "Talab va taklif bozor qonuniyatlarini belgilaydi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Mahsulotga 20% chegirma berilsa nima bo'ladi?", a:"Narxi arzonlashadi", w:["Qimmatlashadi","O'zgarmaydi","Yo'qoladi"]}] }
+                ]
+            },
+            {
+                id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya va qonunlar.",
+                topics: [
+                    { title: "1. O'zbekiston Konstitutsiyasi", theory: "Konstitutsiya mamlakatning asosiy qonunidir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Konstitutsiya qachon qabul qilingan?", a:"1992-yil 8-dekabr", w:["1991-yil 1-sentabr","1993-yil 2-iyul","1990-yil"]}] }
+                ]
+            },
+            {
+                id: 14, name: "14. Falsafa", desc: "Tafakkur va dunyoqarash.",
+                topics: [
+                    { title: "1. Qadimgi falsafa", theory: "Suqrot va Arastu insoniyatning buyuk mutafakkirlaridir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'O'zingni angla' hikmati kimniki?", a:"Suqrot", w:["Arastu","Platon","Pifagor"]}] }
+                ]
+            },
+            {
+                id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati va temperament.",
+                topics: [
+                    { title: "1. Temperament turlari", theory: "Xolerik, sangvinik, flegmatik va melanxolik asosiy turlardir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Tez jahli chiqadigan temperament?", a:"Xolerik", w:["Flegmatik","Sangvinik","Melanxolik"]}] }
+                ]
+            }
         ];
-
-        const factBanks = {
-            3: [
-                { q: "Vodorod (H) atom raqami nechiga teng?", a: "1", w: ["2", "4", "8"] },
-                { q: "Kislorod (O) atom massasi taxminan nechiga teng?", a: "16", w: ["8", "12", "32"] },
-                { q: "Oltin elementining kimyoviy belgisi nima?", a: "Au", w: ["Ag", "Fe", "Cu"] },
-                { q: "Temir elementining kimyoviy belgisi nima?", a: "Fe", w: ["Te", "Tm", "Pb"] },
-                { q: "Karbonat angidrid gazining formulasi qanday?", a: "CO2", w: ["CO", "H2O", "CH4"] },
-                { q: "Osh tuzining kimyoviy nomi qanday?", a: "Natriy xlorid", w: ["Kalsiy karbonat", "Magniy sulfat", "Kaliy xlorid"] }
-            ],
-            4: [
-                { q: "Odam yuragi nechta kameradan iborat?", a: "4 ta", w: ["2 ta", "3 ta", "5 ta"] },
-                { q: "Hujayraning energetik stansiyasi qaysi organoid?", a: "Mitoxondriya", w: ["Ribosoma", "Yadro", "Vakuola"] },
-                { q: "Qonning qizil rangini beruvchi oqsil nima?", a: "Gemoglobin", w: ["Insulin", "Keratin", "Kollagen"] },
-                { q: "O'simlikka yashil rang beruvchi modda?", a: "Xlorofill", w: ["Karotin", "Kraxmal", "Sellyuloza"] }
-            ],
-            6: [
-                { q: "Amir Temur qaysi yilda tavallud topgan?", a: "1336-yil", w: ["1370-yil", "1405-yil", "1441-yil"] },
-                { q: "Alisher Navoiy qaysi yilda tug'ilgan?", a: "1441-yil", w: ["1483-yil", "1336-yil", "1501-yil"] },
-                { q: "Mirzo Ulug'bek qaysi yilda tug'ilgan?", a: "1394-yil", w: ["1449-yil", "1336-yil", "1405-yil"] },
-                { q: "O'zbekiston Mustaqilligi qachon e'lon qilingan?", a: "1991-yil 31-avgust", w: ["1992-yil 8-dekabr", "1991-yil 1-yanvar", "1990-yil 20-iyun"] }
-            ],
-            7: [
-                { q: "Yaponiyaning poytaxti qaysi shahar?", a: "Tokio", w: ["Seul", "Pekin", "Kioto"] },
-                { q: "Dunyodagi eng katta cho'l qaysi?", a: "Sahroi Kabir", w: ["Qizilqum", "Gobi", "Atakama"] },
-                { q: "Eng chuqur ko'l qaysi?", a: "Baykal", w: ["Orol", "Kaspiy", "Viktoriya"] }
-            ],
-            8: [
-                { q: "Qaysi so'z turkumi harakatni bildiradi?", a: "Fe'l", w: ["Ot", "Sifat", "Ravish"] },
-                { q: "'Go'zal' so'zining ma'nodoshi (sinonimi) qaysi?", a: "Chiroyli", w: ["Xunuk", "Katta", "Tez"] },
-                { q: "'Oq' so'zining antonimi (zid ma'nosi)?", a: "Qora", w: ["Sariq", "Ko'k", "Yorug'"] }
-            ],
-            9: [
-                { q: "'Xamsa'ning birinchi dostoni qaysi?", a: "Hayrat ul-abror", w: ["Farhod va Shirin", "Layli va Majnun", "Sab'ai sayyor"] },
-                { q: "'Mehrobdan chayon' romanini kim yozgan?", a: "Abdulla Qodiriy", w: ["Oybek", "G'afur G'ulom", "Cho'lpon"] },
-                { q: "'Shum bola' qissasining muallifi kim?", a: "G'afur G'ulom", w: ["O'tkir Hoshimov", "Xudoyberdi To'xtaboyev", "Pirimqul Qodirov"] }
-            ],
-            10: [
-                { q: "'Knowledge' so'zining tarjimasi nima?", a: "Bilim", w: ["Kuch", "Kitob", "Maktab"] },
-                { q: "'They ___ students' gapiga mos so'zni qo'ying:", a: "are", w: ["is", "am", "was"] },
-                { q: "'Beautiful' so'zining ma'nosi nima?", a: "Chiroyli", w: ["Aqlli", "Kuchli", "Tez"] }
-            ],
-            11: [
-                { q: "Quyosh sistemasida nechta sayyora bor?", a: "8 ta", w: ["9 ta", "7 ta", "10 ta"] },
-                { q: "Halqalari bor gigant sayyora qaysi?", a: "Saturn", w: ["Mars", "Merkuriy", "Venera"] },
-                { q: "Quyoshga eng yaqin sayyora qaysi?", a: "Merkuriy", w: ["Venera", "Yer", "Mars"] }
-            ],
-            13: [
-                { q: "O'zbekiston Konstitutsiyasi nechta moddadan iborat?", a: "155 modda", w: ["128 modda", "100 modda", "200 modda"] },
-                { q: "Davlat hokimiyatining birdan-bir manbai kim?", a: "Xalq", w: ["Prezident", "Vazirlar", "Sud"] }
-            ],
-            14: [
-                { q: "'O'zingni angla' hikmati kimga tegishli?", a: "Suqrot (Sokrat)", w: ["Arastu", "Aflotun", "Pifagor"] },
-                { q: "Mantiq fanining asoschisi deb kim tan olingan?", a: "Arastu (Aristotel)", w: ["Demokrit", "Geraklit", "Epikur"] }
-            ],
-            15: [
-                { q: "Tez jahli chiqadigan temperament turi?", a: "Xolerik", w: ["Sangvinik", "Flegmatik", "Melanxolik"] },
-                { q: "Og'ir-bosiq, shoshilmaydigan temperament turi qaysi?", a: "Flegmatik", w: ["Xolerik", "Sangvinik", "Melanxolik"] }
-            ]
-        };
 
         let currentUserId = localStorage.getItem("portal_user_id") || "";
         let currentUser = localStorage.getItem("portal_user") || "Mehmon";
         let currentXp = parseInt(localStorage.getItem("portal_xp")) || 0;
         let activeSubject = null;
+        let activeTopic = null;
         let questionCount = 1;
         let currentLevel = 1;
         let currentCorrectAnswer = "";
-        let currentXpReward = 1; // Boshlanishiga 1 XP
+        let currentXpReward = 1;
 
         function rand(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -286,42 +318,22 @@
                     localStorage.setItem("portal_xp", currentXp);
                     localStorage.setItem("portal_user", currentUser);
                     localStorage.setItem("portal_user_id", currentUserId);
-
-                    if (data.progress) {
-                        for (let subjId in data.progress) {
-                            localStorage.setItem(`subject_q_${subjId}`, data.progress[subjId]);
-                        }
-                    }
-                    statusEl.innerText = "✅ Profil muvaffaqiyatli yuklandi!";
+                    statusEl.innerText = "✅ Profil yuklandi!";
                 } else {
-                    db.ref('users/' + userId).set({
-                        name: currentUser,
-                        xp: currentXp,
-                        progress: {}
-                    });
+                    db.ref('users/' + userId).set({ name: currentUser, xp: currentXp });
                     localStorage.setItem("portal_user", currentUser);
                     localStorage.setItem("portal_user_id", currentUserId);
-                    statusEl.innerText = "🎉 Yangi onlayn profil ochildi!";
+                    statusEl.innerText = "🎉 Yangi profil ochildi!";
                 }
                 statusEl.className = "text-xs font-semibold text-emerald-400";
                 updateUI();
-                renderSubjects(subjects);
                 setTimeout(() => closeAuthModal(), 1200);
             });
         }
 
         function syncDataToCloud() {
             if (!currentUserId) return;
-            let progress = {};
-            for (let i = 1; i <= 15; i++) {
-                let q = localStorage.getItem(`subject_q_${i}`);
-                if (q) progress[i] = q;
-            }
-            db.ref('users/' + currentUserId).update({
-                name: currentUser,
-                xp: currentXp,
-                progress: progress
-            });
+            db.ref('users/' + currentUserId).update({ name: currentUser, xp: currentXp });
         }
 
         function syncDataFromCloud(userId) {
@@ -332,13 +344,7 @@
                     currentUser = data.name || currentUser;
                     localStorage.setItem("portal_xp", currentXp);
                     localStorage.setItem("portal_user", currentUser);
-                    if (data.progress) {
-                        for (let subjId in data.progress) {
-                            localStorage.setItem(`subject_q_${subjId}`, data.progress[subjId]);
-                        }
-                    }
                     updateUI();
-                    renderSubjects(subjects);
                 }
             });
         }
@@ -347,20 +353,19 @@
             const grid = document.getElementById("subjectsGrid");
             grid.innerHTML = "";
             list.forEach(subj => {
-                let savedQ = parseInt(localStorage.getItem(`subject_q_${subj.id}`)) || 1;
                 grid.innerHTML += `
-                    <div onclick="openModal(${subj.id})" class="bg-slate-900/60 backdrop-blur-md p-7 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-yellow-400 flex flex-col justify-between group">
+                    <div onclick="openSubjectModal(${subj.id})" class="bg-slate-900/60 backdrop-blur-md p-7 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-yellow-400 flex flex-col justify-between group">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30 group-hover:bg-yellow-400 group-hover:text-blue-950 transition">Modul #${subj.id}</span>
-                                <span class="text-xs font-bold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 px-2.5 py-1 rounded-lg">Savol: #${savedQ}</span>
+                                <span class="text-xs font-bold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 px-2.5 py-1 rounded-lg">${subj.topics.length} ta Mavzu</span>
                             </div>
                             <h3 class="text-xl font-black text-white mb-2">${subj.name}</h3>
                             <p class="text-slate-300 text-sm leading-relaxed mb-4">${subj.desc}</p>
                         </div>
                         <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-yellow-400">
-                            <span>📺 Video + 📖 Tushuntirish</span>
-                            <span>Boshlash →</span>
+                            <span>📚 To'liq darslar</span>
+                            <span>O'rganish →</span>
                         </div>
                     </div>
                 `;
@@ -373,62 +378,64 @@
             renderSubjects(filtered);
         }
 
-        function openModal(id) {
+        function openSubjectModal(id) {
             activeSubject = subjects.find(s => s.id === id);
-            questionCount = parseInt(localStorage.getItem(`subject_q_${activeSubject.id}`)) || 1;
             
             document.getElementById("modalCategoryBadge").innerText = activeSubject.name;
             document.getElementById("modalTitle").innerText = activeSubject.name;
             document.getElementById("modalDesc").innerText = activeSubject.desc;
-            document.getElementById("modalTheory").innerText = activeSubject.theory;
-            document.getElementById("modalVideo").src = activeSubject.video;
-            
-            loadNextQuestion();
 
+            const container = document.getElementById("topicsListContainer");
+            container.innerHTML = "";
+            activeSubject.topics.forEach((top, index) => {
+                container.innerHTML += `
+                    <div onclick="openLesson(${index})" class="bg-slate-800/80 p-4 rounded-2xl border border-white/10 hover:border-yellow-400 cursor-pointer transition flex items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-white text-sm mb-1">${top.title}</h4>
+                            <p class="text-xs text-slate-400">Video dars va testlar mavjud</p>
+                        </div>
+                        <span class="text-yellow-400 font-bold text-sm">O'qish →</span>
+                    </div>
+                `;
+            });
+
+            document.getElementById("subjectTopicsView").classList.remove("hidden");
+            document.getElementById("lessonQuizView").classList.add("hidden");
             document.getElementById("subjectModal").classList.remove("hidden");
             document.getElementById("subjectModal").classList.add("flex");
         }
 
+        function openLesson(topicIndex) {
+            activeTopic = activeSubject.topics[topicIndex];
+            questionCount = 1;
+
+            document.getElementById("subjectTopicsView").classList.add("hidden");
+            document.getElementById("lessonQuizView").classList.remove("hidden");
+
+            document.getElementById("lessonTitle").innerText = activeTopic.title;
+            document.getElementById("lessonTheory").innerText = activeTopic.theory;
+            document.getElementById("lessonVideo").src = activeTopic.video;
+
+            loadNextQuestion();
+        }
+
+        function backToTopics() {
+            document.getElementById("lessonQuizView").classList.add("hidden");
+            document.getElementById("subjectTopicsView").classList.remove("hidden");
+            document.getElementById("lessonVideo").src = "";
+        }
+
         function loadNextQuestion() {
-            // Har 10 ta savol ishlaganda XP mukofoti 1 taga oshib boradi (1-10: 1xp, 11-20: 2xp, 21-30: 3xp...)
             let rewardTier = Math.floor((questionCount - 1) / 10) + 1;
             currentXpReward = rewardTier;
 
-            document.getElementById("modalLevelBadge").innerText = `Daraja: ${rewardTier}`;
             document.getElementById("quizCounter").innerText = `Savol #${questionCount}`;
             document.getElementById("quizXpReward").innerText = `+${currentXpReward} XP Mukofot`;
 
-            let q = "", correct = "", options = [];
-
-            if (activeSubject.id === 1) {
-                let a = rand(10 * rewardTier, 50 * rewardTier), b = rand(5 * rewardTier, 30 * rewardTier);
-                q = `${a} + ${b} nechiga teng?`;
-                correct = String(a + b);
-                let num = Number(correct);
-                options = shuffle([correct, String(num + rand(2, 10)), String(num - rand(2, 8)), String(num + rand(12, 20))]);
-            } else if (activeSubject.id === 2) {
-                let v = rand(10, 20 * rewardTier), t = rand(2, 8);
-                q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. Bosib o'tgan yo'li qancha?`;
-                correct = `${v * t} m`;
-                options = shuffle([correct, `${v * t + 15} m`, `${v + t} m`, `${Math.abs(v * t - 10)} m`]);
-            } else if (activeSubject.id === 5) {
-                let kb = rand(2, 8 * rewardTier);
-                q = `${kb} Kilobayt (KB) necha Baytga teng?`;
-                correct = `${kb * 1024} bayt`;
-                options = shuffle([correct, `${kb * 1000} bayt`, `${kb * 512} bayt`, `${kb * 8} bayt`]);
-            } else if (activeSubject.id === 12) {
-                let sum = rand(10, 20 * rewardTier) * 1000;
-                let ans = sum * 0.2;
-                q = `${sum.toLocaleString()} so'mlik mahsulotga 20% chegirma berilsa, qancha tejaladi?`;
-                correct = `${ans.toLocaleString()} so'm`;
-                options = shuffle([correct, `${(ans + 3000).toLocaleString()} so'm`, `${(ans / 2).toLocaleString()} so'm`, `${(ans + 5000).toLocaleString()} so'm`]);
-            } else {
-                const bank = factBanks[activeSubject.id] || [{ q: "O'zbekiston poytaxti qaysi shahar?", a: "Toshkent", w: ["Samarqand", "Buxoro", "Xiva"] }];
-                const item = bank[rand(0, bank.length - 1)];
-                q = item.q;
-                correct = item.a;
-                options = shuffle([item.a, ...item.w]);
-            }
+            let qItem = activeTopic.qList[rand(0, activeTopic.qList.length - 1)];
+            let q = qItem.q;
+            let correct = qItem.a;
+            let options = shuffle([correct, ...qItem.w]);
 
             currentCorrectAnswer = correct;
             document.getElementById("quizQuestion").innerText = q;
@@ -449,10 +456,7 @@
                 localStorage.setItem("portal_xp", currentXp);
                 
                 questionCount++;
-                localStorage.setItem(`subject_q_${activeSubject.id}`, questionCount);
-
                 updateUI();
-                renderSubjects(subjects);
                 syncDataToCloud();
 
                 resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP qo'shildi. Keyingi savol...`;
@@ -470,8 +474,7 @@
         function closeModal() {
             document.getElementById("subjectModal").classList.remove("flex");
             document.getElementById("subjectModal").classList.add("hidden");
-            document.getElementById("modalVideo").src = "";
-            renderSubjects(subjects);
+            document.getElementById("lessonVideo").src = "";
         }
 
         function openAuthModal() {
