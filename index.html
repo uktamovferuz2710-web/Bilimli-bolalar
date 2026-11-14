@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali — Bosqichma-bosqich Ta'lim va XP</title>
+    <title>Bilimlar Portali — Cheksiz Testlar va XP</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800">
@@ -12,8 +12,8 @@
     <header class="bg-blue-900 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold">Bilimlar Portali</h1>
-                <p class="text-sm text-blue-200">15 ta fan bo'yicha bosqichma-bosqich testlar va XP reytingi</p>
+                <h1 class="text-2xl font-bold">Bilimlar Portali ∞</h1>
+                <p class="text-sm text-blue-200">15 ta fan • Cheksiz savollar • Borgan sari qiyinlashuvchi tizim</p>
             </div>
             
             <div class="flex items-center gap-4 bg-blue-800 px-4 py-2 rounded-xl shadow-inner">
@@ -31,7 +31,7 @@
         
         <!-- SEARCH & LEADERBOARD BUTTON -->
         <div class="flex flex-col md:flex-row gap-4 mb-8">
-            <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Fizika, Tarix)..." 
+            <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Matematika, Ingliz tili)..." 
                 class="flex-grow px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm"
                 onkeyup="searchSubjects()">
             <button onclick="openLeaderboard()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
@@ -40,35 +40,35 @@
         </div>
 
         <!-- SUBJECTS GRID -->
-        <div id="subjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- JavaScript orqali fanlar chiqariladi -->
-        </div>
+        <div id="subjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- MODAL (DETAILS, VIDEO, MULTI-LEVEL QUIZ) -->
+    <!-- MODAL (DETAILS, VIDEO, INFINITE QUIZ) -->
     <div id="subjectModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
-            <h2 id="modalTitle" class="text-2xl font-bold text-blue-900 mb-2"></h2>
-            <p id="modalDesc" class="text-slate-600 mb-4"></p>
+            <h2 id="modalTitle" class="text-2xl font-bold text-blue-900 mb-1"></h2>
+            <p id="modalDesc" class="text-slate-600 text-sm mb-4"></p>
             
             <!-- Video dars bo'limi -->
-            <div class="mb-6">
-                <h3 class="font-semibold text-lg text-blue-800 mb-2">📺 Video Dars</h3>
-                <div class="aspect-w-16 aspect-h-9 bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center text-white min-h-[200px]">
-                    <iframe id="modalVideo" class="w-full h-64 rounded-xl" src="" title="Video dars" frameborder="0" allowfullscreen></iframe>
+            <div class="mb-5">
+                <h3 class="font-semibold text-base text-blue-800 mb-2">📺 Video Dars</h3>
+                <div class="bg-slate-900 rounded-xl overflow-hidden">
+                    <iframe id="modalVideo" class="w-full h-56 rounded-xl" src="" title="Video dars" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
 
-            <!-- Bosqichma-bosqich Test bo'limi -->
-            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 id="quizLevelTitle" class="font-semibold text-lg text-blue-800">✍️ Bosqichli Testlar</h3>
-                    <span id="quizScoreBadge" class="text-xs bg-blue-200 text-blue-800 font-bold px-2 py-1 rounded-md">Savol 1 / 3</span>
+            <!-- Cheksiz Test bo'limi -->
+            <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                    <span id="levelBadge" class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">Daraja (Level): 1</span>
+                    <span id="questionCounter" class="text-xs bg-blue-200 text-blue-900 font-bold px-3 py-1 rounded-full">Savol #1 • ∞ cheksiz</span>
+                    <span id="xpRewardBadge" class="text-xs bg-green-200 text-green-900 font-bold px-3 py-1 rounded-full">+20 XP</span>
                 </div>
-                <p id="quizQuestion" class="font-medium text-slate-700 mb-3"></p>
-                <div id="quizOptions" class="space-y-2"></div>
-                <p id="quizResult" class="mt-3 font-semibold text-sm"></p>
+                
+                <p id="quizQuestion" class="font-bold text-lg text-slate-800 mb-4"></p>
+                <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+                <p id="quizResult" class="mt-3 font-semibold text-sm min-h-[20px]"></p>
             </div>
         </div>
     </div>
@@ -93,134 +93,207 @@
     </div>
 
     <script>
-        // Har bir fanda oson, o'rta va qiyin darajadagi ko'p savollar bazasi
         const subjects = [
-            {
-                id: 1, name: "1. Matematika", desc: "Sonlar, tuzilmalar, fazo va o'zgarishlar haqidagi aniq fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "2 + 2 * 2 nechiga teng?", options: ["6", "8", "4"], correct: "6", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "100 ning 15% qismiga teng?", options: ["10", "15", "20"], correct: "15", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Kvadratning yuzi 64 ga teng bo'lsa, uning tomoni nechiga teng?", options: ["6", "8", "16"], correct: "8", xp: 60 }
-                ]
-            },
-            {
-                id: 2, name: "2. Fizika", desc: "Tabiatning umumiy qonunlari, materiya va energiya haqidagi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "Tezlik formulasini toping?", options: ["S = v * t", "F = m * a", "E = mc^2"], correct: "S = v * t", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "Bosimning birligi nima?", options: ["Nyuton", "Paskal", "Joul"], correct: "Paskal", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Erkin tushish tezlanishi (g) taxminan nechiga teng?", options: ["9.8 m/s²", "5.2 m/s²", "10.5 m/s²"], correct: "9.8 m/s²", xp: 60 }
-                ]
-            },
-            {
-                id: 3, name: "3. Kimyo", desc: "Moddalarning tarkibi, tuzilishi, xossalari va o'zgarishlarini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "Suvning kimyoviy formulasi qanday?", options: ["CO2", "H2O", "O2"], correct: "H2O", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "Mendeleyev jadvalida Kislorod nechta raqam ostida?", options: ["6", "8", "12"], correct: "8", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Osh tuzining kimyoviy nomi qanday?", options: ["Natriy xlorid", "Kaliy permanganat", "Kalsiy karbonat"], correct: "Natriy xlorid", xp: 60 }
-                ]
-            },
-            {
-                id: 4, name: "4. Biologiya", desc: "Tiriklik va barcha tirik organizmlarning hayot faoliyati haqidagi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "Inson tanasidagi asosiy qon haydovchi organ?", options: ["Yurak", "O'pka", "Buyrak"], correct: "Yurak", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "O'simliklar quyosh nuri yordamida qanday jarayon hosil qiladi?", options: ["Fotosintez", "Nafas olish", "Ekish"], correct: "Fotosintez", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Inson tanasida nechta xromosoma mavjud?", options: ["46", "23", "48"], correct: "46", xp: 60 }
-                ]
-            },
-            {
-                id: 5, name: "5. Informatika", desc: "Axborotni kompyuterlar yordamida qayta ishlash va dasturlash asoslari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "HTML nima?", options: ["Dasturlash tili", "Belgilash tili", "Operatsion sistema"], correct: "Belgilash tili", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "Kompyuterning 'miyasi' nima deb ataladi?", options: ["RAM", "Protsessor (CPU)", "Qattiq disk"], correct: "Protsessor (CPU)", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "1 Bayt necha Bitdan iborat?", options: ["8", "16", "1024"], correct: "8", xp: 60 }
-                ]
-            },
-            {
-                id: 6, name: "6. Tarix", desc: "Insoniyatning o'tmishi, sivilizatsiyalar rivojlanishi va tarixiy voqealar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "Amir Temur qaysi yilda tug'ilgan?", options: ["1336", "1405", "1219"], correct: "1336", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "Buyuk Ipak yo'li qaysi qit'alarni bog'lagan?", options: ["Osiyo va Yevropa", "Afrika va Amerika", "Avstraliya va Antarktida"], correct: "Osiyo va Yevropa", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Ulug'bek akademiyasi qaysi shaharda barpo etilgan?", options: ["Samarqand", "Buxoro", "Xiva"], correct: "Samarqand", xp: 60 }
-                ]
-            },
-            {
-                id: 7, name: "7. Geografiya", desc: "Yer yuzasi tabiatini, aholisini va xo'jalik faoliyatini o'rganuvchi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "Eng katta okean qaysi?", options: ["Tinch okeani", "Atlantika", "Hind okeani"], correct: "Tinch okeani", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "Dunyodagi eng uzun daryo qaysi?", options: ["Nil", "Amazonka", "Sirdaryo"], correct: "Nil", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Yer yuzidagi eng baland cho'qqi qaysi?", options: ["Everest", "Chogori", "Elbrus"], correct: "Everest", xp: 60 }
-                ]
-            },
-            {
-                id: 8, name: "8. Ona tili", desc: "Tilning grammatik qurilishi, imlo qoidalari va nutq madaniyati.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "O'zbek alifbosida nechta harf bor?", options: ["26", "29", "34"], correct: "29", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "Quyidagilardan qaysi biri unli harf?", options: ["B", "O", "T"], correct: "O", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Bosh kelishikdagi so'z qaysi savolga javob beradi?", options: ["Kim? Nima?", "Kimni? Nimani?", "Kimga? Nimaga?"], correct: "Kim? Nima?", xp: 60 }
-                ]
-            },
-            {
-                id: 9, name: "9. Adabiyot", desc: "So'z san'ati, badiiy asarlar tahlili va adabiyot tarixi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "'O'tkan kunlar' romanining muallifi kim?", options: ["Abdulla Qodiriy", "Alisher Navoiy", "Cho'lpon"], correct: "Abdulla Qodiriy", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "'Xamsa' asari nechta dostondan iborat?", options: ["5", "4", "7"], correct: "5", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Bobur Mirzo qaysi mashhur asarning muallifi?", options: ["Boburnoma", "Qutadg'u bilig", "Muhokamat ul-lug'atayn"], correct: "Boburnoma", xp: 60 }
-                ]
-            },
-            {
-                id: 10, name: "10. Ingliz tili", desc: "Xalqaro muloqot, ilm-fan va texnologiyalar tili.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "'Hello' so'zining ma'nosi?", options: ["Salom", "Xayr", "Rahmat"], correct: "Salom", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "'To be' fe'lining 'he' olmoshi uchun shakli?", options: ["is", "are", "am"], correct: "is", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "'Went' fe'li qaysi zamon va fe'lning shakli?", options: ["Go fe'lining o'tgan zamon shakli", "Kelasi zamon", "Hozirgi davom et humanidad"], correct: "Go fe'lining o'tgan zamon shakli", xp: 60 }
-                ]
-            },
-            {
-                id: 11, name: "11. Astronomiya", desc: "Osmon jismlari, yulduzlar, sayyoralar va koinot tuzilishi haqidagi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "Quyosh sistemasidagi eng katta sayyora?", options: ["Yupiter", "Yer", "Mars"], correct: "Yupiter", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "Qaysi sayyora 'Qizil sayyora' deb ataladi?", options: ["Mars", "Venera", "Saturn"], correct: "Mars", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Yerga eng yaqin yulduz qaysi?", options: ["Quyosh", "Sirius", "Polaris"], correct: "Quyosh", xp: 60 }
-                ]
-            },
-            {
-                id: 12, name: "12. Iqtisodiyot", desc: "Cheklangan resurslardan samarali foydalanish va bozor qonunlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "O'zbekiston milliy valyutasi?", options: ["So'm", "Dollar", "Yevro"], correct: "So'm", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "Inflatsiya nima?", options: ["Pul qadrsizlanishi", "Daromad oshishi", "Soliq kamayishi"], correct: "Pul qadrsizlanishi", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Monopoliya nima?", options: ["Bozorda bitta sotuvchi hukmronligi", "Ko'plab raqobat", "Davlat byudjeti"], correct: "Bozorda bitta sotuvchi hukmronligi", xp: 60 }
-                ]
-            },
-            {
-                id: 13, name: "13. Huquqshunoslik", desc: "Jamiyatdagi huquqiy normalar, qonunlar va inson huquqlari asoslari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "O'zbekiston Respublikasining Asosiy qonuni?", options: ["Konstitutsiya", "Jinoyat kodeksi", "Mehnat kodeksi"], correct: "Konstitutsiya", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "O'zbekistonda fuqarolar necha yoshdan ovoz berish huquqiga ega?", options: ["18 yoshdan", "16 yoshdan", "21 yoshdan"], correct: "18 yoshdan", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "O'zbekiston Respublikasining Konstitutsiyasi qabul qilingan sana?", options: ["1992-yil 8-dekabr", "1991-yil 1-sentabr", "1993-yil 2-iyul"], correct: "1992-yil 8-dekabr", xp: 60 }
-                ]
-            },
-            {
-                id: 14, name: "14. Falsafa", desc: "Borliq, bilim, axloq va inson tafakkurining umumiy tamoyillari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "Falsafa so'zining ma'nosi?", options: ["Donishmandlikni sevish", "Matematik qonun", "Tarixiy sana"], correct: "Donishmandlikni sevish", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "'Men o'ylayapman, demak, men yashayapman' degan faylasuf kim?", options: ["Rene Dekart", "Aristotel", "Platon"], correct: "Rene Dekart", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Antik davr yunon faylasufi Sokratning o'quvchisi kim bo'lgan?", options: ["Platon", "Pifagor", "Arximed"], correct: "Platon", xp: 60 }
-                ]
-            },
-            {
-                id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati, xulq-atvori va ichki kechinmalarini o'rganuvchi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                quizzes: [
-                    { level: "1-bosqich (Oson)", q: "Psixologiya nimani o'rganadi?", options: ["Ruhiyatni", "Toshlarni", "Mashinalarni"], correct: "Ruhiyatni", xp: 20 },
-                    { level: "2-bosqich (O'rta)", q: "Inson fe'l-atvorining 4 ta asosiy asosiy turi kim tomonidan e'tirof etilgan?", options: ["Gippokrat", "Freyd", "Pavlov"], correct: "Gippokrat", xp: 40 },
-                    { level: "3-bosqich (Qiyin)", q: "Psychoanalysis (Psixoanaliz) asoschisi kim?", options: ["Zigmunt Freyd", "Karl Jung", "Jon Uotson"], correct: "Zigmunt Freyd", xp: 60 }
-                ]
-            }
+            { id: 1, name: "1. Matematika", desc: "Arifmetika, algebra, geometriya va mantiqiy misollar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 2, name: "2. Fizika", desc: "Tezlik, kuch, energiya, bosim va elektr qonunlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 3, name: "3. Kimyo", desc: "Kimyoviy elementlar, valentlik, massalar va reaksiyalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 4, name: "4. Biologiya", desc: "Hujayra, odam anatomiyasi, botanika va genetika.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 5, name: "5. Informatika", desc: "Sanoq sistemalari (ikkilik/o'nlik), baytlar va dasturlash.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 6, name: "6. Tarix", desc: "Jahon va O'zbekiston tarixi, asrlar va buyuk sanalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 7, name: "7. Geografiya", desc: "Davlatlar, poytaxtlar, okeanlar, tog'lar va iqlim.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 8, name: "8. Ona tili", desc: "Imlo qoidalari, so'z turkumlari, sintaksis va ma'nodosh so'zlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 9, name: "9. Adabiyot", desc: "Shoir va yozuvchilar, dostonlar va badiiy asarlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 10, name: "10. Ingliz tili", desc: "So'z boyligi, grammatika, zamonlar va tarjimalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 11, name: "11. Astronomiya", desc: "Sayyoralar, yulduzlar, yorug'lik yili va koinot masofalari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 12, name: "12. Iqtisodiyot", desc: "Foizlar, foyda-zarar hisobi, valyuta va bozor qonunlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya moddalari, fuqarolik huquqlari va qonunlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 14, name: "14. Falsafa", desc: "Mutafakkirlar, mantiq qonunlari va falsafiy tushunchalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 15, name: "15. Psixologiya", desc: "Xotira, temperament turlari, hissiyotlar va muloqot.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
         ];
+
+        // Boshqa fanlar uchun katta faktlar bazasi (har safar aralashtirib millionlab kombinatsiya yasaydi)
+        const factBanks = {
+            3: [ // Kimyo
+                { q: "Vodorod (H) ning atom raqami nechiga teng?", a: "1", w: ["2", "4", "8"] },
+                { q: "Kislorod (O) ning atom massasi taxminan nechiga teng?", a: "16", w: ["8", "12", "32"] },
+                { q: "Uglerod (C) ning atom raqami nechiga teng?", a: "6", w: ["12", "14", "4"] },
+                { q: "Oltin elementining kimyoviy belgisi nima?", a: "Au", w: ["Ag", "Fe", "Cu"] },
+                { q: "Temir elementining kimyoviy belgisi nima?", a: "Fe", w: ["Te", "Tm", "Pb"] },
+                { q: "Kumush elementining kimyoviy belgisi nima?", a: "Ag", w: ["Au", "Al", "Si"] },
+                { q: "Karbonat angidrid gazining formulasi qanday?", a: "CO2", w: ["CO", "H2O", "CH4"] },
+                { q: "Sulfat kislotaning formulasi qaysi?", a: "H2SO4", w: ["HCl", "HNO3", "NaOH"] }
+            ],
+            4: [ // Biologiya
+                { q: "Odam yuragi nechta kameradan iborat?", a: "4 ta", w: ["2 ta", "3 ta", "5 ta"] },
+                { q: "Hujayraning energetik stansiyasi qaysi organoid?", a: "Mitoxondriya", w: ["Ribosoma", "Yadro", "Vakuola"] },
+                { q: "Qonning qizil rangini beruvchi oqsil nima?", a: "Gemoglobin", w: ["Insulin", "Keratin", "Kollagen"] },
+                { q: "DNK molekulasining tuzilishi qanday shaklda?", a: "Qo'sh spiral", w: ["Yassi doira", "Kub", "To'g'ri chiziq"] },
+                { q: "O'simlik barglariga yashil rang beruvchi modda?", a: "Xlorofill", w: ["Karotin", "Kraxmal", "Sellyuloza"] }
+            ],
+            6: [ // Tarix
+                { q: "Amir Temur qaysi yilda tavallud topgan?", a: "1336-yil", w: ["1370-yil", "1405-yil", "1441-yil"] },
+                { q: "Alisher Navoiy qaysi yilda tug'ilgan?", a: "1441-yil", w: ["1483-yil", "1336-yil", "1501-yil"] },
+                { q: "Zahiriddin Muhammad Bobur qaysi yilda tug'ilgan?", a: "1483-yil", w: ["1441-yil", "1526-yil", "1394-yil"] },
+                { q: "Mirzo Ulug'bek qaysi yilda tug'ilgan?", a: "1394-yil", w: ["1449-yil", "1336-yil", "1405-yil"] },
+                { q: "O'zbekiston Mustaqilligi qachon e'lon qilingan?", a: "1991-yil 31-avgust", w: ["1992-yil 8-dekabr", "1991-yil 1-yanvar", "1990-yil 20-iyun"] }
+            ],
+            7: [ // Geografiya
+                { q: "Yaponiyaning poytaxti qaysi shahar?", a: "Tokio", w: ["Seul", "Pekin", "Kioto"] },
+                { q: "Dunyodagi eng katta cho'l qaysi?", a: "Sahroi Kabir", w: ["Qizilqum", "Gobi", "Atakama"] },
+                { q: "Eng chuqur ko'l qaysi?", a: "Baykal", w: ["Orol", "Kaspiy", "Viktoriya"] },
+                { q: "Braziliyaning poytaxti qaysi shahar?", a: "Braziliya", w: ["Rio-de-Janeyro", "San-Paulu", "Buenos-Ayres"] },
+                { q: "Dunyodagi eng baland sharshara qaysi?", a: "Anxel", w: ["Niagara", "Viktoriya", "Iguasu"] }
+            ],
+            8: [ // Ona tili
+                { q: "'Kitob' so'ziga qaysi kelishik qo'shimchasi qo'shilsa tushum kelishigi bo'ladi?", a: "-ni (kitobni)", w: ["-ning (kitobning)", "-ga (kitobga)", "-da (kitobda)"] },
+                { q: "Qaysi so'z turkumi shaxs va narsaning harakatini bildiradi?", a: "Fe'l", w: ["Ot", "Sifat", "Ravish"] },
+                { q: "'Chiroyli' so'zining ma'nodoshi (sinonimi) qaysi?", a: "Go'zal", w: ["Xunuk", "Katta", "Tez"] },
+                { q: "'Oq' so'zining zid ma'nosi (antonimi) qaysi?", a: "Qora", w: ["Sariq", "Ko'k", "Yorug'"] }
+            ],
+            9: [ // Adabiyot
+                { q: "'Xamsa'ning birinchi dostoni qaysi?", a: "Hayrat ul-abror", w: ["Farhod va Shirin", "Layli va Majnun", "Sab'ai sayyor"] },
+                { q: "'Mehrobdan chayon' romanining muallifi kim?", a: "Abdulla Qodiriy", w: ["Oybek", "G'afur G'ulom", "Cho'lpon"] },
+                { q: "'Kecha va kunduz' romanini kim yozgan?", a: "Abdulhamid Cho'lpon", w: ["Abdurauf Fitrat", "Abdulla Qahhor", "Usmon Nosir"] },
+                { q: "'Shum bola' qissasining muallifi kim?", a: "G'afur G'ulom", w: ["O'tkir Hoshimov", "Xudoyberdi To'xtaboyev", "Pirimqul Qodirov"] }
+            ],
+            10: [ // Ingliz tili
+                { q: "'Knowledge' so'zining o'zbekcha tarjimasi nima?", a: "Bilim", w: ["Kuch", "Kitob", "Maktab"] },
+                { q: "'Success' so'zining tarjimasi qaysi?", a: "Muvaffaqiyat", w: ["Mag'lubiyat", "Harakat", "Vaqt"] },
+                { q: "'They ___ students' gapiga mos so'zni qo'ying:", a: "are", w: ["is", "am", "was"] },
+                { q: "'Beautiful' so'zining ma'nosi nima?", a: "Chiroyli", w: ["Aqlli", "Kuchli", "Tez"] },
+                { q: "'Yesterday I ___ to school' (borgan edim):", a: "went", w: ["go", "gone", "going"] }
+            ],
+            11: [ // Astronomiya
+                { q: "Quyosh sistemasida nechta asosiy sayyora bor?", a: "8 ta", w: ["9 ta", "7 ta", "10 ta"] },
+                { q: "Halqalari bilan mashhur bo'lgan gigant sayyora qaysi?", a: "Saturn", w: ["Mars", "Merkuriy", "Venera"] },
+                { q: "Quyoshga eng yaqin sayyora qaysi?", a: "Merkuriy", w: ["Venera", "Yer", "Mars"] },
+                { q: "Bizning galaktikamiz qanday nomlanadi?", a: "Somon yo'li", w: ["Andromeda", "Orion", "Katta Ayiq"] }
+            ],
+            13: [ // Huquqshunoslik
+                { q: "O'zbekiston Respublikasi Konstitutsiyasi nechta moddadan iborat (yangi tahrir)?", a: "155 modda", w: ["128 modda", "100 modda", "200 modda"] },
+                { q: "O'zbekistonda davlat hokimiyatining birdan-bir manbai kim?", a: "Xalq", w: ["Prezident", "Vazirlar", "Sud"] },
+                { q: "Voyaga yetish yoshi necha yosh etib belgilangan?", a: "18 yosh", w: ["16 yosh", "20 yosh", "21 yosh"] }
+            ],
+            14: [ // Falsafa
+                { q: "'O'zingni angla' hikmati kimga tegishli?", a: "Suqrot (Sokrat)", w: ["Arastu", "Aflotun", "Pifagor"] },
+                { q: "Mantiq fanining asoschisi deb kim tan olingan?", a: "Arastu (Aristotel)", w: ["Demokrit", "Geraklit", "Epikur"] },
+                { q: "Borliq va bilishning eng umumiy qonunlarini o'rganuvchi fan?", a: "Falsafa", w: ["Sotsiologiya", "Psixologiya", "Tarix"] }
+            ],
+            15: [ // Psixologiya
+                { q: "Tez jahli chiqadigan, lekin tez hovridan tushadigan temperament turi?", a: "Xolerik", w: ["Sangvinik", "Flegmatik", "Melanxolik"] },
+                { q: "Og'ir-bosiq, shoshilmaydigan temperament turi qaysi?", a: "Flegmatik", w: ["Xolerik", "Sangvinik", "Melanxolik"] },
+                { q: "Quvnoq, kirishimli va faol temperament turi qaysi?", a: "Sangvinik", w: ["Melanxolik", "Flegmatik", "Xolerik"] }
+            ]
+        };
 
         let currentUser = localStorage.getItem("portal_user") || "Mehmon";
         let currentXp = parseInt(localStorage.getItem("portal_xp")) || 0;
         let activeSubject = null;
-        let currentQuizIndex = 0;
+        let questionCount = 1;
+        let currentLevel = 1;
+        let currentCorrectAnswer = "";
+        let currentXpReward = 20;
+
+        function rand(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        // CHEKSIZ VA QIYINLASHIB BORUVCHI SAVOL GENERATORI
+        function generateInfiniteQuestion(subjectId, level) {
+            let q = "", correct = "", options = [];
+
+            // 1. MATEMATIKA — Darajaga qarab sonlar va amallar qiyinlashadi!
+            if (subjectId === 1) {
+                if (level === 1) {
+                    let a = rand(5, 30), b = rand(5, 30);
+                    q = `${a} + ${b} nechiga teng?`;
+                    correct = String(a + b);
+                } else if (level === 2) {
+                    let a = rand(6, 15), b = rand(6, 15);
+                    q = `${a} × ${b} nechiga teng?`;
+                    correct = String(a * b);
+                } else if (level === 3) {
+                    let a = rand(10, 25), b = rand(3, 9), c = rand(5, 20);
+                    q = `${a} × ${b} + ${c} nechiga teng?`;
+                    correct = String(a * b + c);
+                } else if (level === 4) {
+                    let x = rand(5, 25), k = rand(3, 8), b = rand(10, 40);
+                    let res = k * x + b;
+                    q = `Tenglamani yeching: ${k}x + ${b} = ${res}. (x = ?)`;
+                    correct = String(x);
+                } else {
+                    // Level 5 va undan yuqori — cheksiz murakkab kvadrat va foiz misollar!
+                    let base = rand(11, 20 + level * 2);
+                    let add = rand(15, 50 * level);
+                    q = `${base}² + ${add} nechiga teng?`;
+                    correct = String(base * base + add);
+                }
+                let num = Number(correct);
+                options = shuffle([correct, String(num + rand(2, 12)), String(num - rand(2, 10)), String(num + rand(13, 25))]);
+            }
+
+            // 2. FIZIKA — Tezlik, kuch, energiya va bosim masalalari (cheksiz sonlar bilan)
+            else if (subjectId === 2) {
+                let type = rand(1, 3);
+                if (type === 1) {
+                    let v = rand(10, 25 * level), t = rand(2, 10 + level);
+                    q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. U qancha yo'l (metr) bosib o'tgan?`;
+                    correct = `${v * t} m`;
+                    options = shuffle([correct, `${v * t + 10} m`, `${v + t} m`, `${Math.abs(v * t - 15)} m`]);
+                } else if (type === 2) {
+                    let m = rand(5, 20 * level), a = rand(2, 10);
+                    q = `Massasi ${m} kg bo'lgan jismga ${a} m/s² tezlanish berish uchun qancha kuch (Nyuton) kerak?`;
+                    correct = `${m * a} N`;
+                    options = shuffle([correct, `${m + a} N`, `${m * a + 20} N`, `${m * 2} N`]);
+                } else {
+                    let u = rand(10, 50 * level), r = rand(2, 10);
+                    let i = u * r;
+                    q = `Zanjirdagi tok kuchi ${r} A, qarshilik ${u} Om bo'lsa, kuchlanish necha Volt?`;
+                    correct = `${i} V`;
+                    options = shuffle([correct, `${i + 12} V`, `${u + r} V`, `${Math.abs(i - 8)} V`]);
+                }
+            }
+
+            // 5. INFORMATIKA — Ikkilik sanoq sistemasi va axborot o'lchov birliklari (cheksiz!)
+            else if (subjectId === 5) {
+                if (level <= 2) {
+                    let kb = rand(2, 16 * level);
+                    q = `${kb} Kilobayt (KB) necha Baytga teng?`;
+                    correct = `${kb * 1024} bayt`;
+                    options = shuffle([correct, `${kb * 1000} bayt`, `${kb * 512} bayt`, `${kb * 8} bayt`]);
+                } else {
+                    let dec = rand(10, 30 + level * 15);
+                    q = `O'nlik sanoq sistemasidagi ${dec} soni ikkilik sanoq sistemasida qanday yoziladi?`;
+                    correct = dec.toString(2);
+                    options = shuffle([correct, (dec + 1).toString(2), (dec - 1).toString(2), (dec + 3).toString(2)]);
+                }
+            }
+
+            // 12. IQTISODIYOT — Foiz, foyda va valyuta hisoblari (cheksiz!)
+            else if (subjectId === 12) {
+                let sum = rand(10, 50 * level) * 1000;
+                let perc = [10, 15, 20, 25, 30][rand(0, 4)];
+                let ans = (sum * perc) / 100;
+                q = `${sum.toLocaleString()} so'mlik mahsulotga ${perc}% chegirma berilsa, necha so'm tejaladi?`;
+                correct = `${ans.toLocaleString()} so'm`;
+                options = shuffle([correct, `${(ans + 2000).toLocaleString()} so'm`, `${(ans / 2).toLocaleString()} so'm`, `${(ans + 5000).toLocaleString()} so'm`]);
+            }
+
+            // QOLGAN BARCHA FANLAR — Faktlar bazasidan + darajaga qarab aralashtirilgan savollar
+            else {
+                const bank = factBanks[subjectId];
+                const item = bank[rand(0, bank.length - 1)];
+                q = `[Daraja ${level}] ${item.q}`;
+                correct = item.a;
+                options = shuffle([item.a, ...item.w]);
+            }
+
+            return { q, correct, options };
+        }
 
         function updateUI() {
             document.getElementById("userNameDisplay").innerText = currentUser;
@@ -236,7 +309,7 @@
                         <div>
                             <h3 class="text-xl font-bold text-blue-900 mb-2">${subj.name}</h3>
                             <p class="text-slate-600 text-sm mb-4">${subj.desc}</p>
-                            <span class="text-xs bg-blue-100 text-blue-800 font-semibold px-2 py-1 rounded-md">⭐ 3 ta bosqichli test</span>
+                            <span class="text-xs bg-indigo-100 text-indigo-800 font-semibold px-2.5 py-1 rounded-md">∞ Cheksiz testlar • Level tizimi</span>
                         </div>
                         <span class="mt-4 text-blue-600 font-semibold text-sm flex items-center gap-1">Darsni boshlash →</span>
                     </div>
@@ -252,61 +325,65 @@
 
         function openModal(id) {
             activeSubject = subjects.find(s => s.id === id);
-            currentQuizIndex = 0;
+            questionCount = 1;
+            currentLevel = 1;
             
             document.getElementById("modalTitle").innerText = activeSubject.name;
             document.getElementById("modalDesc").innerText = activeSubject.desc;
             document.getElementById("modalVideo").src = activeSubject.video;
             
-            loadQuizStep();
+            loadNextInfiniteQuestion();
 
             document.getElementById("subjectModal").classList.remove("hidden");
             document.getElementById("subjectModal").classList.add("flex");
         }
 
-        function loadQuizStep() {
-            const quiz = activeSubject.quizzes[currentQuizIndex];
-            document.getElementById("quizLevelTitle").innerText = `✍️ ${quiz.level} (+${quiz.xp} XP)`;
-            document.getElementById("quizScoreBadge").innerText = `Savol ${currentQuizIndex + 1} / ${activeSubject.quizzes.length}`;
-            document.getElementById("quizQuestion").innerText = quiz.q;
-            
-            const optionsDiv = document.getElementById("quizOptions");
-            optionsDiv.innerHTML = "";
+        function loadNextInfiniteQuestion() {
+            // Har 3 ta savolda daraja (Level) oshadi va qiyinlashadi!
+            currentLevel = Math.floor((questionCount - 1) / 3) + 1;
+            currentXpReward = currentLevel * 20;
+
+            const generated = generateInfiniteQuestion(activeSubject.id, currentLevel);
+            currentCorrectAnswer = generated.correct;
+
+            document.getElementById("levelBadge").innerText = `Daraja (Level): ${currentLevel}`;
+            document.getElementById("questionCounter").innerText = `Savol #${questionCount} • ∞ cheksiz`;
+            document.getElementById("xpRewardBadge").innerText = `+${currentXpReward} XP`;
+            document.getElementById("quizQuestion").innerText = generated.q;
             document.getElementById("quizResult").innerText = "";
 
-            quiz.options.forEach(opt => {
-                optionsDiv.innerHTML += `<button onclick="checkAnswer('${opt}', '${quiz.correct}', ${quiz.xp})" class="w-full text-left bg-white p-2.5 rounded-lg border hover:bg-blue-100 transition font-medium">${opt}</button>`;
+            const optionsDiv = document.getElementById("quizOptions");
+            optionsDiv.innerHTML = "";
+            generated.options.forEach(opt => {
+                const safeOpt = opt.replace(/'/g, "\\'");
+                optionsDiv.innerHTML += `<button onclick="checkAnswer('${safeOpt}')" class="w-full text-left bg-white p-3 rounded-xl border border-slate-200 hover:bg-blue-100 hover:border-blue-400 transition font-medium shadow-sm">${opt}</button>`;
             });
+        }
+
+        function checkAnswer(selected) {
+            const resultEl = document.getElementById("quizResult");
+            if (selected === currentCorrectAnswer) {
+                currentXp += currentXpReward;
+                localStorage.setItem("portal_xp", currentXp);
+                updateUI();
+
+                resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP qo'shildi! Keyingi savol yuklanmoqda...`;
+                resultEl.className = "mt-3 font-semibold text-sm text-green-600";
+                
+                questionCount++;
+                setTimeout(() => {
+                    loadNextInfiniteQuestion();
+                }, 800);
+            } else {
+                resultEl.innerText = "❌ Xato javob! Qayta urinib ko'ring.";
+                resultEl.className = "mt-3 font-semibold text-sm text-red-600";
+            }
         }
 
         function closeModal() {
             document.getElementById("subjectModal").classList.remove("flex");
             document.getElementById("subjectModal").classList.add("hidden");
             document.getElementById("modalVideo").src = "";
-        }
-
-        function checkAnswer(selected, correct, xpReward) {
-            const resultEl = document.getElementById("quizResult");
-            if(selected === correct) {
-                currentXp += xpReward;
-                localStorage.setItem("portal_xp", currentXp);
-                updateUI();
-
-                if(currentQuizIndex < activeSubject.quizzes.length - 1) {
-                    resultEl.innerHTML = `✅ To'g'ri! +${xpReward} XP. Keyingi bosqichga o'tilmoqda...`;
-                    resultEl.className = "mt-3 font-semibold text-sm text-green-600";
-                    setTimeout(() => {
-                        currentQuizIndex++;
-                        loadQuizStep();
-                    }, 1200);
-                } else {
-                    resultEl.innerHTML = `🎉 Tabriklayman! Siz bu fanning barcha bosqichlarini muvaffaqiyatli yakunladingiz!`;
-                    resultEl.className = "mt-3 font-semibold text-sm text-green-600";
-                }
-            } else {
-                resultEl.innerText = "❌ Xato javob, qayta urinib ko'ring!";
-                resultEl.className = "mt-3 font-semibold text-sm text-red-600";
-            }
         }
 
         function openAuthModal() {
@@ -321,7 +398,7 @@
 
         function saveUser() {
             const name = document.getElementById("usernameInput").value.trim();
-            if(name) {
+            if (name) {
                 currentUser = name;
                 localStorage.setItem("portal_user", currentUser);
                 updateUI();
@@ -333,11 +410,11 @@
             const list = document.getElementById("leaderboardList");
             const players = [
                 { name: currentUser, xp: currentXp },
-                { name: "Azizbek", xp: 450 },
-                { name: "Madina", xp: 380 },
-                { name: "Jasur", xp: 300 },
-                { name: "Feruza", xp: 150 }
-            ].sort((a,b) => b.xp - a.xp);
+                { name: "Azizbek (Uzbekistan)", xp: 1450 },
+                { name: "Madina (Uzbekistan)", xp: 980 },
+                { name: "Jasur (Kazakhstan)", xp: 640 },
+                { name: "Feruza (Uzbekistan)", xp: 320 }
+            ].sort((a, b) => b.xp - a.xp);
 
             list.innerHTML = "";
             players.forEach((p, index) => {
