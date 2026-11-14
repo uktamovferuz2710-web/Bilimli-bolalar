@@ -1,593 +1,424 @@
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali PRO — Megamind Edition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <style>
-        /* Megamind tiniq orqa fon rasmi */
-        .megamind-bg {
-            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.90)), 
-                              url('https://images.hdqwalls.com/wallpapers/megamind-4k-uhd.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MEGAMIYYA QUIZ</title>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080a18;color:white;
+ font-family:Arial,sans-serif;min-height:100vh;
+ background-image:radial-gradient(ellipse at top,#25205b 0%,#080a18 65%);
+}
+header{
+ padding:18px;display:flex;justify-content:space-between;
+ align-items:center;border-bottom:1px solid #29264d;
+ position:sticky;top:0;background:#101126ed;z-index:5;
+}
+.logo{font-size:23px;font-weight:900;color:#bd9aff}
+.logo span{color:#42e8ff}
+button{
+ background:linear-gradient(120deg,#8055ff,#2bafff);
+ border:0;color:white;padding:12px 18px;border-radius:11px;
+ font-weight:bold;cursor:pointer;margin:4px;
+}
+button:disabled{opacity:.4}
+input,select{
+ width:100%;padding:14px;margin:7px 0;border-radius:10px;
+ border:1px solid #49416e;background:#17172d;color:white;
+}
+.container{max-width:1000px;margin:auto;padding:20px}
+.card{
+ background:#15152c;border:1px solid #37315c;
+ border-radius:17px;padding:20px;margin:14px 0;
+ box-shadow:0 8px 35px #0005;
+}
+h1,h2{color:#c8a8ff}
+.brain{
+ font-size:90px;text-align:center;
+ animation:brain 5s linear infinite;
+ filter:drop-shadow(0 0 20px #a65cff);
+}
+@keyframes brain{
+ 0%{transform:rotateY(0deg) rotateZ(-4deg)}
+ 50%{transform:rotateY(180deg) rotateZ(4deg)}
+ 100%{transform:rotateY(360deg) rotateZ(-4deg)}
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.subject{
+ background:#201d40;border:1px solid #51458a;
+ padding:18px 10px;border-radius:13px;text-align:center;
+ cursor:pointer;transition:.2s;
+}
+.subject:hover{transform:translateY(-4px);background:#33265e}
+.stat{font-size:27px;color:#65e8ff;font-weight:bold}
+.small{color:#aaa;font-size:13px}
+.hidden{display:none!important}
+.progress{height:9px;background:#34304e;border-radius:20px;overflow:hidden}
+.progress div{height:100%;background:#a78bfa}
+.option{
+ display:block;width:100%;text-align:left;margin:10px 0;
+ background:#282344;border:1px solid #51467d;
+}
+.option:hover{background:#44336e}
+.option.selected{border:2px solid #55e8ff}
+table{width:100%;border-collapse:collapse}
+td,th{padding:12px 7px;border-bottom:1px solid #35304e;text-align:left}
+th{color:#bca0ff}
+footer{text-align:center;color:#777;padding:25px}
+</style>
 </head>
-<body class="megamind-bg min-h-screen text-slate-100 font-sans selection:bg-yellow-400 selection:text-blue-950">
+<body>
+<header>
+ <div class="logo">🧠 MEGA<span>MIYYA</span></div>
+ <div id="userTop" class="small">MEGAMIYYA QUIZ</div>
+</header>
 
-    <!-- HEADER & NAVBAR -->
-    <header class="bg-slate-900/90 backdrop-blur-md border-b border-white/10 shadow-xl sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
-                <!-- Megamind Logotipi -->
-                <img src="https://images.hdqwalls.com/wallpapers/megamind-4k-uhd.jpg" class="w-11 h-11 rounded-2xl object-cover border-2 border-yellow-400 shadow-lg" alt="Logo">
-                <div>
-                    <h1 class="text-2xl font-black tracking-tight text-white">Megamind Academy</h1>
-                    <p class="text-xs text-blue-300">15 ta fan • 60 ta savol • 60% o'tish sharti</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 shadow-inner">
-                <div class="text-right">
-                    <span id="userNameDisplay" class="font-bold text-sm block text-yellow-300">Mehmon</span>
-                    <span class="text-xs text-blue-200" id="userXpDisplay">XP: 0</span>
-                    <span class="text-[11px] font-black bg-yellow-400 text-blue-950 px-2 py-0.5 rounded-md mt-0.5 inline-block" id="userRankDisplay">🥉 Boshlang'ich</span>
-                </div>
-                <button onclick="openAuthModal()" id="authBtn" class="bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold px-4 py-2 rounded-xl text-sm transition shadow-md">Kirish</button>
-            </div>
-        </div>
-    </header>
+<div class="container">
 
-    <!-- MAIN CONTAINER -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        
-        <!-- SEARCH & PROFILE & LEADERBOARD BAR -->
-        <div class="flex flex-col md:flex-row gap-4 mb-8">
-            <div class="relative flex-grow">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">🔍</span>
-                <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Matematika, Fizika, Tarix)..." 
-                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 shadow-sm transition"
-                    onkeyup="searchSubjects()">
-            </div>
-            <button onclick="openProfileModal()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
-                👤 Profilim
-            </button>
-            <button onclick="openLeaderboard()" class="bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-blue-950 font-black px-6 py-3.5 rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
-                🏆 Reyting
-            </button>
-        </div>
+<section id="auth">
+ <div class="card" style="max-width:430px;margin:50px auto;text-align:center">
+  <div class="brain">🧠</div>
+  <h1>MEGAMIYYA QUIZ</h1>
+  <p>Bilimingni sinab ko‘r. EXP yig‘. Legend bo‘l!</p>
+  <input id="username" placeholder="Ismingiz">
+  <input id="password" type="password" placeholder="Parolingiz">
+  <button onclick="register()" style="width:100%">RO‘YXATDAN O‘TISH</button>
+  <button onclick="login()" style="width:100%;background:#383052">KIRISH</button>
+  <p id="authMsg" class="small"></p>
+ </div>
+</section>
 
-        <!-- SUBJECTS GRID -->
-        <div id="subjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    </main>
+<section id="app" class="hidden">
+ <div class="card">
+  <div class="brain">🧠</div>
+  <h1 id="welcome">Xush kelibsiz!</h1>
+  <div class="grid">
+   <div><div class="stat" id="exp">0</div><div class="small">JAMI EXP</div></div>
+   <div><div class="stat" id="rank">BRONZE</div><div class="small">RANK</div></div>
+   <div><div class="stat" id="level">1</div><div class="small">LEVEL</div></div>
+  </div>
+  <p id="nextRank" class="small"></p>
+  <div class="progress"><div id="progress" style="width:0%"></div></div>
+  <button onclick="logout()">CHIQISH</button>
+ </div>
 
-    <!-- MODAL (SUBJECT LEARNING HUB) -->
-    <div id="subjectModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50 overflow-y-auto">
-        <div class="bg-slate-900/95 border border-white/10 text-slate-100 rounded-3xl max-w-3xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl">
-            <button onclick="closeModal()" class="absolute top-5 right-5 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full font-bold flex items-center justify-center transition">✕</button>
-            
-            <div class="flex items-center gap-3 mb-2">
-                <span id="modalCategoryBadge" class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30">Fan</span>
-            </div>
-            <h2 id="modalTitle" class="text-3xl font-black text-white mb-2"></h2>
-            <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
-            
-            <!-- Yozma Tushuntirish (Nazariya) -->
-            <div class="bg-slate-800/90 border border-white/10 p-5 rounded-2xl mb-6 shadow-inner">
-                <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Mavzu bo'yicha yozma tushuntirish</h3>
-                <p id="modalTheory" class="text-sm text-slate-200 leading-relaxed"></p>
-                <p class="text-xs text-blue-300 mt-2 font-semibold">⚡ Eslatma: Ushbu mavzudan muvaffaqiyatli o'tish uchun 60 ta savoldan kamida 60% (36 ta to'g'ri javob) to'plashingiz kerak!</p>
-            </div>
+ <div class="card">
+  <h2>📚 15 TA FAN</h2>
+  <p class="small">Fanni tanlang va bilim darajangizni oshiring.</p>
+  <div class="grid" id="subjects"></div>
+ </div>
 
-            <!-- Test Qismi (60 ta savol) -->
-            <div class="bg-gradient-to-br from-blue-900/50 to-indigo-900/50 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
-                <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol 1 / 60</span>
-                    <span id="quizScoreDisplay" class="text-xs font-bold bg-amber-500/20 text-amber-300 px-3 py-1.5 rounded-xl border border-amber-500/30">To'g'ri: 0 / 36 (60%)</span>
-                    <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+1 XP</span>
-                </div>
-                
-                <p id="quizQuestion" class="font-bold text-xl text-white mb-6 leading-snug"></p>
-                <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"></div>
-                <p id="quizResult" class="font-bold text-sm min-h-[24px] text-center"></p>
-            </div>
-        </div>
-    </div>
+ <div class="card hidden" id="quiz">
+  <h2 id="quizTitle">Test</h2>
+  <p id="difficulty"></p>
+  <p id="question"></p>
+  <div id="options"></div>
+  <p id="feedback"></p>
+  <button id="answerBtn" onclick="checkAnswer()">JAVOBNI TEKSHIRISH</button>
+  <button id="nextBtn" class="hidden" onclick="nextQuestion()">KEYINGI SAVOL →</button>
+  <button onclick="closeQuiz()" style="background:#39334c">TESTDAN CHIQISH</button>
+ </div>
 
-    <!-- PROFILE MODAL -->
-    <div id="profileModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="bg-slate-900/95 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
-            <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
-            <div class="w-20 h-20 bg-yellow-400 text-blue-950 font-black text-3xl rounded-full mx-auto flex items-center justify-center mb-4 shadow-lg overflow-hidden border-2 border-yellow-400">
-                <span id="profileAvatarLetter">M</span>
-            </div>
-            <h2 id="profileModalName" class="text-2xl font-black text-white mb-1">Mehmon</h2>
-            <p id="profileModalRank" class="text-sm font-bold text-yellow-400 mb-6">🥉 Boshlang'ich</p>
-            
-            <div class="bg-slate-800 p-4 rounded-2xl border border-white/10 space-y-3 text-left mb-6">
-                <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Jami XP ball:</span><span id="profileModalXp" class="font-black text-yellow-400">0 XP</span></div>
-                <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Joriy Daraja:</span><span id="profileModalLevel" class="font-black text-blue-400">1</span></div>
-                <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Dunyo bo'yicha o'rin:</span><span id="profileModalPlace" class="font-black text-emerald-400">#1</span></div>
-            </div>
+ <div class="card">
+  <h2>🏆 GLOBAL REYTING</h2>
+  <p class="small">Barcha o‘yinchilarning EXP natijalari.</p>
+  <table>
+   <thead><tr><th>#</th><th>O‘yinchi</th><th>Rank</th><th>EXP</th></tr></thead>
+   <tbody id="leaderboard"><tr><td colspan="4">Yuklanmoqda...</td></tr></tbody>
+  </table>
+ </div>
+</section>
+</div>
+<footer>🧠 MEGAMIYYA QUIZ © 2026</footer>
 
-            <button onclick="logout()" class="w-full bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white font-bold py-3 rounded-2xl transition border border-rose-500/30">Hisobdan chiqish</button>
-        </div>
-    </div>
+<script>
+// 1. FIREBASE SOZLAMALARI
+const firebaseConfig = {
+ apiKey: "BU_YERGA_API_KEY",
+ authDomain: "BU_YERGA_AUTH_DOMAIN",
+ projectId: "BU_YERGA_PROJECT_ID",
+ storageBucket: "BU_YERGA_STORAGE_BUCKET",
+ messagingSenderId: "BU_YERGA_SENDER_ID",
+ appId: "BU_YERGA_APP_ID"
+};
 
-    <!-- AUTH MODAL -->
-    <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="bg-slate-900/95 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
-            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
-            <div class="bg-blue-500/20 text-blue-400 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black mb-3 border border-blue-500/30">🔑</div>
-            <h2 class="text-2xl font-black text-white mb-2">Onlayn Profilga Kirish</h2>
-            <p class="text-xs text-slate-400 mb-6">Ism va parolingizni kiriting — ballaringiz saqlanadi!</p>
-            
-            <input type="text" id="usernameInput" placeholder="Ismingiz (masalan: Alisher)..." class="w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-slate-800 text-white placeholder-slate-400 mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium text-center">
-            <input type="password" id="passwordInput" placeholder="Maxfiy parol..." class="w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-slate-800 text-white placeholder-slate-400 mb-5 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium text-center">
-            
-            <button onclick="loginOrRegister()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold py-3.5 rounded-2xl shadow-lg transition mb-3">Kirish / Ochish</button>
-            <p id="authStatus" class="text-xs font-semibold text-slate-400"></p>
-        </div>
-    </div>
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
+const db=firebase.firestore();
 
-    <!-- LEADERBOARD MODAL -->
-    <div id="leaderboardModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="bg-slate-900/95 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
-            <button onclick="closeLeaderboard()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
-            <div class="text-center mb-6">
-                <span class="text-4xl">🏆</span>
-                <h2 class="text-2xl font-black text-white mt-2">Dunyo bo'yicha Reyting</h2>
-                <p class="text-xs text-slate-400">Barcha faol foydalanuvchilar bazasi</p>
-            </div>
-            <ul id="leaderboardList" class="space-y-3 max-h-80 overflow-y-auto pr-1"></ul>
-        </div>
-    </div>
+let currentUser=null;
+let playerData=null;
+let unsubscribe=null;
+let currentSubject="";
+let currentIndex=0;
+let currentQuestions=[];
+let selected=-1;
+let answered=false;
 
-    <script>
-        const firebaseConfig = {
-            databaseURL: "https://bilimlar-portali-default-rtdb.firebaseio.com/"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+// 2. RANK TIZIMI
+function getRank(x){
+ if(x>=1000)return "👑 LEGEND";
+ if(x>=700)return "🔥 MASTER";
+ if(x>=500)return "💎 DIAMOND";
+ if(x>=300)return "🏆 PLATINUM";
+ if(x>=150)return "🥇 GOLD";
+ if(x>=50)return "🥈 SILVER";
+ return "🥉 BRONZE";
+}
+function updateStats(){
+ const x=playerData.exp||0;
+ document.getElementById("exp").textContent=x;
+ document.getElementById("rank").textContent=getRank(x);
+ document.getElementById("level").textContent=Math.floor(x/25)+1;
+ const limits=[50,150,300,500,700,1000];
+ const next=limits.find(n=>x<n);
+ document.getElementById("nextRank").textContent=
+ next?`${next-x} EXP qoldi — keyingi rank: ${getRank(next)}`:
+ "Siz eng yuqori rankdasiz!";
+ const previous=limits.filter(n=>n<=x).pop()||0;
+ const target=next||1000;
+ document.getElementById("progress").style.width=
+ Math.min(100,(x-previous)/(target-previous)*100)+"%";
+}
 
-        const subjects = [
-            { id: 1, name: "1. Matematika", desc: "Arifmetika, qisqa ko'paytirish va kvadrat tenglamalar.", theory: "Matematika fanida savollar avtomatik ravishda oddiy arifmetikadan boshlanib, asta-sekin qisqa ko'paytirish formulalari va kvadrat tenglamalarga qarab qiyinlashib boraveradi." },
-            { id: 2, name: "2. Tarix", desc: "Amir Temur, O'zbekiston tarixi va jahon sanalari.", theory: "Tarix fanidan asosiy e'tibor buyuk sarkardalar, xususan Amir Temur davri, uning yurishlari, tug'ilgan va vafot etgan yillariga qaratiladi." },
-            { id: 3, name: "3. Fizika", desc: "Mexanika, kinematika, elektr va optika.", theory: "Fizika tabiat qonunlarini, tezlik, kuch va bosim hisob-kitoblarini o'rgatadi." },
-            { id: 4, name: "4. Kimyo", desc: "Elementlar jadvali va reaksiyalar.", theory: "Moddalar, atomlar, molekulalar va kimyoviy reaksiyalar tahlili." },
-            { id: 5, name: "5. Biologiya", desc: "Hujayra, anatomiya va tabiat.", theory: "Tirik organizmlar, hujayra tuzilishi va odam anatomiyasi." },
-            { id: 6, name: "6. Informatika", desc: "Algoritmlar va kompyuter.", theory: "Axborot o'lchov birliklari, dasturlash va tarmoqlar." },
-            { id: 7, name: "7. Geografiya", desc: "Materiklar, davlatlar va iqlim.", theory: "Yer yuzining tuzilishi, okeanlar va iqlim mintaqalari." },
-            { id: 8, name: "8. Ona tili", desc: "Imlo, fonetika va so'z turkumlari.", theory: "O'zbek tili qoidalari, so'z turkumlari va sintaksis." },
-            { id: 9, name: "9. Adabiyot", desc: "Mumtoz va zamonaviy asarlar.", theory: "O'zbek mumtoz adabiyoti va shoirlarning ijodi." },
-            { id: 10, name: "10. Ingliz tili", desc: "Grammar, Vocabulary va Tenses.", theory: "Ingliz tili grammatikasi va so'z boyligi." },
-            { id: 11, name: "11. Astronomiya", desc: "Koinot va sayyoralar.", theory: "Quyosh sistemasi va koinot sirlari." },
-            { id: 12, name: "12. Iqtisodiyot", desc: "Moliya, bozor va soliqlar.", theory: "Bozor iqtisodiyoti va moliyaviy hisob-kitoblar." },
-            { id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya va qonunlar.", theory: "O'zbekiston Respublikasi Konstitutsiyasi va qonunlar." },
-            { id: 14, name: "14. Falsafa", desc: "Tafakkur va dunyoqarash.", theory: "Inson tafakkuri va dunyoqarash asoslari." },
-            { id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati va temperament.", theory: "Inson ruhiy holati va temperament turlari." }
-        ];
+// 3. 15 TA FAN VA SAVOLLAR
+const data={
+ "Matematika":[
+  ["7 × 8 nechchi?",["54","56","64","48"],1],
+  ["144 ning kvadrat ildizi?",["10","11","12","14"],2],
+  ["2x + 7 = 25. x ni toping.",["8","9","10","11"],1]
+ ],
+ "Fizika":[
+  ["Kuch birligi nima?",["Joul","Nyuton","Vatt","Paskal"],1],
+  ["Tezlik formulasi?",["s/t","m×v","F/m","t/s"],0],
+  ["Tok kuchi birligi?",["Volt","Om","Amper","Vatt"],2]
+ ],
+ "Kimyo":[
+  ["Suv formulasi?",["CO2","H2O","O2","NaCl"],1],
+  ["Kislorod belgisi?",["K","C","O","N"],2],
+  ["Atom yadrosida nima bor?",["Elektron","Proton va neytron","Faqat elektron","Molekula"],1]
+ ],
+ "Biologiya":[
+  ["Hujayraning energiya markazi?",["Yadro","Mitoxondriya","Ribosoma","Membrana"],1],
+  ["Fotosintez qayerda kechadi?",["Xloroplast","Yadro","Vakuola","Lizosoma"],0],
+  ["Inson yuragi nechta kamerali?",["2","3","4","5"],2]
+ ],
+ "Tarix":[
+  ["Amir Temur qachon tug‘ilgan?",["1336","1405","1220","1441"],0],
+  ["O‘zbekiston mustaqilligi qachon e'lon qilingan?",["1990","1991","1992","1989"],1],
+  ["Buyuk ipak yo‘li nima?",["Savdo yo‘li","Daryo","Davlat","Shahar"],0]
+ ],
+ "Geografiya":[
+  ["Eng katta okean?",["Atlantika","Hind","Tinch","Shimoliy Muz"],2],
+  ["O‘zbekiston poytaxti?",["Samarqand","Buxoro","Toshkent","Xiva"],2],
+  ["Eng katta materik?",["Afrika","Yevrosiyo","Avstraliya","Antarktida"],1]
+ ],
+ "Informatika":[
+  ["HTML nima?",["Dasturlash tili","Belgilash tili","Operatsion tizim","Brauzer"],1],
+  ["CPU nimani anglatadi?",["Markaziy protsessor","Xotira","Monitor","Disk"],0],
+  ["Binary sanoq tizimi asosini toping.",["2","8","10","16"],0]
+ ],
+ "Ingliz tili":[
+  ["Apple tarjimasi?",["Olma","Nok","Uzum","Anor"],0],
+  ["Past tense of GO?",["Goed","Gone","Went","Going"],2],
+  ["Choose correct: She ___ a student.",["am","are","is","be"],2]
+ ],
+ "Adabiyot":[
+  ["Alisher Navoiy qaysi asrda yashagan?",["XIV-XV","XVI-XVII","XIII-XIV","XVIII"],0],
+  ["Xamsa nechta dostondan iborat?",["3","4","5","6"],2],
+  ["O‘tkan kunlar muallifi?",["Cho‘lpon","Abdulla Qodiriy","Oybek","Fitrat"],1]
+ ],
+ "Astronomiya":[
+  ["Quyosh nima?",["Sayyora","Yulduz","Yo‘ldosh","Kometa"],1],
+  ["Yerning tabiiy yo‘ldoshi?",["Mars","Oy","Quyosh","Venera"],1],
+  ["Quyosh tizimida nechta sayyora bor?",["7","8","9","10"],1]
+ ],
+ "Ona tili":[
+  ["Ot nimani bildiradi?",["Harakat","Belgi","Shaxs va narsa","Miqdor"],2],
+  ["Nechta unli tovush bor?",["5","6","7","8"],1],
+  ["Fe'l nimani bildiradi?",["Harakat va holat","Narsa","Belgi","Son"],0]
+ ],
+ "Huquq":[
+  ["Konstitutsiya nima?",["Asosiy qonun","Farmon","Buyruq","Shartnoma"],0],
+  ["O‘zbekiston Respublikasi davlat tili?",["Rus tili","Ingliz tili","O‘zbek tili","Tojik tili"],2],
+  ["Qonun chiqaruvchi oliy organ?",["Vazirlik","Oliy Majlis","Sud","Hokimlik"],1]
+ ],
+ "Iqtisodiyot":[
+  ["Talab oshsa, boshqa shartlar teng bo‘lganda narx odatda?",["Oshadi","Pasayadi","O‘zgarmaydi","Yo‘qoladi"],0],
+  ["Inflyatsiya nima?",["Narxlar umumiy o‘sishi","Ishsizlik","Eksport","Soliq"],0],
+  ["Daromad minus xarajat nima?",["Zarar","Foyda","Qarz","Soliq"],1]
+ ],
+ "Mantiq":[
+  ["2, 4, 8, 16, ?",["20","24","32","30"],2],
+  ["Barcha mushuklar hayvon. Momiq mushuk. Demak?",["Momiq hayvon","Momiq qush","Aniq emas","Momiq o‘simlik"],0],
+  ["1, 1, 2, 3, 5, 8, ?",["10","11","13","15"],2]
+ ],
+ "Musiqa":[
+  ["Pianinoda qaysi klavishlar bor?",["Oq va qora","Faqat oq","Faqat qora","Ko‘k va oq"],0],
+  ["Notalar soni an'anaviy tizimda?",["5","6","7","8"],2],
+  ["Simfonik orkestrni kim boshqaradi?",["Dirijyor","Shoir","Rassom","Aktyor"],0]
+ ]
+};
 
-        // Tarix va boshqa fanlar uchun aniq savollar banki (Amir Temur va yillar)
-        const historyBank = [
-            { q: "Amir Temur qayerda tavallud topgan?", a: "Kesh (Shahrisabz) yaqinidagi Xoja Ilg'or qishlog'ida", w: ["Samarqandda", "Buxoroda", "Toshkentda"] },
-            { q: "Amir Temur qaysi yilda tavallud topgan?", a: "1336-yil 9-aprel", w: ["1370-yil", "1405-yil", "1389-yil"] },
-            { q: "Amir Temur qaysi yilda vafot etgan?", a: "1405-yil 18-fevral", w: ["1400-yil", "1410-yil", "1395-yil"] },
-            { q: "Amir Temur qayerda vafot etgan?", a: "O'tror shahrida", w: ["Samarqandda", "Hirotda", "Dehlida"] },
-            { q: "Amir Temur qaysi davlatlarga yurish qilgan va bo'ysundirgan?", a: "Eron, Iroq, Shom (Suriya), Oltin O'rda va Hindiston", w: ["Faqat Xitoyga", "Faqat Yevropaga", "Faqat Afrikaga"] },
-            { q: "To'xtamishxon boshchiligidagi Oltin O'rda ustidan qaysi yilda g'alaba qozonilgan?", a: "1395-yil Terek daryosi bo'yida", w: ["1370-yil", "1402-yil", "1380-yil"] },
-            { q: "Amir Temur Usmonli sultoni Boyazid Yildirimni qaysi yilda tor-mor etgan?", a: "1402-yil Anqara jangi", w: ["1398-yil", "1405-yil", "1391-yil"] }
-        ];
+const subjects=Object.keys(data);
+function renderSubjects(){
+ const box=document.getElementById("subjects");
+ box.innerHTML="";
+ subjects.forEach((s,i)=>{
+  const el=document.createElement("div");
+  el.className="subject";
+  el.innerHTML=`<div style="font-size:26px">${["➗","⚛️","🧪","🧬","📜","🌍","💻","🇬🇧","📚","🔭","✍️","⚖️","📈","🧩","🎵"][i]}</div><b>${s}</b>`;
+  el.onclick=()=>startQuiz(s);
+  box.appendChild(el);
+ });
+}
 
-        const factBanks = {
-            3: [
-                { q: "Vodorod (H) atom raqami nechiga teng?", a: "1", w: ["2", "4", "8"] },
-                { q: "Kislorod (O) atom massasi taxminan nechiga teng?", a: "16", w: ["8", "12", "32"] }
-            ],
-            4: [
-                { q: "Odam yuragi nechta kameradan iborat?", a: "4 ta", w: ["2 ta", "3 ta", "5 ta"] },
-                { q: "Hujayraning energetik stansiyasi qaysi?", a: "Mitoxondriya", w: ["Ribosoma", "Yadro", "Vakuola"] }
-            ]
-        };
+// 4. LOGIN VA RO‘YXAT
+function safeEmail(name){
+ return name.trim().toLowerCase().replace(/[^a-z0-9]/g,"")+"@megamiya.local";
+}
+async function register(){
+ const name=document.getElementById("username").value.trim();
+ const pass=document.getElementById("password").value;
+ if(name.length<3||pass.length<6){
+  return message("Ism kamida 3 ta, parol kamida 6 ta belgi bo‘lsin");
+ }
+ try{
+  const credential=await auth.createUserWithEmailAndPassword(safeEmail(name),pass);
+  await db.collection("players").doc(credential.user.uid).set({
+   name:name,exp:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  message("Akkaunt yaratildi!");
+ }catch(e){message(e.message)}
+}
+async function login(){
+ const name=document.getElementById("username").value.trim();
+ const pass=document.getElementById("password").value;
+ try{
+  await auth.signInWithEmailAndPassword(safeEmail(name),pass);
+ }catch(e){message("Kirish amalga oshmadi: "+e.message)}
+}
+function message(t){document.getElementById("authMsg").textContent=t}
+async function logout(){await auth.signOut()}
 
-        let currentUserId = localStorage.getItem("portal_user_id") || "";
-        let currentUser = localStorage.getItem("portal_user") || "Mehmon";
-        let currentXp = parseInt(localStorage.getItem("portal_xp")) || 0;
-        let activeSubject = null;
-        let questionCount = 1;
-        let correctCount = 0;
-        let currentLevel = 1;
-        let currentCorrectAnswer = "";
-        let currentXpReward = 1;
+// 5. AKKAUNTNI KUZATISH
+auth.onAuthStateChanged(async user=>{
+ if(unsubscribe){unsubscribe();unsubscribe=null}
+ currentUser=user;
+ document.getElementById("auth").classList.toggle("hidden",!!user);
+ document.getElementById("app").classList.toggle("hidden",!user);
+ if(!user)return;
+ document.getElementById("userTop").textContent="🟢 ONLINE";
+ const ref=db.collection("players").doc(user.uid);
+ unsubscribe=ref.onSnapshot(doc=>{
+  if(!doc.exists)return;
+  playerData=doc.data();
+  document.getElementById("welcome").textContent=
+   "Xush kelibsiz, "+playerData.name+"!";
+  updateStats();
+ });
+ renderSubjects();
+ listenLeaderboard();
+});
 
-        function rand(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+// 6. GLOBAL REYTING
+function listenLeaderboard(){
+ db.collection("players").orderBy("exp","desc").limit(100)
+ .onSnapshot(snapshot=>{
+  const body=document.getElementById("leaderboard");
+  body.innerHTML="";
+  let i=0;
+  snapshot.forEach(doc=>{
+   const p=doc.data();
+   const tr=document.createElement("tr");
+   [++i,p.name||"O‘yinchi",getRank(p.exp||0),(p.exp||0)+" EXP"]
+   .forEach(v=>{
+    const td=document.createElement("td");
+    td.textContent=v;
+    tr.appendChild(td);
+   });
+   body.appendChild(tr);
+  });
+ });
+}
 
-        function shuffle(array) {
-            return array.sort(() => Math.random() - 0.5);
-        }
-
-        function getRankInfo(xp) {
-            if (xp >= 4000) return { name: "⚡ Daho (Grandmaster)", color: "text-purple-300" };
-            if (xp >= 2000) return { name: "👑 Professor (Master)", color: "text-amber-300" };
-            if (xp >= 1000) return { name: "💎 Mutaxassis (Expert)", color: "text-blue-300" };
-            if (xp >= 500)  return { name: "🥇 Bilimdon (Scholar)", color: "text-emerald-300" };
-            if (xp >= 200)  return { name: "🥈 Talaba (Student)", color: "text-sky-300" };
-            return { name: "🥉 Boshlang'ich (Novice)", color: "text-slate-300" };
-        }
-
-        function updateUI() {
-            currentLevel = Math.floor(currentXp / 200) + 1;
-            const rank = getRankInfo(currentXp);
-            
-            document.getElementById("userNameDisplay").innerText = currentUser;
-            document.getElementById("userXpDisplay").innerText = `XP: ${currentXp} • Daraja ${currentLevel}`;
-            document.getElementById("userRankDisplay").innerText = rank.name;
-            document.getElementById("profileAvatarLetter").innerText = currentUser !== "Mehmon" ? currentUser[0].toUpperCase() : "M";
-
-            if (currentUser !== "Mehmon") {
-                document.getElementById("authBtn").innerText = "Chiqish";
-                document.getElementById("authBtn").setAttribute("onclick", "logout()");
-            }
-        }
-
-        window.onload = function () {
-            updateUI();
-            renderSubjects(subjects);
-            if (currentUserId) {
-                syncDataFromCloud(currentUserId);
-            }
-        };
-
-        function loginOrRegister() {
-            let name = document.getElementById("usernameInput").value.trim();
-            let pass = document.getElementById("passwordInput").value.trim();
-            let statusEl = document.getElementById("authStatus");
-
-            if (!name || !pass) {
-                statusEl.innerText = "⚠️ Iltimos, ism va parolni kiriting!";
-                statusEl.className = "text-xs font-semibold text-rose-400";
-                return;
-            }
-
-            let userId = name.toLowerCase().replace(/\s+/g, '_') + "_" + pass;
-            currentUserId = userId;
-            currentUser = name;
-
-            statusEl.innerText = "⏳ Serverga ulanmoqda...";
-            statusEl.className = "text-xs font-semibold text-blue-400";
-
-            db.ref('users/' + userId).once('value').then((snapshot) => {
-                if (snapshot.exists()) {
-                    let data = snapshot.val();
-                    currentXp = data.xp || 0;
-                    localStorage.setItem("portal_xp", currentXp);
-                    localStorage.setItem("portal_user", currentUser);
-                    localStorage.setItem("portal_user_id", currentUserId);
-
-                    if (data.progress) {
-                        for (let key in data.progress) {
-                            localStorage.setItem(key, data.progress[key]);
-                        }
-                    }
-                    statusEl.innerText = "✅ Profil yuklandi!";
-                } else {
-                    db.ref('users/' + userId).set({ name: currentUser, xp: currentXp, progress: {} });
-                    localStorage.setItem("portal_user", currentUser);
-                    localStorage.setItem("portal_user_id", currentUserId);
-                    statusEl.innerText = "🎉 Yangi profil ochildi!";
-                }
-                statusEl.className = "text-xs font-semibold text-emerald-400";
-                updateUI();
-                setTimeout(() => closeAuthModal(), 1200);
-            });
-        }
-
-        function syncDataToCloud() {
-            if (!currentUserId) return;
-            let progress = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                let key = localStorage.key(i);
-                if (key.startsWith("subj_")) {
-                    progress[key] = localStorage.getItem(key);
-                }
-            }
-            db.ref('users/' + currentUserId).update({ name: currentUser, xp: currentXp, progress: progress });
-        }
-
-        function syncDataFromCloud(userId) {
-            db.ref('users/' + userId).once('value').then((snapshot) => {
-                if (snapshot.exists()) {
-                    let data = snapshot.val();
-                    currentXp = data.xp || 0;
-                    currentUser = data.name || currentUser;
-                    localStorage.setItem("portal_xp", currentXp);
-                    localStorage.setItem("portal_user", currentUser);
-                    if (data.progress) {
-                        for (let key in data.progress) {
-                            localStorage.setItem(key, data.progress[key]);
-                        }
-                    }
-                    updateUI();
-                }
-            });
-        }
-
-        function logout() {
-            localStorage.removeItem("portal_user");
-            localStorage.removeItem("portal_user_id");
-            localStorage.removeItem("portal_xp");
-            currentUser = "Mehmon";
-            currentUserId = "";
-            currentXp = 0;
-            updateUI();
-            location.reload();
-        }
-
-        function renderSubjects(list) {
-            const grid = document.getElementById("subjectsGrid");
-            grid.innerHTML = "";
-            list.forEach(subj => {
-                let savedQ = parseInt(localStorage.getItem(`subj_${subj.id}_q`)) || 1;
-                let isPassed = localStorage.getItem(`subj_${subj.id}_passed`) === "true";
-                grid.innerHTML += `
-                    <div onclick="openModal(${subj.id})" class="bg-slate-900/80 backdrop-blur-md p-7 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-yellow-400 flex flex-col justify-between group">
-                        <div>
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30 group-hover:bg-yellow-400 group-hover:text-blue-950 transition">Modul #${subj.id}</span>
-                                <span class="text-xs font-bold ${isPassed ? 'text-emerald-400 bg-emerald-400/10 border-emerald-500/30' : 'text-yellow-300 bg-yellow-400/10 border-yellow-400/30'} px-2.5 py-1 rounded-lg border">
-                                    ${isPassed ? "✅ O'tilgan (60%+)" : `Savol: ${savedQ}/60`}
-                                </span>
-                            </div>
-                            <h3 class="text-xl font-black text-white mb-2">${subj.name}</h3>
-                            <p class="text-slate-300 text-sm leading-relaxed mb-4">${subj.desc}</p>
-                        </div>
-                        <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-yellow-400">
-                            <span>📚 60 ta Test (60% talab)</span>
-                            <span>Boshlash →</span>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function searchSubjects() {
-            const query = document.getElementById("searchInput").value.toLowerCase();
-            const filtered = subjects.filter(s => s.name.toLowerCase().includes(query) || s.desc.toLowerCase().includes(query));
-            renderSubjects(filtered);
-        }
-
-        function openModal(id) {
-            activeSubject = subjects.find(s => s.id === id);
-            questionCount = parseInt(localStorage.getItem(`subj_${activeSubject.id}_q`)) || 1;
-            correctCount = parseInt(localStorage.getItem(`subj_${activeSubject.id}_correct`)) || 0;
-            if (questionCount > 60) questionCount = 60;
-            
-            document.getElementById("modalCategoryBadge").innerText = activeSubject.name;
-            document.getElementById("modalTitle").innerText = activeSubject.name;
-            document.getElementById("modalDesc").innerText = activeSubject.desc;
-            document.getElementById("modalTheory").innerText = activeSubject.theory;
-
-            loadNextQuestion();
-
-            document.getElementById("subjectModal").classList.remove("hidden");
-            document.getElementById("subjectModal").classList.add("flex");
-        }
-
-        function loadNextQuestion() {
-            if (questionCount > 60) {
-                let percent = (correctCount / 60) * 100;
-                let passed = percent >= 60;
-                if (passed) {
-                    localStorage.setItem(`subj_${activeSubject.id}_passed`, "true");
-                }
-
-                document.getElementById("quizCounter").innerText = "Tugatildi (60/60)";
-                document.getElementById("quizScoreDisplay").innerText = `To'g'ri: ${correctCount} / 60 (${percent.toFixed(0)}%)`;
-                
-                let msg = passed 
-                    ? `🎉 Tabriklaymiz! Siz ${percent.toFixed(0)}% natija ko'rsatib (60% talabini bajarib) ushbu mavzudan muvaffaqiyatli o'tdingiz!`
-                    : `⚠️ Siz ${percent.toFixed(0)}% to'pladingiz. Keyingi mavzuga o'tish uchun kamida 60% (36 ta to'g'ri) kerak. Qaytadan urinib ko'ring!`;
-                
-                document.getElementById("quizQuestion").innerText = msg;
-                document.getElementById("quizOptions").innerHTML = `<button onclick="resetSubjectTest()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold py-3.5 rounded-2xl transition">Testni qaytadan boshlash</button>`;
-                document.getElementById("quizResult").innerText = "";
-                return;
-            }
-
-            let rewardTier = Math.floor((questionCount - 1) / 10) + 1;
-            currentXpReward = rewardTier;
-
-            document.getElementById("quizCounter").innerText = `Savol ${questionCount} / 60`;
-            document.getElementById("quizScoreDisplay").innerText = `To'g'ri: ${correctCount} / 36 (60%)`;
-            document.getElementById("quizXpReward").innerText = `+${currentXpReward} XP`;
-
-            let q = "", correct = "", options = [];
-
-            // 1. MATEMATIKA
-            if (activeSubject.id === 1) {
-                if (questionCount <= 20) {
-                    let a = rand(10 * rewardTier, 50 * rewardTier), b = rand(5 * rewardTier, 40 * rewardTier);
-                    q = `${a} + ${b} nechiga teng?`;
-                    correct = String(a + b);
-                    let num = Number(correct);
-                    options = shuffle([correct, String(num + rand(2, 10)), String(num - rand(2, 8)), String(num + rand(12, 20))]);
-                } else if (questionCount <= 40) {
-                    let a = rand(2, 8), b = rand(1, 6);
-                    let res = (a + b) * (a + b);
-                    q = `(${a} + ${b})² ifodaning qiymatini toping:`;
-                    correct = String(res);
-                    options = shuffle([correct, String(res + rand(2, 10)), String(res - rand(2, 6)), String(res + rand(12, 20))]);
-                } else {
-                    let x1 = rand(1, 6), x2 = rand(1, 6);
-                    let bCoeff = -(x1 + x2);
-                    let cCoeff = x1 * x2;
-                    let bStr = bCoeff >= 0 ? `+ ${bCoeff}x` : `- ${Math.abs(bCoeff)}x`;
-                    let cStr = cCoeff >= 0 ? `+ ${cCoeff}` : `- ${Math.abs(cCoeff)}`;
-                    q = `x² ${bStr} ${cStr} = 0 kvadrat tenglamaning ildizlaridan birini toping:`;
-                    correct = String(x1);
-                    options = shuffle([correct, String(x2), String(x1 + 2), String(Math.abs(x1 - 3) || 5)]);
-                }
-            } 
-            // 2. TARIX (Amir Temur va aniq yillar)
-            else if (activeSubject.id === 2) {
-                const item = historyBank[(questionCount - 1) % historyBank.length];
-                q = item.q;
-                correct = item.a;
-                options = shuffle([item.a, ...item.w]);
-            } 
-            // 3. FIZIKA
-            else if (activeSubject.id === 3) {
-                let v = rand(10, 20 * rewardTier), t = rand(2, 10);
-                q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. Bosib o'tgan yo'li qancha?`;
-                correct = `${v * t} m`;
-                options = shuffle([correct, `${v * t + 15} m`, `${v + t} m`, `${Math.abs(v * t - 10)} m`]);
-            } 
-            // BOSHQA FANLAR
-            else {
-                const bank = factBanks[activeSubject.id] || [{ q: `${activeSubject.name} faniga oid savol #${questionCount}: To'g'ri javobni tanlang.`, a: "To'g'ri javob", w: ["Xato 1", "Xato 2", "Xato 3"] }];
-                const item = bank[rand(0, bank.length - 1)];
-                q = item.q;
-                correct = item.a;
-                options = shuffle([item.a, ...item.w]);
-            }
-
-            currentCorrectAnswer = correct;
-            document.getElementById("quizQuestion").innerText = q;
-            document.getElementById("quizResult").innerText = "";
-
-            const optionsDiv = document.getElementById("quizOptions");
-            optionsDiv.innerHTML = "";
-            options.forEach(opt => {
-                let safeOpt = opt.replace(/'/g, "\\'");
-                optionsDiv.innerHTML += `<button onclick="checkAnswer('${safeOpt}')" class="w-full text-left bg-slate-800 text-white p-3.5 rounded-2xl border border-white/10 hover:bg-yellow-400 hover:text-blue-950 hover:border-yellow-400 transition font-bold shadow-sm">${opt}</button>`;
-            });
-        }
-
-        function checkAnswer(selected) {
-            const resultEl = document.getElementById("quizResult");
-            if (selected === currentCorrectAnswer) {
-                currentXp += currentXpReward;
-                correctCount++;
-                localStorage.setItem("portal_xp", currentXp);
-                localStorage.setItem(`subj_${activeSubject.id}_correct`, correctCount);
-                
-                questionCount++;
-                localStorage.setItem(`subj_${activeSubject.id}_q`, questionCount);
-
-                updateUI();
-                syncDataToCloud();
-
-                resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP. Keyingi...`;
-                resultEl.className = "font-bold text-sm text-emerald-400 text-center";
-                
-                setTimeout(() => {
-                    loadNextQuestion();
-                }, 800);
-            } else {
-                questionCount++;
-                localStorage.setItem(`subj_${activeSubject.id}_q`, questionCount);
-
-                resultEl.innerText = "❌ Xato javob!";
-                resultEl.className = "font-bold text-sm text-rose-400 text-center";
-                
-                setTimeout(() => {
-                    loadNextQuestion();
-                }, 800);
-            }
-        }
-
-        function resetSubjectTest() {
-            localStorage.setItem(`subj_${activeSubject.id}_q`, 1);
-            localStorage.setItem(`subj_${activeSubject.id}_correct`, 0);
-            openModal(activeSubject.id);
-        }
-
-        function closeModal() {
-            document.getElementById("subjectModal").classList.remove("flex");
-            document.getElementById("subjectModal").classList.add("hidden");
-            renderSubjects(subjects);
-        }
-
-        function openProfileModal() {
-            document.getElementById("profileModalName").innerText = currentUser;
-            document.getElementById("profileModalRank").innerText = getRankInfo(currentXp).name;
-            document.getElementById("profileModalXp").innerText = `${currentXp} XP`;
-            document.getElementById("profileModalLevel").innerText = currentLevel;
-            document.getElementById("profileModalPlace").innerText = "#1 (Dunyo bo'yicha)";
-            document.getElementById("profileAvatarLetter").innerText = currentUser !== "Mehmon" ? currentUser[0].toUpperCase() : "M";
-
-            document.getElementById("profileModal").classList.remove("hidden");
-            document.getElementById("profileModal").classList.add("flex");
-        }
-
-        function closeProfileModal() {
-            document.getElementById("profileModal").classList.remove("flex");
-            document.getElementById("profileModal").classList.add("hidden");
-        }
-
-        function openAuthModal() {
-            if (currentUser !== "Mehmon") return;
-            document.getElementById("authModal").classList.remove("hidden");
-            document.getElementById("authModal").classList.add("flex");
-        }
-
-        function closeAuthModal() {
-            document.getElementById("authModal").classList.remove("flex");
-            document.getElementById("authModal").classList.add("hidden");
-        }
-
-        function openLeaderboard() {
-            const list = document.getElementById("leaderboardList");
-            db.ref('users').orderByChild('xp').limitToLast(10).once('value').then((snapshot) => {
-                let players = [];
-                snapshot.forEach((childSnapshot) => {
-                    players.push(childSnapshot.val());
-                });
-                players.sort((a, b) => b.xp - a.xp);
-
-                if (players.length === 0) {
-                    players = [{ name: currentUser, xp: currentXp }];
-                }
-
-                list.innerHTML = "";
-                players.forEach((p, index) => {
-                    let rank = getRankInfo(p.xp);
-                    list.innerHTML += `
-                        <li class="flex justify-between items-center p-3.5 rounded-2xl border border-white/10 bg-slate-800 font-bold shadow-sm">
-                            <div class="flex items-center gap-3">
-                                <span class="w-6 text-center text-yellow-400">${index + 1}.</span>
-                                <div>
-                                    <div class="text-white">${p.name}</div>
-                                    <div class="text-[10px] font-normal text-slate-400">${rank.name}</div>
-                                </div>
-                            </div>
-                            <span class="text-yellow-400">${p.xp} XP</span>
-                        </li>`;
-                });
-            });
-
-            document.getElementById("leaderboardModal").classList.remove("hidden");
-            document.getElementById("leaderboardModal").classList.add("flex");
-        }
-
-        function closeLeaderboard() {
-            document.getElementById("leaderboardModal").classList.remove("flex");
-            document.getElementById("leaderboardModal").classList.add("hidden");
-        }
-
-        function goHome() {
-            closeModal();
-            closeAuthModal();
-            closeLeaderboard();
-            closeProfileModal();
-        }
-    </script>
+// 7. TEST TIZIMI
+function startQuiz(subject){
+ currentSubject=subject;
+ currentQuestions=data[subject];
+ currentIndex=0;
+ document.getElementById("quiz").classList.remove("hidden");
+ document.getElementById("quizTitle").textContent="📚 "+subject;
+ document.getElementById("quiz").scrollIntoView({behavior:"smooth"});
+ showQuestion();
+}
+function showQuestion(){
+ selected=-1;answered=false;
+ const q=currentQuestions[currentIndex];
+ document.getElementById("difficulty").textContent=
+ "⚡ "+(currentIndex===0?"OSON":currentIndex===1?"O‘RTA":"QIYIN")+
+ " | Savol "+(currentIndex+1)+"/"+currentQuestions.length;
+ document.getElementById("question").textContent=q[0];
+ document.getElementById("feedback").textContent="";
+ document.getElementById("answerBtn").classList.remove("hidden");
+ document.getElementById("nextBtn").classList.add("hidden");
+ const box=document.getElementById("options");
+ box.innerHTML="";
+ q[1].forEach((v,i)=>{
+  const b=document.createElement("button");
+  b.className="option";
+  b.textContent=String.fromCharCode(65+i)+". "+v;
+  b.onclick=()=>{
+   if(answered)return;
+   selected=i;
+   document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));
+   b.classList.add("selected");
+  };
+  box.appendChild(b);
+ });
+}
+async function checkAnswer(){
+ if(selected<0)return alert("Javobni tanlang!");
+ if(answered)return;
+ answered=true;
+ const q=currentQuestions[currentIndex];
+ const correct=selected===q[2];
+ if(correct){
+  document.getElementById("feedback").textContent="🎉 TO‘G‘RI! +1 EXP";
+  document.getElementById("feedback").style.color="#4affad";
+  // Eslatma: bu mijoz tomonidagi demo EXP yozuvi.
+  await db.collection("players").doc(currentUser.uid).update({
+   exp:firebase.firestore.FieldValue.increment(1)
+  });
+ }else{
+  document.getElementById("feedback").textContent=
+   "❌ Noto‘g‘ri! To‘g‘ri javob: "+q[1][q[2]];
+  document.getElementById("feedback").style.color="#ff7272";
+ }
+ document.getElementById("answerBtn").classList.add("hidden");
+ document.getElementById("nextBtn").classList.remove("hidden");
+ document.querySelectorAll(".option").forEach((b,i)=>{
+  if(i===q[2])b.style.border="2px solid #40e9a0";
+  if(i===selected&&!correct)b.style.border="2px solid #ff5555";
+ });
+}
+function nextQuestion(){
+ currentIndex++;
+ if(currentIndex>=currentQuestions.length){
+  alert("🎉 Test tugadi! Natijalaringiz saqlandi.");
+  closeQuiz();
+ }else showQuestion();
+}
+function closeQuiz(){
+ document.getElementById("quiz").classList.add("hidden");
+}
+renderSubjects();
+</script>
 </body>
 </html>
