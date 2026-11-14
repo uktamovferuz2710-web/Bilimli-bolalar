@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali PRO — Jonli Animatsiya va Darslar</title>
+    <title>Bilimlar Portali PRO — Progressiv XP Tizimi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
-        /* Orqa fonda qimirlaydigan jonli animatsiya */
         @keyframes gradientBackground {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -30,7 +29,7 @@
                 <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
                 <div>
                     <h1 class="text-2xl font-black tracking-tight text-white">Bilimlar Portali PRO</h1>
-                    <p class="text-xs text-blue-300">15 ta fan • Yozma darslar • Jonli fon</p>
+                    <p class="text-xs text-blue-300">15 ta fan • Progressiv XP • Jonli fon</p>
                 </div>
             </div>
             
@@ -94,8 +93,8 @@
             <!-- Cheksiz Test Tizimi -->
             <div class="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
                 <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol #1 • Barcha mavzular</span>
-                    <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+20 XP Mukofot</span>
+                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol #1</span>
+                    <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+1 XP Mukofot</span>
                 </div>
                 
                 <p id="quizQuestion" class="font-bold text-xl text-white mb-6 leading-snug"></p>
@@ -226,7 +225,7 @@
         let questionCount = 1;
         let currentLevel = 1;
         let currentCorrectAnswer = "";
-        let currentXpReward = 20;
+        let currentXpReward = 1; // Boshlanishiga 1 XP
 
         function rand(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -391,43 +390,34 @@
         }
 
         function loadNextQuestion() {
-            let qLevel = Math.floor((questionCount - 1) / 3) + 1;
-            currentXpReward = qLevel * 20;
+            // Har 10 ta savol ishlaganda XP mukofoti 1 taga oshib boradi (1-10: 1xp, 11-20: 2xp, 21-30: 3xp...)
+            let rewardTier = Math.floor((questionCount - 1) / 10) + 1;
+            currentXpReward = rewardTier;
 
-            document.getElementById("modalLevelBadge").innerText = `Daraja: ${qLevel}`;
-            document.getElementById("quizCounter").innerText = `Savol #${questionCount} • Barcha mavzular`;
+            document.getElementById("modalLevelBadge").innerText = `Daraja: ${rewardTier}`;
+            document.getElementById("quizCounter").innerText = `Savol #${questionCount}`;
             document.getElementById("quizXpReward").innerText = `+${currentXpReward} XP Mukofot`;
 
             let q = "", correct = "", options = [];
 
             if (activeSubject.id === 1) {
-                if (qLevel === 1) {
-                    let a = rand(10, 50), b = rand(10, 50);
-                    q = `${a} + ${b} nechiga teng?`;
-                    correct = String(a + b);
-                } else if (qLevel === 2) {
-                    let a = rand(5, 20), b = rand(5, 20);
-                    q = `${a} × ${b} nechiga teng?`;
-                    correct = String(a * b);
-                } else {
-                    let a = rand(10, 30), b = rand(2, 9), c = rand(10, 50);
-                    q = `${a} × ${b} + ${c} nechiga teng?`;
-                    correct = String(a * b + c);
-                }
+                let a = rand(10 * rewardTier, 50 * rewardTier), b = rand(5 * rewardTier, 30 * rewardTier);
+                q = `${a} + ${b} nechiga teng?`;
+                correct = String(a + b);
                 let num = Number(correct);
                 options = shuffle([correct, String(num + rand(2, 10)), String(num - rand(2, 8)), String(num + rand(12, 20))]);
             } else if (activeSubject.id === 2) {
-                let v = rand(10, 30 * qLevel), t = rand(2, 10);
+                let v = rand(10, 20 * rewardTier), t = rand(2, 8);
                 q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. Bosib o'tgan yo'li qancha?`;
                 correct = `${v * t} m`;
                 options = shuffle([correct, `${v * t + 15} m`, `${v + t} m`, `${Math.abs(v * t - 10)} m`]);
             } else if (activeSubject.id === 5) {
-                let kb = rand(2, 16 * qLevel);
+                let kb = rand(2, 8 * rewardTier);
                 q = `${kb} Kilobayt (KB) necha Baytga teng?`;
                 correct = `${kb * 1024} bayt`;
                 options = shuffle([correct, `${kb * 1000} bayt`, `${kb * 512} bayt`, `${kb * 8} bayt`]);
             } else if (activeSubject.id === 12) {
-                let sum = rand(10, 40 * qLevel) * 1000;
+                let sum = rand(10, 20 * rewardTier) * 1000;
                 let ans = sum * 0.2;
                 q = `${sum.toLocaleString()} so'mlik mahsulotga 20% chegirma berilsa, qancha tejaladi?`;
                 correct = `${ans.toLocaleString()} so'm`;
