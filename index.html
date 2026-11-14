@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali PRO — To'liq Mavzular va Darslar</title>
+    <title>Bilimlar Portali PRO — To'liq Darslar va Mavzular</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -23,13 +23,13 @@
 <body class="animated-bg min-h-screen text-slate-100 font-sans selection:bg-yellow-400 selection:text-blue-950">
 
     <!-- HEADER & NAVBAR -->
-    <header class="bg-slate-900/80 backdrop-blur-md border-b border-white/10 shadow-xl sticky top-0 z-40">
+    <header class="bg-slate-900/85 backdrop-blur-md border-b border-white/10 shadow-xl sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
                 <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
                 <div>
                     <h1 class="text-2xl font-black tracking-tight text-white">Bilimlar Portali PRO</h1>
-                    <p class="text-xs text-blue-300">15 ta fan • To'liq mavzular bazasi • Progressiv XP</p>
+                    <p class="text-xs text-blue-300">15 ta fan • Barcha darslar va mavzular</p>
                 </div>
             </div>
             
@@ -76,7 +76,7 @@
                 <h2 id="modalTitle" class="text-3xl font-black text-white mb-2"></h2>
                 <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
                 
-                <h3 class="font-bold text-lg text-yellow-400 mb-4">📚 Barcha Mavzular va Darslar (Tanlang):</h3>
+                <h3 class="font-bold text-lg text-yellow-400 mb-4">📚 Barcha Darslar va Mavzular:</h3>
                 <div id="topicsListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
 
@@ -86,14 +86,14 @@
                 <h2 id="lessonTitle" class="text-2xl font-black text-white mb-3"></h2>
                 
                 <!-- Sodda Tushuntirish -->
-                <div class="bg-slate-800/60 border border-white/10 p-5 rounded-2xl mb-6">
-                    <h3 class="font-bold text-base text-yellow-400 mb-2">📖 Sodda va tushunarli tushuntirish</h3>
-                    <p id="lessonTheory" class="text-sm text-slate-300 leading-relaxed"></p>
+                <div class="bg-slate-800/80 border border-white/10 p-5 rounded-2xl mb-6 shadow-inner">
+                    <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Sodda va tushunarli tushuntirish</h3>
+                    <p id="lessonTheory" class="text-sm text-slate-200 leading-relaxed"></p>
                 </div>
 
                 <!-- Video Dars -->
                 <div class="mb-8">
-                    <h3 class="font-bold text-lg text-white mb-3">📺 Video Dars</h3>
+                    <h3 class="font-bold text-lg text-white mb-3 flex items-center gap-2">📺 Video Dars</h3>
                     <div class="bg-slate-950 rounded-2xl overflow-hidden shadow-lg aspect-video flex items-center justify-center border border-white/10">
                         <iframe id="lessonVideo" class="w-full h-full" src="" title="Video dars" frameborder="0" allowfullscreen></iframe>
                     </div>
@@ -150,101 +150,101 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // 15 ta Fan va ularning barcha mavzulari to'liq ro'yxati
+        // 15 ta Fan va ularning to'liq mavzular va darslar bazasi
         const subjects = [
             {
                 id: 1, name: "1. Matematika", desc: "Arifmetika, algebra, geometriya va tenglamalar.",
                 topics: [
-                    { title: "1. Natural sonlar va arifmetik amallar", theory: "Natural sonlar sanash uchun ishlatiladi. Qo'shish, ayirish, ko'paytirish va bo'lish arifmaning asosidir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"15 + 25 nechiga teng?", a:"40", w:["35","45","50"]},{q:"8 × 7 nechiga teng?", a:"56", w:["48","64","54"]}] },
-                    { title: "2. Oddiy va o'nli kasrlar", theory: "Kasrlar butunning qismini bildiradi. Masalan, 1/2 bu yarim demakdir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"1/2 + 1/2 yig'indisi nechiga teng?", a:"1", w:["1/4","2","0.5"]},{q:"0.5 soni kasr ko'rinishida qanday yoziladi?", a:"1/2", w:["1/3","1/4","3/4"]}] },
-                    { title: "3. Oddiy tenglamalar", theory: "Noma'lum miqdorni topish uchun tenglamalar tuziladi (masalan: x + 5 = 10).", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"x + 10 = 25 tenglamasida x nechiga teng?", a:"15", w:["10","20","35"]},{q:"3x = 18 tenglamasida x nechiga teng?", a:"6", w:["5","7","8"]}] }
+                    { title: "1-Dars: Natural sonlar va amallar", theory: "Natural sonlar buyumlarni sanashda ishlatiladi: 1, 2, 3... Ularni qo'shish va ayirish eng asosiy hisob-kitobdir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"15 + 25 nechiga teng?", a:"40", w:["35","45","50"]},{q:"8 × 7 nechiga teng?", a:"56", w:["48","64","54"]}] },
+                    { title: "2-Dars: Kasrlar bilan ishlash", theory: "Kasr sonlar butunning qismini bildiradi (masalan, 1/2 pirogning yarmi demakdir).", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"1/2 + 1/2 yig'indisi nechiga teng?", a:"1", w:["1/4","2","0.5"]},{q:"0.5 soni kasr ko'rinishida qanday yoziladi?", a:"1/2", w:["1/3","1/4","3/4"]}] },
+                    { title: "3-Dars: Oddiy tenglamalar", theory: "Tenglama — ichida noma'lum harf (masalan, x) bo'lgan tenglik. Maqsad x ning qiymatini topish.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"x + 10 = 25 tenglamasida x nechiga teng?", a:"15", w:["10","20","35"]},{q:"3x = 18 tenglamasida x nechiga teng?", a:"6", w:["5","7","8"]}] }
                 ]
             },
             {
                 id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, elektr va optika.",
                 topics: [
-                    { title: "1. Tezlik, yo'l va vaqt", theory: "Jismning ma'lum vaqt ichida bosib o'tgan masofasi yo'l deyiladi. V = S / t.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Jism 20 m/s tezlik bilan 5 sekund harakatlandi. Yo'l qancha?", a:"100 m", w:["50 m","120 m","80 m"]}] },
-                    { title: "2. Nyuton qonunlari", theory: "Kuch jismga ta'sir qilib uning tezligini o'zgartiradi. F = m * a.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Kuch o'lchov birligi nima?", a:"Nyuton (N)", w:["Joul","Vatt","Paskal"]}] }
+                    { title: "1-Dars: Tezlik, yo'l va vaqt", theory: "Jism ma'lum vaqt ichida qancha masofa o'tsa, uning yo'li topiladi. Formula: S = v * t.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Jism 20 m/s tezlik bilan 5 sekund harakatlandi. Yo'l qancha?", a:"100 m", w:["50 m","120 m","80 m"]}] },
+                    { title: "2-Dars: Kuch va Nyuton qonunlari", theory: "Kuch jismning harakat holatini o'zgartiruvchi ta'sirdir. U Nyuton (N) da o'lchanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Kuchning o'lchov birligi nima?", a:"Nyuton (N)", w:["Joul","Vatt","Paskal"]}] }
                 ]
             },
             {
                 id: 3, name: "3. Kimyo", desc: "Elementlar jadvali va reaksiyalar.",
                 topics: [
-                    { title: "1. Atom va molekula", theory: "Moddalarning eng kichik zarrachasi atom deb ataladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Vodorod atom raqami nechiga teng?", a:"1", w:["2","4","8"]},{q:"Kislorod kimyoviy belgisi nima?", a:"O", w:["C","N","H"]}] },
-                    { title: "2. Kimyoviy reaksiyalar", theory: "Moddalarning bir-biri bilan birikib yangi modda hosil qilishi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Suv formulasi qanday?", a:"H2O", w:["CO2","NaCl","CH4"]}] }
+                    { title: "1-Dars: Atomlar va molekulalar", theory: "Barcha moddalar juda kichik zarrachalar — atomlardan tashkil topgan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Vodorodning atom raqami nechiga teng?", a:"1", w:["2","4","8"]},{q:"Kislorodning kimyoviy belgisi nima?", a:"O", w:["C","N","H"]}] },
+                    { title: "2-Dars: Kimyoviy reaksiyalar", theory: "Moddalarning o'zaro ta'sirlashib boshqa yangi moddaga aylanishi reaksiya deyiladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Suvning kimyoviy formulasi qanday?", a:"H2O", w:["CO2","NaCl","CH4"]}] }
                 ]
             },
             {
                 id: 4, name: "4. Biologiya", desc: "Hujayra, anatomiya va tabiat.",
                 topics: [
-                    { title: "1. Hujayra tuzilishi", theory: "Barcha tirik organizmlar hujayralardan tashkil topgan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Hujayraning energetik stansiyasi?", a:"Mitoxondriya", w:["Yadro","Ribosoma","Vakuola"]}] },
-                    { title: "2. Odam anatomiyasi", theory: "Inson tanasining tuzilishi va organlar faoliyati.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Odam yuragi nechta kamerali?", a:"4 ta", w:["2 ta","3 ta","5 ta"]}] }
+                    { title: "1-Dars: Hujayra tuzilishi", theory: "Tirik organizmlarning asosiy qurilish birligi bu hujayradir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Hujayraning energetik stansiyasi qaysi?", a:"Mitoxondriya", w:["Yadro","Ribosoma","Vakuola"]}] },
+                    { title: "2-Dars: Odam anatomiyasi", theory: "Inson organizmida yurak qon aylanishini ta'minlaydigan asosiy organdir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Odam yuragi nechta kameradan iborat?", a:"4 ta", w:["2 ta","3 ta","5 ta"]}] }
                 ]
             },
             {
                 id: 5, name: "5. Informatika", desc: "Algoritmlar va kompyuter.",
                 topics: [
-                    { title: "1. Axborot o'lchov birliklari", theory: "Kompyuterda axborot baytlar va bitlarda o'lchanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"1 Kilobayt necha bayt?", a:"1024 bayt", w:["1000 bayt","512 bayt","2048 bayt"]}] }
+                    { title: "1-Dars: Axborot o'lchov birliklari", theory: "Kompyuterda ma'lumotlar baytlar va kilobytlarda saqlanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"1 Kilobayt necha baytga teng?", a:"1024 bayt", w:["1000 bayt","512 bayt","2048 bayt"]}] }
                 ]
             },
             {
                 id: 6, name: "6. Tarix", desc: "O'zbekiston va jahon tarixi.",
                 topics: [
-                    { title: "1. Buyuk siymolar va sanalar", theory: "O'zbekiston tarixida Amir Temur va Alisher Navoiy kabi buyuklar o'tgan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Amir Temur qachon tug'ilgan?", a:"1336-yil", w:["1370-yil","1405-yil","1441-yil"]}] }
+                    { title: "1-Dars: Buyuk sarkardalar va sanalar", theory: "O'zbek xalqining boy tarixi davomida ko'plab buyuk davlatlar va allomalar o'tgan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Amir Temur qaysi yilda tug'ilgan?", a:"1336-yil", w:["1370-yil","1405-yil","1441-yil"]}] }
                 ]
             },
             {
                 id: 7, name: "7. Geografiya", desc: "Materiklar, davlatlar va iqlim.",
                 topics: [
-                    { title: "1. Dunyo xaritasi va okeanlar", theory: "Yer yuzining asosiy qismi suvdan iborat.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Dunyodagi eng katta cho'l?", a:"Sahroi Kabir", w:["Qizilqum","Gobi","Karakum"]}] }
+                    { title: "1-Dars: Yer yuzining tuzilishi", theory: "Yer sharining asosiy qismini okeanlar va dengizlar tashkil qiladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Dunyodagi eng katta cho'l qaysi?", a:"Sahroi Kabir", w:["Qizilqum","Gobi","Karakum"]}] }
                 ]
             },
             {
                 id: 8, name: "8. Ona tili", desc: "Imlo, fonetika va so'z turkumlari.",
                 topics: [
-                    { title: "1. So'z turkumlari", theory: "Ot, sifat, fe'l va son asosiy so'z turkumlaridir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Harakatni bildiruvchi so'z turkumi?", a:"Fe'l", w:["Ot","Sifat","Ravish"]}] }
+                    { title: "1-Dars: So'z turkumlari", theory: "O'zbek tilida ot, sifat, son, olmosh va fe'l kabi so'z turkumlari bor.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Harakatni bildiruvchi so'z turkumi nima?", a:"Fe'l", w:["Ot","Sifat","Ravish"]}] }
                 ]
             },
             {
                 id: 9, name: "9. Adabiyot", desc: "Mumtoz va zamonaviy asarlar.",
                 topics: [
-                    { title: "1. O'zbek mumtoz adabiyoti", theory: "Alisher Navoiyning Xamsa dostoni jahon adabiyoti durdonasidir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Xamsa nechta dostondan iborat?", a:"5 ta", w:["4 ta","6 ta","3 ta"]}] }
+                    { title: "1-Dars: O'zbek mumtoz adabiyoti", theory: "Alisher Navoiy o'zbek adabiyotining ulug' namoyandasi hisoblanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'Xamsa' dostoni nechta qismdan iborat?", a:"5 ta", w:["4 ta","6 ta","3 ta"]}] }
                 ]
             },
             {
                 id: 10, name: "10. Ingliz tili", desc: "Grammar, Vocabulary va Tenses.",
                 topics: [
-                    { title: "1. English Grammar basics", theory: "Present Simple zamoni odatiy takrorlanuvchi harakatlarni bildiradi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'Knowledge' so'zining tarjimasi?", a:"Bilim", w:["Kitob","Maktab","Kuch"]}] }
+                    { title: "1-Dars: English Basics", theory: "Ingliz tilida gaplar asosan ega, kesim va to'ldiruvchi tartibida tuziladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'Knowledge' so'zining tarjimasi?", a:"Bilim", w:["Kitob","Maktab","Kuch"]}] }
                 ]
             },
             {
                 id: 11, name: "11. Astronomiya", desc: "Koinot va sayyoralar.",
                 topics: [
-                    { title: "1. Quyosh sistemasi", theory: "Quyosh atrofida 8 ta sayyora aylanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Quyoshga eng yaqin sayyora?", a:"Merkuriy", w:["Venera","Yer","Mars"]}] }
+                    { title: "1-Dars: Quyosh sistemasi", theory: "Quyosh atrofida 8 ta asosiy sayyora aylanib yuradi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Quyoshga eng yaqin sayyora qaysi?", a:"Merkuriy", w:["Venera","Yer","Mars"]}] }
                 ]
             },
             {
                 id: 12, name: "12. Iqtisodiyot", desc: "Moliya, bozor va soliqlar.",
                 topics: [
-                    { title: "1. Bozor iqtisodiyoti asoslari", theory: "Talab va taklif bozor qonuniyatlarini belgilaydi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Mahsulotga 20% chegirma berilsa nima bo'ladi?", a:"Narxi arzonlashadi", w:["Qimmatlashadi","O'zgarmaydi","Yo'qoladi"]}] }
+                    { title: "1-Dars: Bozor va narxlar", theory: "Bozorda narxlar talab va taklif asosida belgilanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Mahsulotga 20% chegirma berilsa nima bo'ladi?", a:"Narxi arzonlashadi", w:["Qimmatlashadi","O'zgarmaydi","Yo'qoladi"]}] }
                 ]
             },
             {
                 id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya va qonunlar.",
                 topics: [
-                    { title: "1. O'zbekiston Konstitutsiyasi", theory: "Konstitutsiya mamlakatning asosiy qonunidir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Konstitutsiya qachon qabul qilingan?", a:"1992-yil 8-dekabr", w:["1991-yil 1-sentabr","1993-yil 2-iyul","1990-yil"]}] }
+                    { title: "1-Dars: Asosiy qonunimiz", theory: "O'zbekiston Respublikasining Konstitutsiyasi davlatning bosh qonunidir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Konstitutsiya qachon qabul qilingan?", a:"1992-yil 8-dekabr", w:["1991-yil 1-sentabr","1993-yil 2-iyul","1990-yil"]}] }
                 ]
             },
             {
                 id: 14, name: "14. Falsafa", desc: "Tafakkur va dunyoqarash.",
                 topics: [
-                    { title: "1. Qadimgi falsafa", theory: "Suqrot va Arastu insoniyatning buyuk mutafakkirlaridir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'O'zingni angla' hikmati kimniki?", a:"Suqrot", w:["Arastu","Platon","Pifagor"]}] }
+                    { title: "1-Dars: Qadimgi dunyo falsafasi", theory: "Falsafa insonning dunyoqarashi va tafakkurini rivojlantiradi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"'O'zingni angla' hikmati kimga tegishli?", a:"Suqrot", w:["Arastu","Platon","Pifagor"]}] }
                 ]
             },
             {
                 id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati va temperament.",
                 topics: [
-                    { title: "1. Temperament turlari", theory: "Xolerik, sangvinik, flegmatik va melanxolik asosiy turlardir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Tez jahli chiqadigan temperament?", a:"Xolerik", w:["Flegmatik","Sangvinik","Melanxolik"]}] }
+                    { title: "1-Dars: Temperament turlari", theory: "Insonlarning xulq-atvori ularning temperamentiga qarab farqlanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", qList: [{q:"Tez jahli chiqadigan temperament turi?", a:"Xolerik", w:["Flegmatik","Sangvinik","Melanxolik"]}] }
                 ]
             }
         ];
@@ -358,13 +358,13 @@
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30 group-hover:bg-yellow-400 group-hover:text-blue-950 transition">Modul #${subj.id}</span>
-                                <span class="text-xs font-bold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 px-2.5 py-1 rounded-lg">${subj.topics.length} ta Mavzu</span>
+                                <span class="text-xs font-bold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 px-2.5 py-1 rounded-lg">${subj.topics.length} ta Dars</span>
                             </div>
                             <h3 class="text-xl font-black text-white mb-2">${subj.name}</h3>
                             <p class="text-slate-300 text-sm leading-relaxed mb-4">${subj.desc}</p>
                         </div>
                         <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-yellow-400">
-                            <span>📚 To'liq darslar</span>
+                            <span>📚 Mavzular va Darslar</span>
                             <span>O'rganish →</span>
                         </div>
                     </div>
@@ -392,7 +392,7 @@
                     <div onclick="openLesson(${index})" class="bg-slate-800/80 p-4 rounded-2xl border border-white/10 hover:border-yellow-400 cursor-pointer transition flex items-center justify-between">
                         <div>
                             <h4 class="font-bold text-white text-sm mb-1">${top.title}</h4>
-                            <p class="text-xs text-slate-400">Video dars va testlar mavjud</p>
+                            <p class="text-xs text-slate-400">Sodda tushuntirish va test</p>
                         </div>
                         <span class="text-yellow-400 font-bold text-sm">O'qish →</span>
                     </div>
@@ -444,7 +444,7 @@
             const optionsDiv = document.getElementById("quizOptions");
             optionsDiv.innerHTML = "";
             options.forEach(opt => {
-                const safeOpt = opt.replace(/'/g, "\\'");
+                let safeOpt = opt.replace(/'/g, "\\'");
                 optionsDiv.innerHTML += `<button onclick="checkAnswer('${safeOpt}')" class="w-full text-left bg-slate-800 text-white p-3.5 rounded-2xl border border-white/10 hover:bg-yellow-400 hover:text-blue-950 hover:border-yellow-400 transition font-bold shadow-sm">${opt}</button>`;
             });
         }
