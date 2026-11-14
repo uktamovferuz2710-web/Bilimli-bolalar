@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali Pro — Cheksiz Ta'lim va Reyting</title>
+    <title>Bilimlar Portali PRO — Rank va Cheksiz Testlar</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 font-sans selection:bg-blue-600 selection:text-white">
@@ -15,14 +15,15 @@
                 <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
                 <div>
                     <h1 class="text-2xl font-black tracking-tight">Bilimlar Portali PRO</h1>
-                    <p class="text-xs text-blue-200">15 ta fan • Cheksiz intellektual ta'lim tizimi</p>
+                    <p class="text-xs text-blue-200">15 ta fan • Rank va Cheksiz intellektual tizim</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 shadow-inner">
                 <div class="text-right">
                     <span id="userNameDisplay" class="font-bold text-sm block text-yellow-300">Mehmon</span>
-                    <span class="text-xs text-blue-200" id="userXpDisplay">XP: 0 • Daraja 1</span>
+                    <span class="text-xs text-blue-200" id="userXpDisplay">XP: 0</span>
+                    <span class="text-[11px] font-black bg-yellow-400 text-blue-950 px-2 py-0.5 rounded-md mt-0.5 inline-block" id="userRankDisplay">🥉 Boshlang'ich</span>
                 </div>
                 <button onclick="openAuthModal()" class="bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold px-4 py-2 rounded-xl text-sm transition shadow-md">Profil</button>
             </div>
@@ -41,7 +42,7 @@
                     onkeyup="searchSubjects()">
             </div>
             <button onclick="openLeaderboard()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
-                🏆 Global Reyting
+                🏆 Global Reyting & Rank
             </button>
         </div>
 
@@ -103,8 +104,8 @@
             <button onclick="closeLeaderboard()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
             <div class="text-center mb-6">
                 <span class="text-4xl">🏆</span>
-                <h2 class="text-2xl font-black text-slate-900 mt-2">Global XP Reytingi</h2>
-                <p class="text-xs text-slate-500">Eng faol bilimdonlar jadvali</p>
+                <h2 class="text-2xl font-black text-slate-900 mt-2">Global XP Reytingi & Rank</h2>
+                <p class="text-xs text-slate-500">Eng faol bilimdonlar unvonlar jadvali</p>
             </div>
             <ul id="leaderboardList" class="space-y-3 max-h-80 overflow-y-auto pr-1"></ul>
         </div>
@@ -204,29 +205,43 @@
             return array.sort(() => Math.random() - 0.5);
         }
 
+        // XP ga qarab Rank (Unvon)ni aniqlash funksiyasi
+        function getRankInfo(xp) {
+            if (xp >= 4000) return { name: "⚡ Daho (Grandmaster)", color: "bg-purple-100 text-purple-800 border-purple-300" };
+            if (xp >= 2000) return { name: "👑 Professor (Master)", color: "bg-amber-100 text-amber-800 border-amber-300" };
+            if (xp >= 1000) return { name: "💎 Mutaxassis (Expert)", color: "bg-blue-100 text-blue-800 border-blue-300" };
+            if (xp >= 500)  return { name: "🥇 Bilimdon (Scholar)", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
+            if (xp >= 200)  return { name: "🥈 Talaba (Student)", color: "bg-sky-100 text-sky-800 border-sky-300" };
+            return { name: "🥉 Boshlang'ich (Novice)", color: "bg-slate-100 text-slate-700 border-slate-200" };
+        }
+
         function updateUI() {
             currentLevel = Math.floor(currentXp / 200) + 1;
+            const rank = getRankInfo(currentXp);
+            
             document.getElementById("userNameDisplay").innerText = currentUser;
             document.getElementById("userXpDisplay").innerText = `XP: ${currentXp} • Daraja ${currentLevel}`;
+            document.getElementById("userRankDisplay").innerText = rank.name;
         }
 
         function renderSubjects(list) {
             const grid = document.getElementById("subjectsGrid");
             grid.innerHTML = "";
             list.forEach(subj => {
+                let savedQ = localStorage.getItem(`subject_q_${subj.id}`) || 1;
                 grid.innerHTML += `
                     <div onclick="openModal(${subj.id})" class="bg-white p-7 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-slate-100 hover:border-blue-500 flex flex-col justify-between group">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full group-hover:bg-blue-600 group-hover:text-white transition">Modul #${subj.id}</span>
-                                <span class="text-slate-300 group-hover:text-blue-600 transition text-lg">➔</span>
+                                <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-lg">Savol: #${savedQ}</span>
                             </div>
                             <h3 class="text-xl font-black text-blue-950 mb-2">${subj.name}</h3>
                             <p class="text-slate-600 text-sm leading-relaxed mb-4">${subj.desc}</p>
                         </div>
                         <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
                             <span>∞ Cheksiz Testlar</span>
-                            <span>Boshlash →</span>
+                            <span>Davom etish →</span>
                         </div>
                     </div>
                 `;
@@ -241,7 +256,7 @@
 
         function openModal(id) {
             activeSubject = subjects.find(s => s.id === id);
-            questionCount = 1;
+            questionCount = parseInt(localStorage.getItem(`subject_q_${activeSubject.id}`)) || 1;
             
             document.getElementById("modalCategoryBadge").innerText = activeSubject.name;
             document.getElementById("modalTitle").innerText = activeSubject.name;
@@ -264,7 +279,6 @@
 
             let q = "", correct = "", options = [];
 
-            // 1. Matematika Generator
             if (activeSubject.id === 1) {
                 if (qLevel === 1) {
                     let a = rand(10, 50), b = rand(10, 50);
@@ -281,31 +295,23 @@
                 }
                 let num = Number(correct);
                 options = shuffle([correct, String(num + rand(2, 10)), String(num - rand(2, 8)), String(num + rand(12, 20))]);
-            } 
-            // 2. Fizika Generator
-            else if (activeSubject.id === 2) {
+            } else if (activeSubject.id === 2) {
                 let v = rand(10, 30 * qLevel), t = rand(2, 10);
                 q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. Bosib o'tgan yo'li qancha?`;
                 correct = `${v * t} m`;
                 options = shuffle([correct, `${v * t + 15} m`, `${v + t} m`, `${Math.abs(v * t - 10)} m`]);
-            }
-            // 5. Informatika Generator
-            else if (activeSubject.id === 5) {
+            } else if (activeSubject.id === 5) {
                 let kb = rand(2, 16 * qLevel);
                 q = `${kb} Kilobayt (KB) necha Baytga teng?`;
                 correct = `${kb * 1024} bayt`;
                 options = shuffle([correct, `${kb * 1000} bayt`, `${kb * 512} bayt`, `${kb * 8} bayt`]);
-            }
-            // 12. Iqtisodiyot Generator
-            else if (activeSubject.id === 12) {
+            } else if (activeSubject.id === 12) {
                 let sum = rand(10, 40 * qLevel) * 1000;
                 let ans = sum * 0.2;
                 q = `${sum.toLocaleString()} so'mlik mahsulotga 20% chegirma berilsa, qancha tejaladi?`;
                 correct = `${ans.toLocaleString()} so'm`;
                 options = shuffle([correct, `${(ans + 3000).toLocaleString()} so'm`, `${(ans / 2).toLocaleString()} so'm`, `${(ans + 5000).toLocaleString()} so'm`]);
-            }
-            // Boshqa fanlar uchun factBank
-            else {
+            } else {
                 const bank = factBanks[activeSubject.id] || [{ q: "O'zbekiston poytaxti qaysi shahar?", a: "Toshkent", w: ["Samarqand", "Buxoro", "Xiva"] }];
                 const item = bank[rand(0, bank.length - 1)];
                 q = item.q;
@@ -330,12 +336,15 @@
             if (selected === currentCorrectAnswer) {
                 currentXp += currentXpReward;
                 localStorage.setItem("portal_xp", currentXp);
+                
+                questionCount++;
+                localStorage.setItem(`subject_q_${activeSubject.id}`, questionCount);
+
                 updateUI();
 
                 resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP qo'shildi. Keyingi savol...`;
                 resultEl.className = "font-bold text-sm text-emerald-600 text-center";
                 
-                questionCount++;
                 setTimeout(() => {
                     loadNextQuestion();
                 }, 800);
@@ -349,6 +358,7 @@
             document.getElementById("subjectModal").classList.remove("flex");
             document.getElementById("subjectModal").classList.add("hidden");
             document.getElementById("modalVideo").src = "";
+            renderSubjects(subjects);
         }
 
         function openAuthModal() {
@@ -375,22 +385,25 @@
             const list = document.getElementById("leaderboardList");
             const players = [
                 { name: currentUser, xp: currentXp },
-                { name: "Azizbek (Toshkent)", xp: 1850 },
-                { name: "Madina (Samarqand)", xp: 1420 },
+                { name: "Azizbek (Toshkent)", xp: 4850 },
+                { name: "Madina (Samarqand)", xp: 2420 },
                 { name: "Jasur (Buxoro)", xp: 960 },
-                { name: "Feruza (Farg'ona)", xp: 740 }
+                { name: "Feruza (Farg'ona)", xp: 340 }
             ].sort((a, b) => b.xp - a.xp);
 
             list.innerHTML = "";
             players.forEach((p, index) => {
-                let badgeColor = index === 0 ? "bg-yellow-100 text-yellow-800 border-yellow-300" : index === 1 ? "bg-slate-100 text-slate-800 border-slate-300" : index === 2 ? "bg-amber-100 text-amber-800 border-amber-300" : "bg-white text-slate-700 border-slate-100";
+                let rank = getRankInfo(p.xp);
                 list.innerHTML += `
-                    <li class="flex justify-between items-center p-3.5 rounded-2xl border ${badgeColor} font-bold shadow-sm">
+                    <li class="flex justify-between items-center p-3.5 rounded-2xl border ${rank.color} font-bold shadow-sm">
                         <div class="flex items-center gap-3">
                             <span class="w-6 text-center">${index + 1}.</span>
-                            <span>${p.name}</span>
+                            <div>
+                                <div>${p.name}</div>
+                                <div class="text-[10px] font-normal opacity-75">${rank.name}</div>
+                            </div>
                         </div>
-                        <span class="text-blue-600">${p.xp} XP</span>
+                        <span class="text-blue-700">${p.xp} XP</span>
                     </li>`;
             });
 
