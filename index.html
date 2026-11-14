@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilimlar Portali — 15 ta asosiy fan</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; text-align: center; padding: 2.5rem 1rem; }
+        header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+        .search-box { max-width: 500px; margin: 1.5rem auto 0; }
+        .search-box input { width: 100%; padding: 12px 20px; border: none; border-radius: 25px; font-size: 1rem; outline: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; border-top: 4px solid #2a5298; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .card h3 { color: #1e3c72; margin-bottom: 0.5rem; font-size: 1.3rem; }
+        .card p { font-size: 0.95rem; color: #666; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; padding: 1rem; z-index: 1000; }
+        .modal-content { background: white; padding: 2rem; border-radius: 12px; max-width: 500px; width: 100%; position: relative; animation: fadeIn 0.3s; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #888; }
+        .close-btn:hover { color: #000; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Bilimlar Portali</h1>
+    <p>15 ta asosiy fan bo'yicha o'quv qo'llanma va ma'lumotlar bazasi</p>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Fizika, Tarix)...">
+    </div>
+</header>
+
+<div class="container">
+    <div class="grid" id="subjectsGrid"></div>
+</div>
+
+<div class="modal" id="subjectModal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModal">&times;</span>
+        <h2 id="modalTitle" style="color: #1e3c72; margin-bottom: 1rem;"></h2>
+        <p id="modalDesc" style="margin-bottom: 1rem;"></p>
+        <div id="modalTopics" style="background: #f0f4f8; padding: 1rem; border-radius: 8px; font-size: 0.9rem;"></div>
+    </div>
+</div>
+
+<script>
+    const fanlar = [
+        { nomi: "1. Matematika", qisqa: "Sonlar, tuzilmalar, fazo va o'zgarishlar haqidagi aniq fan.", mavzular: "Asosiy bo'limlar: Algebra, Geometriya, Matematik analiz, Ehtimollar nazariyasi." },
+        { nomi: "2. Fizika", qisqa: "Tabiatning eng umumiy qonunlari, materiya va energiya haqidagi fan.", mavzular: "Asosiy bo'limlar: Mexanika, Termodinamika, Elektrodinamika, Kvant fizikasi." },
+        { nomi: "3. Kimyo", qisqa: "Moddalarning tarkibi, tuzilishi, xossalari va o'zgarishlarini o'rganadi.", mavzular: "Asosiy bo'limlar: Anorganik kimyo, Organik kimyo, Analitik kimyo." },
+        { nomi: "4. Biologiya", qisqa: "Tiriklik va barcha tirik organizmlarning hayot faoliyati haqidagi fan.", mavzular: "Asosiy bo'limlar: Botanika, Zoologiya, Anatomiya, Genetika." },
+        { nomi: "5. Informatika", qisqa: "Axborotni kompyuterlar yordamida qayta ishlash va dasturlash asoslari.", mavzular: "Asosiy bo'limlar: Algoritmlar, Dasturlash tillari, Ma'lumotlar bazasi, Sun'iy intellekt." },
+        { nomi: "6. Tarix", qisqa: "Insoniyatning o'tmishi, sivilizatsiyalar rivojlanishi va tarixiy voqealar.", mavzular: "Asosiy bo'limlar: Qadimgi dunyo, O'rta asrlar, O'zbekiston tarixi, Jahon tarixi." },
+        { nomi: "7. Geografiya", qisqa: "Yer yuzasi tabiatini, aholisini va xo'jalik faoliyatini o'rganuvchi fan.", mavzular: "Asosiy bo'limlar: Tabiiy geografiya, Iqtisodiy geografiya, Kartografiya." },
+        { nomi: "8. Ona tili", qisqa: "Tilning grammatik qurilishi, imlo qoidalari va nutq madaniyati.", mavzular: "Asosiy bo'limlar: Fonetika, Leksikologiya, Morfologiya, Sintaksis." },
+        { nomi: "9. Adabiyot", qisqa: "So'z san'ati, badiiy asarlar tahlili va adabiyot tarixi.", mavzular: "Asosiy bo'limlar: Xalq og'zaki ijodi, Mumtoz adabiyot, Zamonaviy adabiyot." },
+        { nomi: "10. Ingliz tili", qisqa: "Xalqaro muloqot, ilm-fan va texnologiyalar tili.", mavzular: "Asosiy bo'limlar: Grammar, Vocabulary, Reading, Listening, Speaking." },
+        { nomi: "11. Astronomiya", qisqa: "Osmon jismlari, yulduzlar, sayyoralar va koinot tuzilishi haqidagi fan.", mavzular: "Asosiy bo'limlar: Quyosh tizimi, Astrofizika, Kosmologiya." },
+        { nomi: "12. Iqtisodiyot", qisqa: "Cheklangan resurslardan samarali foydalanish va bozor qonunlari.", mavzular: "Asosiy bo'limlar: Mikroiqtisodiyot, Makroiqtisodiyot, Moliya, Marketing." },
+        { nomi: "13. Huquqshunoslik", qisqa: "Jamiyatdagi huquqiy normalar, qonunlar va inson huquqlari asoslari.", mavzular: "Asosiy bo'limlar: Konstitutsiyaviy huquq, Fuqarolik huquqi, Jinoyat huquqi." },
+        { nomi: "14. Falsafa", qisqa: "Borliq, bilim, axloq va inson tafakkurining umumiy tamoyillari.", mavzular: "Asosiy bo'limlar: Ontologiya, Gnoseologiya, Etika, Mantiq." },
+        { nomi: "15. Psixologiya", qisqa: "Inson ruhiyati, xulq-atvori va ichki kechinmalarini o'rganuvchi fan.", mavzular: "Asosiy bo'limlar: Umumiy psixologiya, Yosh davrlari psixologiyasi, Ijtimoiy psixologiya." }
+    ];
+
+    const grid = document.getElementById('subjectsGrid');
+    const searchInput = document.getElementById('searchInput');
+    const modal = document.getElementById('subjectModal');
+
+    function renderCards(data) {
+        grid.innerHTML = '';
+        data.forEach(fan => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<h3>${fan.nomi}</h3><p>${fan.qisqa}</p>`;
+            card.onclick = () => openModal(fan);
+            grid.appendChild(card);
+        });
+    }
+
+    function openModal(fan) {
+        document.getElementById('modalTitle').innerText = fan.nomi;
+        document.getElementById('modalDesc').innerText = fan.qisqa;
+        document.getElementById('modalTopics').innerHTML = `<strong>O'rganiladigan yo'nalishlar:</strong><br>${fan.mavzular}`;
+        modal.style.display = 'flex';
+    }
+
+    document.getElementById('closeModal').onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+    searchInput.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        const filtered = fanlar.filter(f => f.nomi.toLowerCase().includes(val) || f.qisqa.toLowerCase().includes(val));
+        renderCards(filtered);
+    });
+
+    renderCards(fanlar);
+</script>
+
+</body>
+</html>
