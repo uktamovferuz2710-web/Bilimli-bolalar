@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali PRO — Google Profil va 50 Talik Testlar</title>
+    <title>Bilimlar Portali PRO — Cheksiz Qiyinlashuvchi Testlar</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Identity Services SDK -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 </head>
 <body class="bg-slate-950 min-h-screen text-slate-100 font-sans selection:bg-yellow-400 selection:text-blue-950">
 
@@ -17,12 +17,11 @@
                 <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
                 <div>
                     <h1 class="text-2xl font-black tracking-tight text-white">Bilimlar Portali PRO</h1>
-                    <p class="text-xs text-blue-300">15 ta fan • Har mavzuda 50 ta test • Google Profil</p>
+                    <p class="text-xs text-blue-300">15 ta fan • Avtomatik qiyinlashuvchi testlar</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 shadow-inner">
-                <img id="userAvatar" src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full border-2 border-yellow-400 hidden" alt="Avatar">
                 <div class="text-right">
                     <span id="userNameDisplay" class="font-bold text-sm block text-yellow-300">Mehmon</span>
                     <span class="text-xs text-blue-200" id="userXpDisplay">XP: 0</span>
@@ -56,44 +55,33 @@
         <div id="subjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- MODAL (SUBJECT TOPICS HUB) -->
+    <!-- MODAL (SUBJECT LEARNING HUB) -->
     <div id="subjectModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50 overflow-y-auto">
-        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-4xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl">
+        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-3xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl">
             <button onclick="closeModal()" class="absolute top-5 right-5 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full font-bold flex items-center justify-center transition">✕</button>
             
-            <div id="subjectTopicsView">
-                <div class="flex items-center gap-3 mb-2">
-                    <span id="modalCategoryBadge" class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30">Fan</span>
-                </div>
-                <h2 id="modalTitle" class="text-3xl font-black text-white mb-2"></h2>
-                <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
-                
-                <h3 class="font-bold text-lg text-yellow-400 mb-4">📚 Mavzular ro'yxati (Har birida 50 tadan test):</h3>
-                <div id="topicsListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            <div class="flex items-center gap-3 mb-2">
+                <span id="modalCategoryBadge" class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30">Fan</span>
+            </div>
+            <h2 id="modalTitle" class="text-3xl font-black text-white mb-2"></h2>
+            <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
+            
+            <!-- Yozma Tushuntirish -->
+            <div class="bg-slate-800/80 border border-white/10 p-5 rounded-2xl mb-6 shadow-inner">
+                <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Qisqacha Nazariya va Tushuntirish</h3>
+                <p id="modalTheory" class="text-sm text-slate-200 leading-relaxed"></p>
             </div>
 
-            <!-- SINGLE LESSON & QUIZ VIEW -->
-            <div id="lessonQuizView" class="hidden">
-                <button onclick="backToTopics()" class="mb-4 text-xs font-bold bg-slate-800 text-yellow-400 px-4 py-2 rounded-xl border border-white/10 hover:bg-slate-700 transition">← Mavzular ro'yxatiga qaytish</button>
-                <h2 id="lessonTitle" class="text-2xl font-black text-white mb-3"></h2>
+            <!-- Test Qismi (Avtomatik qiyinlashib boruvchi) -->
+            <div class="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol #1</span>
+                    <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+1 XP Mukofot</span>
+                </div>
                 
-                <!-- Yozma Tushuntirish -->
-                <div class="bg-slate-800/80 border border-white/10 p-5 rounded-2xl mb-6 shadow-inner">
-                    <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Yozma Tushuntirish (Nazariya)</h3>
-                    <p id="lessonTheory" class="text-sm text-slate-200 leading-relaxed"></p>
-                </div>
-
-                <!-- Test Qismi (50 ta savol) -->
-                <div class="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
-                    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-                        <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol 1 / 50</span>
-                        <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+1 XP Mukofot</span>
-                    </div>
-                    
-                    <p id="quizQuestion" class="font-bold text-xl text-white mb-6 leading-snug"></p>
-                    <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"></div>
-                    <p id="quizResult" class="font-bold text-sm min-h-[24px] text-center"></p>
-                </div>
+                <p id="quizQuestion" class="font-bold text-xl text-white mb-6 leading-snug"></p>
+                <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"></div>
+                <p id="quizResult" class="font-bold text-sm min-h-[24px] text-center"></p>
             </div>
         </div>
     </div>
@@ -102,7 +90,7 @@
     <div id="profileModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
             <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
-            <img id="profileModalAvatar" src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full mx-auto border-4 border-yellow-400 mb-4 object-cover shadow-lg" alt="Avatar">
+            <div class="w-20 h-20 bg-yellow-400 text-blue-950 font-black text-3xl rounded-full mx-auto flex items-center justify-center mb-4 shadow-lg" id="profileAvatarLetter">M</div>
             <h2 id="profileModalName" class="text-2xl font-black text-white mb-1">Mehmon</h2>
             <p id="profileModalRank" class="text-sm font-bold text-yellow-400 mb-6">🥉 Boshlang'ich</p>
             
@@ -110,22 +98,25 @@
                 <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Jami XP ball:</span><span id="profileModalXp" class="font-black text-yellow-400">0 XP</span></div>
                 <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Joriy Daraja:</span><span id="profileModalLevel" class="font-black text-blue-400">1</span></div>
                 <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Dunyo bo'yicha o'rin:</span><span id="profileModalPlace" class="font-black text-emerald-400">#1</span></div>
-                <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">O'qilayotgan mavzu:</span><span id="profileModalActiveTopic" class="font-black text-indigo-300 text-xs">Hozircha yo'q</span></div>
             </div>
 
             <button onclick="logout()" class="w-full bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white font-bold py-3 rounded-2xl transition border border-rose-500/30">Hisobdan chiqish</button>
         </div>
     </div>
 
-    <!-- AUTH MODAL (GOOGLE SIGN-IN) -->
+    <!-- AUTH MODAL (ISM VA PAROL BILAN KIRISH) -->
     <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
             <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
-            <div class="bg-blue-500/20 text-blue-400 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black mb-3 border border-blue-500/30">G</div>
-            <h2 class="text-2xl font-black text-white mb-2">Google bilan Kirish</h2>
-            <p class="text-xs text-slate-400 mb-6">Google akkauntingiz orqali bir soniyada kiring va natijalaringizni saqlang!</p>
+            <div class="bg-blue-500/20 text-blue-400 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black mb-3 border border-blue-500/30">🔑</div>
+            <h2 class="text-2xl font-black text-white mb-2">Onlayn Profilga Kirish</h2>
+            <p class="text-xs text-slate-400 mb-6">Ism va parolingizni kiriting — ballaringiz avtomatik saqlanadi!</p>
             
-            <div id="googleSignInDiv" class="flex justify-center mb-4"></div>
+            <input type="text" id="usernameInput" placeholder="Ismingiz (masalan: Alisher)..." class="w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-slate-800 text-white placeholder-slate-400 mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium text-center">
+            <input type="password" id="passwordInput" placeholder="Maxfiy parol..." class="w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-slate-800 text-white placeholder-slate-400 mb-5 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium text-center">
+            
+            <button onclick="loginOrRegister()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold py-3.5 rounded-2xl shadow-lg transition mb-3">Kirish / Ochish</button>
+            <p id="authStatus" class="text-xs font-semibold text-slate-400"></p>
         </div>
     </div>
 
@@ -136,117 +127,81 @@
             <div class="text-center mb-6">
                 <span class="text-4xl">🏆</span>
                 <h2 class="text-2xl font-black text-white mt-2">Dunyo bo'yicha Reyting</h2>
-                <p class="text-xs text-slate-400">Eng ko'p XP to'plagan foydalanuvchilar</p>
+                <p class="text-xs text-slate-400">Barcha faol foydalanuvchilar bazasi</p>
             </div>
             <ul id="leaderboardList" class="space-y-3 max-h-80 overflow-y-auto pr-1"></ul>
         </div>
     </div>
 
     <script>
-        // 15 ta Fan va har birida tushuntirish va 50 talik testlar uchun mavzular
+        const firebaseConfig = {
+            databaseURL: "https://bilimlar-portali-default-rtdb.firebaseio.com/"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         const subjects = [
-            {
-                id: 1, name: "1. Matematika", desc: "Arifmetika, qisqa ko'paytirish va kvadrat tenglamalar.",
-                topics: [
-                    { title: "1-Mavzu: Natural sonlar va arifmetika", theory: "Natural sonlar sanash uchun ishlatiladi (1, 2, 3...). Qo'shish va ayirish arifmetikaning asosi bo'lib, kundalik hayotda eng ko'p ishlatiladigan amallardir." },
-                    { title: "2-Mavzu: Qisqa ko'paytirish formulalari", theory: "(a+b)² = a² + 2ab + b² hamda a² - b² = (a-b)(a+b) formulalari algebraik ifodalarni qisqartirish va hisoblashni tezlashtirish uchun qo'llaniladi." },
-                    { title: "3-Mavzu: Kvadrat tenglamalar", theory: "ax² + bx + c = 0 ko'rinishidagi tenglamalar kvadrat tenglama deyiladi. Ular diskriminant (D = b² - 4ac) yordamida yechiladi." }
-                ]
-            },
-            {
-                id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, elektr va optika.",
-                topics: [
-                    { title: "1-Mavzu: Tezlik, yo'l va vaqt", theory: "Jismning ma'lum vaqt ichida bosib o'tgan masofasi yo'l deyiladi. Formula: S = v * t." },
-                    { title: "2-Mavzu: Nyuton qonunlari", theory: "Kuch jismning harakat holatini o'zgartiradi. F = m * a formulasi orqali hisoblanadi." }
-                ]
-            },
-            {
-                id: 3, name: "3. Kimyo", desc: "Elementlar jadvali va reaksiyalar.",
-                topics: [
-                    { title: "1-Mavzu: Atom va molekula tuzilishi", theory: "Moddalarning eng kichik zarrachasi atom deb ataladi. Ular yadrodan va elektronlardan iborat." },
-                    { title: "2-Mavzu: Kimyoviy reaksiyalar", theory: "Moddalarning o'zaro ta'sirlashib yangi modda hosil qilish jarayoni kimyoviy reaksiya deyiladi." }
-                ]
-            },
-            {
-                id: 4, name: "4. Biologiya", desc: "Hujayra, anatomiya va tabiat.",
-                topics: [
-                    { title: "1-Mavzu: Hujayra biologiyasi", theory: "Barcha tirik organizmlarning asosiy tuzilish birligi hujayra hisoblanadi." },
-                    { title: "2-Mavzu: Odam anatomiyasi", theory: "Inson tanasining organlari va ularning o'zaro faoliyat yuritish qoidalari." }
-                ]
-            },
-            {
-                id: 5, name: "5. Informatika", desc: "Algoritmlar va kompyuter.",
-                topics: [
-                    { title: "1-Mavzu: Axborot o'lchov birliklari", theory: "Kompyuterda ma'lumotlar bit, bayt, kilobayt va megabaytlarda o'lchanadi." }
-                ]
-            },
-            {
-                id: 6, name: "6. Tarix", desc: "O'zbekiston va jahon tarixi.",
-                topics: [
-                    { title: "1-Mavzu: Qadimgi sivilizatsiyalar va sarkardalar", theory: "O'zbekiston hududidagi qadimgi davlatlar va buyuk tarixiy shaxslar faoliyati." }
-                ]
-            },
-            {
-                id: 7, name: "7. Geografiya", desc: "Materiklar, davlatlar va iqlim.",
-                topics: [
-                    { title: "1-Mavzu: Yer yuzining tuzilishi va okeanlar", theory: "Yer sharining geografik qobiqlari, materiklar va suv havzalari." }
-                ]
-            },
-            {
-                id: 8, name: "8. Ona tili", desc: "Imlo, fonetika va so'z turkumlari.",
-                topics: [
-                    { title: "1-Mavzu: So'z turkumlari va sintaksis", theory: "O'zbek tilidagi mustaqil va yordamchi so'z turkumlari, gap bo'laklari." }
-                ]
-            },
-            {
-                id: 9, name: "9. Adabiyot", desc: "Mumtoz va zamonaviy asarlar.",
-                topics: [
-                    { title: "1-Mavzu: O'zbek mumtoz adabiyoti", theory: "Alisher Navoiy va boshqa mutafakkirlarning adabiy merosi." }
-                ]
-            },
-            {
-                id: 10, name: "10. Ingliz tili", desc: "Grammar, Vocabulary va Tenses.",
-                topics: [
-                    { title: "1-Mavzu: English Grammar Basics", theory: "Ingliz tilidagi zamonlar va asosiy grammatik qoidalar." }
-                ]
-            },
-            {
-                id: 11, name: "11. Astronomiya", desc: "Koinot va sayyoralar.",
-                topics: [
-                    { title: "1-Mavzu: Quyosh sistemasi va koinot", theory: "Quyosh atrofida aylanuvchi sayyoralar va osmon jismlari." }
-                ]
-            },
-            {
-                id: 12, name: "12. Iqtisodiyot", desc: "Moliya, bozor va soliqlar.",
-                topics: [
-                    { title: "1-Mavzu: Bozor iqtisodiyoti va foizlar", theory: "Talab, taklif, narx shakllanishi va moliyaviy hisob-kitoblar." }
-                ]
-            },
-            {
-                id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya va qonunlar.",
-                topics: [
-                    { title: "1-Mavzu: O'zbekiston Respublikasi Konstitutsiyasi", theory: "Davlatimizning asosiy qonuni va fuqarolarning huquq hamda burchlari." }
-                ]
-            },
-            {
-                id: 14, name: "14. Falsafa", desc: "Tafakkur va dunyoqarash.",
-                topics: [
-                    { title: "1-Mavzu: Qadimgi dunyo falsafasi", theory: "Inson tafakkuri, borliq va dunyoqarash haqidagi ilmiy qarashlar." }
-                ]
-            },
-            {
-                id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati va temperament.",
-                topics: [
-                    { title: "1-Mavzu: Temperament turlari va xulq", theory: "Inson ruhiy holati, xolerik, sangvinik, flegmatik va melanxolik turlari." }
-                ]
-            }
+            { id: 1, name: "1. Matematika", desc: "Arifmetika, qisqa ko'paytirish va kvadrat tenglamalar.", theory: "Matematika fanida savollar avtomatik ravishda oddiy arifmetikadan boshlanib, asta-sekin qisqa ko'paytirish formulalari va kvadrat tenglamalarga qarab qiyinlashib boraveradi." },
+            { id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, elektr va optika.", theory: "Fizika tabiat qonunlarini, tezlik, kuch va bosim hisob-kitoblarini o'rgatadi." },
+            { id: 3, name: "3. Kimyo", desc: "Elementlar jadvali va reaksiyalar.", theory: "Moddalar, atomlar, molekulalar va kimyoviy reaksiyalar tahlili." },
+            { id: 4, name: "4. Biologiya", desc: "Hujayra, anatomiya va tabiat.", QtWidgets: true, theory: "Tirik organizmlar, hujayra tuzilishi va odam anatomiyasi." },
+            { id: 5, name: "5. Informatika", desc: "Algoritmlar va kompyuter.", theory: "Axborot o'lchov birliklari, dasturlash va tarmoqlar." },
+            { id: 6, name: "6. Tarix", desc: "O'zbekiston va jahon tarixi.", theory: "Tarixiy sanalar, buyuk sarkardalar va sivilizatsiyalar." },
+            { id: 7, name: "7. Geografiya", desc: "Materiklar, davlatlar va iqlim.", theory: "Yer yuzining tuzilishi, okeanlar va iqlim mintaqalari." },
+            { id: 8, name: "8. Ona tili", desc: "Imlo, fonetika va so'z turkumlari.", theory: "O'zbek tili qoidalari, so'z turkumlari va sintaksis." },
+            { id: 9, name: "9. Adabiyot", desc: "Mumtoz va zamonaviy asarlar.", theory: "O'zbek mumtoz adabiyoti va shoirlarning ijodi." },
+            { id: 10, name: "10. Ingliz tili", desc: "Grammar, Vocabulary va Tenses.", theory: "Ingliz tili grammatikasi va so'z boyligi." },
+            { id: 11, name: "11. Astronomiya", desc: "Koinot va sayyoralar.", theory: "Quyosh sistemasi va koinot sirlari." },
+            { id: 12, name: "12. Iqtisodiyot", desc: "Moliya, bozor va soliqlar.", theory: "Bozor iqtisodiyoti va moliyaviy hisob-kitoblar." },
+            { id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya va qonunlar.", theory: "O'zbekiston Respublikasi Konstitutsiyasi va qonunlar." },
+            { id: 14, name: "14. Falsafa", desc: "Tafakkur va dunyoqarash.", theory: "Inson tafakkuri va dunyoqarash asoslari." },
+            { id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati va temperament.", theory: "Inson ruhiy holati va temperament turlari." }
         ];
 
+        const factBanks = {
+            3: [
+                { q: "Vodorod (H) atom raqami nechiga teng?", a: "1", w: ["2", "4", "8"] },
+                { q: "Kislorod (O) atom massasi taxminan nechiga teng?", a: "16", w: ["8", "12", "32"] }
+            ],
+            4: [
+                { q: "Odam yuragi nechta kameradan iborat?", a: "4 ta", w: ["2 ta", "3 ta", "5 ta"] },
+                { q: "Hujayraning energetik stansiyasi qaysi?", a: "Mitoxondriya", w: ["Ribosoma", "Yadro", "Vakuola"] }
+            ],
+            6: [
+                { q: "Amir Temur qaysi yilda tavallud topgan?", a: "1336-yil", w: ["1370-yil", "1405-yil", "1441-yil"] },
+                { q: "Alisher Navoiy qaysi yilda tug'ilgan?", a: "1441-yil", w: ["1483-yil", "1336-yil", "1501-yil"] }
+            ],
+            7: [
+                { q: "Yaponiyaning poytaxti qaysi shahar?", a: "Tokio", w: ["Seul", "Pekin", "Kioto"] },
+                { q: "Dunyodagi eng katta cho'l qaysi?", a: "Sahroi Kabir", w: ["Qizilqum", "Gobi", "Atakama"] }
+            ],
+            8: [
+                { q: "Qaysi so'z turkumi harakatni bildiradi?", a: "Fe'l", w: ["Ot", "Sifat", "Ravish"] }
+            ],
+            9: [
+                { q: "'Xamsa'ning birinchi dostoni qaysi?", a: "Hayrat ul-abror", w: ["Farhod va Shirin", "Layli va Majnun", "Sab'ai sayyor"] }
+            ],
+            10: [
+                { q: "'Knowledge' so'zining tarjimasi?", a: "Bilim", w: ["Kuch", "Kitob", "Maktab"] }
+            ],
+            11: [
+                { q: "Quyosh sistemasida nechta sayyora bor?", a: "8 ta", w: ["9 ta", "7 ta", "10 ta"] }
+            ],
+            13: [
+                { q: "O'zbekiston Konstitutsiyasi nechta moddadan iborat?", a: "155 modda", w: ["128 modda", "100 modda", "200 modda"] }
+            ],
+            14: [
+                { q: "'O'zingni angla' hikmati kimga tegishli?", a: "Suqrot", w: ["Arastu", "Platon", "Pifagor"] }
+            ],
+            15: [
+                { q: "Tez jahli chiqadigan temperament turi?", a: "Xolerik", w: ["Sangvinik", "Flegmatik", "Melanxolik"] }
+            ]
+        };
+
+        let currentUserId = localStorage.getItem("portal_user_id") || "";
         let currentUser = localStorage.getItem("portal_user") || "Mehmon";
-        let userAvatarUrl = localStorage.getItem("portal_avatar") || "";
         let currentXp = parseInt(localStorage.getItem("portal_xp")) || 0;
         let activeSubject = null;
-        let activeTopicIndex = 0;
         let questionCount = 1;
         let currentLevel = 1;
         let currentCorrectAnswer = "";
@@ -276,14 +231,7 @@
             document.getElementById("userNameDisplay").innerText = currentUser;
             document.getElementById("userXpDisplay").innerText = `XP: ${currentXp} • Daraja ${currentLevel}`;
             document.getElementById("userRankDisplay").innerText = rank.name;
-
-            const avatarEl = document.getElementById("userAvatar");
-            if (userAvatarUrl) {
-                avatarEl.src = userAvatarUrl;
-                avatarEl.classList.remove("hidden");
-            } else {
-                avatarEl.classList.add("hidden");
-            }
+            document.getElementById("profileAvatarLetter").innerText = currentUser !== "Mehmon" ? currentUser[0].toUpperCase() : "M";
 
             if (currentUser !== "Mehmon") {
                 document.getElementById("authBtn").innerText = "Chiqish";
@@ -291,50 +239,94 @@
             }
         }
 
-        // GOOGLE SIGN-IN INITIALIZATION
         window.onload = function () {
             updateUI();
             renderSubjects(subjects);
-
-            if (typeof google !== 'undefined') {
-                google.accounts.id.initialize({
-                    client_id: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com", // O'zingizning Google Client ID yozing
-                    callback: handleGoogleSignIn
-                });
-                google.accounts.id.renderButton(
-                    document.getElementById("googleSignInDiv"),
-                    { theme: "outline", size: "large", width: "100%", text: "continue_with" }
-                );
+            if (currentUserId) {
+                syncDataFromCloud(currentUserId);
             }
         };
 
-        function handleGoogleSignIn(response) {
-            let responsePayload = parseJwt(response.credential);
-            currentUser = responsePayload.name;
-            userAvatarUrl = responsePayload.picture;
+        function loginOrRegister() {
+            let name = document.getElementById("usernameInput").value.trim();
+            let pass = document.getElementById("passwordInput").value.trim();
+            let statusEl = document.getElementById("authStatus");
 
-            localStorage.setItem("portal_user", currentUser);
-            localStorage.setItem("portal_avatar", userAvatarUrl);
+            if (!name || !pass) {
+                statusEl.innerText = "⚠️ Iltimos, ism va parolni kiriting!";
+                statusEl.className = "text-xs font-semibold text-rose-400";
+                return;
+            }
 
-            updateUI();
-            closeAuthModal();
+            let userId = name.toLowerCase().replace(/\s+/g, '_') + "_" + pass;
+            currentUserId = userId;
+            currentUser = name;
+
+            statusEl.innerText = "⏳ Serverga ulanmoqda...";
+            statusEl.className = "text-xs font-semibold text-blue-400";
+
+            db.ref('users/' + userId).once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    let data = snapshot.val();
+                    currentXp = data.xp || 0;
+                    localStorage.setItem("portal_xp", currentXp);
+                    localStorage.setItem("portal_user", currentUser);
+                    localStorage.setItem("portal_user_id", currentUserId);
+
+                    if (data.progress) {
+                        for (let key in data.progress) {
+                            localStorage.setItem(key, data.progress[key]);
+                        }
+                    }
+                    statusEl.innerText = "✅ Profil yuklandi!";
+                } else {
+                    db.ref('users/' + userId).set({ name: currentUser, xp: currentXp, progress: {} });
+                    localStorage.setItem("portal_user", currentUser);
+                    localStorage.setItem("portal_user_id", currentUserId);
+                    statusEl.innerText = "🎉 Yangi profil ochildi!";
+                }
+                statusEl.className = "text-xs font-semibold text-emerald-400";
+                updateUI();
+                setTimeout(() => closeAuthModal(), 1200);
+            });
         }
 
-        function parseJwt(token) {
-            var base64Url = token.split('.')[1];
-            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
+        function syncDataToCloud() {
+            if (!currentUserId) return;
+            let progress = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if (key.startsWith("subj_")) {
+                    progress[key] = localStorage.getItem(key);
+                }
+            }
+            db.ref('users/' + currentUserId).update({ name: currentUser, xp: currentXp, progress: progress });
+        }
+
+        function syncDataFromCloud(userId) {
+            db.ref('users/' + userId).once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    let data = snapshot.val();
+                    currentXp = data.xp || 0;
+                    currentUser = data.name || currentUser;
+                    localStorage.setItem("portal_xp", currentXp);
+                    localStorage.setItem("portal_user", currentUser);
+                    if (data.progress) {
+                        for (let key in data.progress) {
+                            localStorage.setItem(key, data.progress[key]);
+                        }
+                    }
+                    updateUI();
+                }
+            });
         }
 
         function logout() {
             localStorage.removeItem("portal_user");
-            localStorage.removeItem("portal_avatar");
+            localStorage.removeItem("portal_user_id");
             localStorage.removeItem("portal_xp");
             currentUser = "Mehmon";
-            userAvatarUrl = "";
+            currentUserId = "";
             currentXp = 0;
             updateUI();
             location.reload();
@@ -344,19 +336,20 @@
             const grid = document.getElementById("subjectsGrid");
             grid.innerHTML = "";
             list.forEach(subj => {
+                let savedQ = parseInt(localStorage.getItem(`subj_${subj.id}_q`)) || 1;
                 grid.innerHTML += `
-                    <div onclick="openSubjectModal(${subj.id})" class="bg-slate-900/60 backdrop-blur-md p-7 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-yellow-400 flex flex-col justify-between group">
+                    <div onclick="openModal(${subj.id})" class="bg-slate-900/60 backdrop-blur-md p-7 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-yellow-400 flex flex-col justify-between group">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30 group-hover:bg-yellow-400 group-hover:text-blue-950 transition">Modul #${subj.id}</span>
-                                <span class="text-xs font-bold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 px-2.5 py-1 rounded-lg">${subj.topics.length} ta Mavzu (Har biri 50 ta test)</span>
+                                <span class="text-xs font-bold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 px-2.5 py-1 rounded-lg">Savol: #${savedQ}</span>
                             </div>
                             <h3 class="text-xl font-black text-white mb-2">${subj.name}</h3>
                             <p class="text-slate-300 text-sm leading-relaxed mb-4">${subj.desc}</p>
                         </div>
                         <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-yellow-400">
-                            <span>📚 Nazariya + 50 ta test</span>
-                            <span>O'rganish →</span>
+                            <span>♾️ Cheksiz Testlar</span>
+                            <span>Boshlash →</span>
                         </div>
                     </div>
                 `;
@@ -369,88 +362,48 @@
             renderSubjects(filtered);
         }
 
-        function openSubjectModal(id) {
+        function openModal(id) {
             activeSubject = subjects.find(s => s.id === id);
+            questionCount = parseInt(localStorage.getItem(`subj_${activeSubject.id}_q`)) || 1;
             
             document.getElementById("modalCategoryBadge").innerText = activeSubject.name;
             document.getElementById("modalTitle").innerText = activeSubject.name;
             document.getElementById("modalDesc").innerText = activeSubject.desc;
+            document.getElementById("modalTheory").innerText = activeSubject.theory;
 
-            const container = document.getElementById("topicsListContainer");
-            container.innerHTML = "";
-            activeSubject.topics.forEach((top, index) => {
-                let savedQ = parseInt(localStorage.getItem(`subj_${activeSubject.id}_top_${index}`)) || 1;
-                container.innerHTML += `
-                    <div onclick="openLesson(${index})" class="bg-slate-800/80 p-4 rounded-2xl border border-white/10 hover:border-yellow-400 cursor-pointer transition flex items-center justify-between">
-                        <div>
-                            <h4 class="font-bold text-white text-sm mb-1">${top.title}</h4>
-                            <p class="text-xs text-yellow-400">Savol: ${savedQ} / 50</p>
-                        </div>
-                        <span class="text-yellow-400 font-bold text-sm">Boshlash →</span>
-                    </div>
-                `;
-            });
+            loadNextQuestion();
 
-            document.getElementById("subjectTopicsView").classList.remove("hidden");
-            document.getElementById("lessonQuizView").classList.add("hidden");
             document.getElementById("subjectModal").classList.remove("hidden");
             document.getElementById("subjectModal").classList.add("flex");
         }
 
-        function openLesson(topicIndex) {
-            activeTopicIndex = topicIndex;
-            let top = activeSubject.topics[topicIndex];
-            
-            questionCount = parseInt(localStorage.getItem(`subj_${activeSubject.id}_top_${topicIndex}`)) || 1;
-            if (questionCount > 50) questionCount = 50;
-
-            document.getElementById("subjectTopicsView").classList.add("hidden");
-            document.getElementById("lessonQuizView").classList.remove("hidden");
-
-            document.getElementById("lessonTitle").innerText = top.title;
-            document.getElementById("lessonTheory").innerText = top.theory;
-
-            localStorage.setItem("portal_active_topic", `${activeSubject.name} — ${top.title}`);
-
-            loadNextQuestion();
-        }
-
-        function backToTopics() {
-            document.getElementById("lessonQuizView").classList.add("hidden");
-            document.getElementById("subjectTopicsView").classList.remove("hidden");
-            openSubjectModal(activeSubject.id);
-        }
-
         function loadNextQuestion() {
-            if (questionCount > 50) {
-                document.getElementById("quizQuestion").innerText = "🎉 Tabriklaymiz! Siz ushbu mavzudagi barcha 50 ta testni muvaffaqiyatli yakunladingiz!";
-                document.getElementById("quizOptions").innerHTML = "";
-                document.getElementById("quizCounter").innerText = "Tugatildi (50/50)";
-                return;
-            }
-
             let rewardTier = Math.floor((questionCount - 1) / 10) + 1;
             currentXpReward = rewardTier;
 
-            document.getElementById("quizCounter").innerText = `Savol ${questionCount} / 50`;
+            document.getElementById("quizCounter").innerText = `Savol #${questionCount} • Daraja ${rewardTier}`;
             document.getElementById("quizXpReward").innerText = `+${currentXpReward} XP Mukofot`;
 
             let q = "", correct = "", options = [];
 
+            // 1. MATEMATIKA: AVTOMATIK RAVISHDA QIYINLASHIB BORUVCHI REJIM (Arifmetika -> Qisqa ko'paytirish -> Kvadrat tenglama)
             if (activeSubject.id === 1) {
-                if (activeTopicIndex === 0) {
-                    let a = rand(10 * rewardTier, 100 * rewardTier), b = rand(5 * rewardTier, 80 * rewardTier);
+                if (questionCount <= 15) {
+                    // 1-bosqich: Oddiy arifmetika
+                    let a = rand(10 * rewardTier, 50 * rewardTier), b = rand(5 * rewardTier, 40 * rewardTier);
                     q = `${a} + ${b} nechiga teng?`;
                     correct = String(a + b);
                     let num = Number(correct);
-                    options = shuffle([correct, String(num + rand(2, 15)), String(num - rand(2, 10)), String(num + rand(20, 35))]);
-                } else if (activeTopicIndex === 1) {
-                    let a = rand(2, 9), b = rand(1, 8);
+                    options = shuffle([correct, String(num + rand(2, 10)), String(num - rand(2, 8)), String(num + rand(12, 20))]);
+                } else if (questionCount <= 30) {
+                    // 2-bosqich: Qisqa ko'paytirish formulalari
+                    let a = rand(2, 8), b = rand(1, 6);
                     let res = (a + b) * (a + b);
                     q = `(${a} + ${b})² ifodaning qiymatini toping:`;
                     correct = String(res);
                     options = shuffle([correct, String(res + rand(2, 10)), String(res - rand(2, 6)), String(res + rand(12, 20))]);
                 } else {
+                    // 3-bosqich: Kvadrat tenglamalar
                     let x1 = rand(1, 6), x2 = rand(1, 6);
                     let bCoeff = -(x1 + x2);
                     let cCoeff = x1 * x2;
@@ -460,10 +413,21 @@
                     correct = String(x1);
                     options = shuffle([correct, String(x2), String(x1 + 2), String(Math.abs(x1 - 3) || 5)]);
                 }
-            } else {
-                q = `${activeSubject.name} — ${activeSubject.topics[activeTopicIndex].title} bo'yicha #${questionCount}-savol: To'g'ri javobni tanlang.`;
-                correct = "To'g'ri javob A";
-                options = shuffle([correct, "Xato javob 1", "Xato javob 2", "Xato javob 3"]);
+            } 
+            // 2. FIZIKA - CHEKSIZ GENERATOR
+            else if (activeSubject.id === 2) {
+                let v = rand(10, 20 * rewardTier), t = rand(2, 10);
+                q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. Bosib o'tgan yo'li qancha?`;
+                correct = `${v * t} m`;
+                options = shuffle([correct, `${v * t + 15} m`, `${v + t} m`, `${Math.abs(v * t - 10)} m`]);
+            }
+            // BOSHQA FANLAR
+            else {
+                const bank = factBanks[activeSubject.id] || [{ q: `${activeSubject.name} faniga oid asosiy tushunchani tanlang:`, a: "To'g'ri javob", w: ["Xato 1", "Xato 2", "Xato 3"] }];
+                const item = bank[rand(0, bank.length - 1)];
+                q = item.q;
+                correct = item.a;
+                options = shuffle([item.a, ...item.w]);
             }
 
             currentCorrectAnswer = correct;
@@ -485,10 +449,10 @@
                 localStorage.setItem("portal_xp", currentXp);
                 
                 questionCount++;
-                if (questionCount > 50) questionCount = 50;
-                localStorage.setItem(`subj_${activeSubject.id}_top_${activeTopicIndex}`, questionCount);
+                localStorage.setItem(`subj_${activeSubject.id}_q`, questionCount);
 
                 updateUI();
+                syncDataToCloud();
 
                 resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP qo'shildi. Keyingi savol...`;
                 resultEl.className = "font-bold text-sm text-emerald-400 text-center";
@@ -505,6 +469,7 @@
         function closeModal() {
             document.getElementById("subjectModal").classList.remove("flex");
             document.getElementById("subjectModal").classList.add("hidden");
+            renderSubjects(subjects);
         }
 
         function openProfileModal() {
@@ -513,14 +478,7 @@
             document.getElementById("profileModalXp").innerText = `${currentXp} XP`;
             document.getElementById("profileModalLevel").innerText = currentLevel;
             document.getElementById("profileModalPlace").innerText = "#1 (Dunyo bo'yicha)";
-            document.getElementById("profileModalActiveTopic").innerText = localStorage.getItem("portal_active_topic") || "Hozircha yo'q";
-
-            const avatarEl = document.getElementById("profileModalAvatar");
-            if (userAvatarUrl) {
-                avatarEl.src = userAvatarUrl;
-            } else {
-                avatarEl.src = "https://via.placeholder.com/80";
-            }
+            document.getElementById("profileAvatarLetter").innerText = currentUser !== "Mehmon" ? currentUser[0].toUpperCase() : "M";
 
             document.getElementById("profileModal").classList.remove("hidden");
             document.getElementById("profileModal").classList.add("flex");
@@ -544,27 +502,32 @@
 
         function openLeaderboard() {
             const list = document.getElementById("leaderboardList");
-            const players = [
-                { name: currentUser, xp: currentXp, rank: getRankInfo(currentXp).name },
-                { name: "Alisher (Toshkent)", xp: 4850, rank: "⚡ Daho" },
-                { name: "Madina (Samarqand)", xp: 2420, rank: "👑 Professor" },
-                { name: "Jasur (Buxoro)", xp: 960, rank: "💎 Mutaxassis" },
-                { name: "Feruza (Farg'ona)", xp: 340, rank: "🥇 Bilimdon" }
-            ].sort((a, b) => b.xp - a.xp);
+            db.ref('users').orderByChild('xp').limitToLast(10).once('value').then((snapshot) => {
+                let players = [];
+                snapshot.forEach((childSnapshot) => {
+                    players.push(childSnapshot.val());
+                });
+                players.sort((a, b) => b.xp - a.xp);
 
-            list.innerHTML = "";
-            players.forEach((p, index) => {
-                list.innerHTML += `
-                    <li class="flex justify-between items-center p-3.5 rounded-2xl border border-white/10 bg-slate-800 font-bold shadow-sm">
-                        <div class="flex items-center gap-3">
-                            <span class="w-6 text-center text-yellow-400">${index + 1}.</span>
-                            <div>
-                                <div class="text-white">${p.name}</div>
-                                <div class="text-[10px] font-normal text-slate-400">${p.rank}</div>
+                if (players.length === 0) {
+                    players = [{ name: currentUser, xp: currentXp }];
+                }
+
+                list.innerHTML = "";
+                players.forEach((p, index) => {
+                    let rank = getRankInfo(p.xp);
+                    list.innerHTML += `
+                        <li class="flex justify-between items-center p-3.5 rounded-2xl border border-white/10 bg-slate-800 font-bold shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <span class="w-6 text-center text-yellow-400">${index + 1}.</span>
+                                <div>
+                                    <div class="text-white">${p.name}</div>
+                                    <div class="text-[10px] font-normal text-slate-400">${rank.name}</div>
+                                </div>
                             </div>
-                        </div>
-                        <span class="text-yellow-400">${p.xp} XP</span>
-                    </li>`;
+                            <span class="text-yellow-400">${p.xp} XP</span>
+                        </li>`;
+                });
             });
 
             document.getElementById("leaderboardModal").classList.remove("hidden");
