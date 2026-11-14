@@ -3,22 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali PRO — Onlayn Sinxronizatsiya</title>
+    <title>Bilimlar Portali PRO — Jonli Animatsiya va Darslar</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDK (Google Cloud Base) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <style>
+        /* Orqa fonda qimirlaydigan jonli animatsiya */
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-bg {
+            background: linear-gradient(-45deg, #0f172a, #1e3a8a, #312e81, #1e1b4b);
+            background-size: 400% 400%;
+            animation: gradientBackground 15s ease infinite;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 font-sans selection:bg-blue-600 selection:text-white">
+<body class="animated-bg min-h-screen text-slate-100 font-sans selection:bg-yellow-400 selection:text-blue-950">
 
     <!-- HEADER & NAVBAR -->
-    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white shadow-xl sticky top-0 z-40">
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-white/10 shadow-xl sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
                 <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
                 <div>
-                    <h1 class="text-2xl font-black tracking-tight">Bilimlar Portali PRO</h1>
-                    <p class="text-xs text-blue-200">15 ta fan • Onlayn Profil va Cheksiz Testlar</p>
+                    <h1 class="text-2xl font-black tracking-tight text-white">Bilimlar Portali PRO</h1>
+                    <p class="text-xs text-blue-300">15 ta fan • Yozma darslar • Jonli fon</p>
                 </div>
             </div>
             
@@ -28,7 +40,7 @@
                     <span class="text-xs text-blue-200" id="userXpDisplay">XP: 0</span>
                     <span class="text-[11px] font-black bg-yellow-400 text-blue-950 px-2 py-0.5 rounded-md mt-0.5 inline-block" id="userRankDisplay">🥉 Boshlang'ich</span>
                 </div>
-                <button onclick="openAuthModal()" class="bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold px-4 py-2 rounded-xl text-sm transition shadow-md">Kirish / Onlayn</button>
+                <button onclick="openAuthModal()" class="bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold px-4 py-2 rounded-xl text-sm transition shadow-md">Kirish</button>
             </div>
         </div>
     </header>
@@ -41,11 +53,11 @@
             <div class="relative flex-grow">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">🔍</span>
                 <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Matematika, Fizika, Tarix)..." 
-                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm transition"
+                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 shadow-sm transition"
                     onkeyup="searchSubjects()">
             </div>
-            <button onclick="openLeaderboard()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
-                🏆 Global Reyting & Rank
+            <button onclick="openLeaderboard()" class="bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-blue-950 font-black px-6 py-3.5 rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
+                🏆 Global Reyting
             </button>
         </div>
 
@@ -54,70 +66,75 @@
     </main>
 
     <!-- MODAL (SUBJECT LEARNING HUB) -->
-    <div id="subjectModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-3xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl border border-slate-100">
-            <button onclick="closeModal()" class="absolute top-5 right-5 bg-slate-100 hover:bg-slate-200 text-slate-600 w-10 h-10 rounded-full font-bold flex items-center justify-center transition">✕</button>
+    <div id="subjectModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-3xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-5 right-5 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full font-bold flex items-center justify-center transition">✕</button>
             
             <div class="flex items-center gap-3 mb-2">
-                <span id="modalCategoryBadge" class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">Fan</span>
-                <span id="modalLevelBadge" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">Daraja: 1</span>
+                <span id="modalCategoryBadge" class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30">Fan</span>
+                <span id="modalLevelBadge" class="bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-500/30">Daraja: 1</span>
             </div>
-            <h2 id="modalTitle" class="text-3xl font-black text-blue-950 mb-2"></h2>
-            <p id="modalDesc" class="text-slate-600 mb-6 leading-relaxed"></p>
+            <h2 id="modalTitle" class="text-3xl font-black text-white mb-2"></h2>
+            <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
             
+            <!-- Yozma Tushuntirish / Nazariya -->
+            <div class="bg-slate-800/60 border border-white/10 p-5 rounded-2xl mb-6">
+                <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Mavzu bo'yicha qisqacha tushuntirish</h3>
+                <p id="modalTheory" class="text-sm text-slate-300 leading-relaxed"></p>
+            </div>
+
             <!-- Video Dars -->
             <div class="mb-8">
-                <h3 class="font-bold text-lg text-slate-800 mb-3 flex items-center gap-2">📺 Video Qo'llanma Darsi</h3>
-                <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-lg aspect-video flex items-center justify-center">
+                <h3 class="font-bold text-lg text-white mb-3 flex items-center gap-2">📺 Video Qo'llanma Darsi</h3>
+                <div class="bg-slate-950 rounded-2xl overflow-hidden shadow-lg aspect-video flex items-center justify-center border border-white/10">
                     <iframe id="modalVideo" class="w-full h-full" src="" title="Video dars" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
 
             <!-- Cheksiz Test Tizimi -->
-            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100 shadow-inner">
+            <div class="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
                 <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-                    <span id="quizCounter" class="text-xs font-bold bg-white text-blue-900 px-3 py-1.5 rounded-xl shadow-sm border border-blue-100">Savol #1 • Barcha mavzular</span>
-                    <span id="quizXpReward" class="text-xs font-bold bg-green-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+20 XP Mukofot</span>
+                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol #1 • Barcha mavzular</span>
+                    <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+20 XP Mukofot</span>
                 </div>
                 
-                <p id="quizQuestion" class="font-bold text-xl text-slate-900 mb-6 leading-snug"></p>
+                <p id="quizQuestion" class="font-bold text-xl text-white mb-6 leading-snug"></p>
                 <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3"></div>
                 <p id="quizResult" class="font-bold text-sm min-h-[24px] text-center"></p>
             </div>
         </div>
     </div>
 
-    <!-- AUTH MODAL (ONLINE ID & PASSWORD) -->
-    <div id="authModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
-            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
-            <div class="bg-blue-100 text-blue-600 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black mb-3">☁️</div>
-            <h2 class="text-2xl font-black text-slate-900 mb-2">Onlayn Profil</h2>
-            <p class="text-xs text-slate-500 mb-6">Ism va parolingizni kiriting — ballaringiz istalgan telefonda saqlanadi!</p>
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
+            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
+            <div class="bg-blue-500/20 text-blue-400 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black mb-3 border border-blue-500/30">☁️</div>
+            <h2 class="text-2xl font-black text-white mb-2">Onlayn Profil</h2>
+            <p class="text-xs text-slate-400 mb-6">Ism va parolingizni kiriting — barcha qurilmalarda ballaringiz saqlanadi!</p>
             
-            <input type="text" id="usernameInput" placeholder="Ismingiz (masalan: Alisher)..." class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium text-center">
-            <input type="password" id="passwordInput" placeholder="Maxfiy parol..." class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 mb-5 focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium text-center">
+            <input type="text" id="usernameInput" placeholder="Ismingiz (masalan: Alisher)..." class="w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-slate-800 text-white placeholder-slate-400 mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium text-center">
+            <input type="password" id="passwordInput" placeholder="Maxfiy parol..." class="w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-slate-800 text-white placeholder-slate-400 mb-5 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium text-center">
             
-            <button onclick="loginOrRegisterOnline()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-blue-600/30 transition mb-3">Onlayn Kirish / Ochish</button>
-            <p id="authStatus" class="text-xs font-semibold text-slate-500"></p>
+            <button onclick="loginOrRegisterOnline()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold py-3.5 rounded-2xl shadow-lg transition mb-3">Onlayn Kirish / Ochish</button>
+            <p id="authStatus" class="text-xs font-semibold text-slate-400"></p>
         </div>
     </div>
 
     <!-- LEADERBOARD MODAL -->
-    <div id="leaderboardModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
-            <button onclick="closeLeaderboard()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
+    <div id="leaderboardModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
+            <button onclick="closeLeaderboard()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
             <div class="text-center mb-6">
                 <span class="text-4xl">🏆</span>
-                <h2 class="text-2xl font-black text-slate-900 mt-2">Global Onlayn Reyting</h2>
-                <p class="text-xs text-slate-500">Barcha faol foydalanuvchilar bazasi</p>
+                <h2 class="text-2xl font-black text-white mt-2">Global Onlayn Reyting</h2>
+                <p class="text-xs text-slate-400">Barcha faol foydalanuvchilar bazasi</p>
             </div>
             <ul id="leaderboardList" class="space-y-3 max-h-80 overflow-y-auto pr-1"></ul>
         </div>
     </div>
 
     <script>
-        // FIREBASE CONFIGURATION (Bepul onlayn baza)
         const firebaseConfig = {
             databaseURL: "https://bilimlar-portali-default-rtdb.firebaseio.com/"
         };
@@ -125,21 +142,21 @@
         const db = firebase.database();
 
         const subjects = [
-            { id: 1, name: "1. Matematika", desc: "Arifmetika, algebra, geometriya, tenglamalar va ehtimollar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, termodinamika, elektr va optika.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 3, name: "3. Kimyo", desc: "Noorganik va organik kimyo, elementlar jadvali, reaksiyalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 4, name: "4. Biologiya", desc: "Botanika, zoologiya, odam anatomiyasi, genetika va ekologiya.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 5, name: "5. Informatika", desc: "Algoritmlar, dasturlash asoslari, sanoq sistemalari va tarmoqlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 6, name: "6. Tarix", desc: "O'zbekiston tarixi, jahon tarixi, qadimgi sivilizatsiyalar va sanalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 7, name: "7. Geografiya", desc: "Fizik geografiya, iqtisodiy geografiya, materiklar va okeanlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 8, name: "8. Ona tili", desc: "Fonetika, leksikologiya, so'z turkumlari, sintaksis va imlo.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 9, name: "9. Adabiyot", desc: "Mumtoz adabiyot, o'zbek mumtoz va zamonaviy dostonlar, romanlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 10, name: "10. Ingliz tili", desc: "Grammar, Vocabulary, Tenses, Phrasal verbs va tarjimalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 11, name: "11. Astronomiya", desc: "Koinot, yulduzlar turkumi, sayyoralar va galaktikalar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 12, name: "12. Iqtisodiyot", desc: "Bozor iqtisodiyoti, mikro/makroiqtisodiyot, moliya va soliqlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya, fuqarolik, mehnat va jinoyat huquqi asoslari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 14, name: "14. Falsafa", desc: "Ontologiya, gnoseologiya, etika, estetika va mutafakkirlar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-            { id: 15, name: "15. Psixologiya", desc: "Umumiy psixologiya, temperament, xotir va shaxs psixologiyasi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+            { id: 1, name: "1. Matematika", desc: "Arifmetika, algebra, geometriya, tenglamalar va ehtimollar.", theory: "Matematika — sonlar, tuzilmalar va fazo haqidagi fan bo'lib, mantiqiy fikrlashni rivojlantiradi. Arifmetik amallar, tenglamalar tizimi va geometrik shakllar tahlili asosiy o'rin tutadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, termodinamika, elektr va optika.", theory: "Fizika tabiatning eng umumiy qonunlarini, materiya va energiyaning o'zaro aylanishlarini o'rganadi. Tezlik, kuch, bosim va elektr toki asosiy tushunchalardir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 3, name: "3. Kimyo", desc: "Noorganik va organik kimyo, elementlar jadvali, reaksiyalar.", theory: "Kimyo moddalar, ularning xossalari, tuzilishi va kimyoviy reaksiyalar natijasida o'zgarishini o'rganuvchi fan hisoblanadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 4, name: "4. Biologiya", desc: "Botanika, zoologiya, odam anatomiyasi, genetika va ekologiya.", theory: "Biologiya tirik organizmlarning tuzilishi, rivojlanishi, hayot faoliyati va tabiatdagi o'rnini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 5, name: "5. Informatika", desc: "Algoritmlar, dasturlash asoslari, sanoq sistemalari va tarmoqlar.", theory: "Informatika axborotni to'plash, saqlash, qayta ishlash va uzatish usullarini hamda kompyuter texnologiyalarini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 6, name: "6. Tarix", desc: "O'zbekiston tarixi, jahon tarixi, qadimgi sivilizatsiyalar va sanalar.", theory: "Tarix insoniyatning o'tmishdagi hayoti, muhim voqealari, sivilizatsiyalar taraqqiyoti va ularning merosini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 7, name: "7. Geografiya", desc: "Fizik geografiya, iqtisodiy geografiya, materiklar va okeanlar.", theory: "Geografiya Yer yuzining tabiati, aholisi, uning xo'jalik faoliyati va hududiy tuzilishini tadqiq etadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 8, name: "8. Ona tili", desc: "Fonetika, leksikologiya, so'z turkumlari, sintaksis va imlo.", theory: "Ona tili xalqning madaniy merosi va muloqot quroli bo'lib, uning grammatik qoidalari va yozuv me'yorlarini o'rgatadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 9, name: "9. Adabiyot", desc: "Mumtoz adabiyot, o'zbek mumtoz va zamonaviy dostonlar, romanlar.", theory: "Adabiyot so'z san'ati orqali inson qalbiga yo'l topadi, estetik zavq beradi va jamiyatdagi ma'naviy qadriyatlarni targ'ib qiladi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 10, name: "10. Ingliz tili", desc: "Grammar, Vocabulary, Tenses, Phrasal verbs va tarjimalar.", theory: "Ingliz tili xalqaro muloqot, fan, texnologiya va biznes tilidir. Grammatika va so'z boyligini oshirish asosiy vazifadir.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 11, name: "11. Astronomiya", desc: "Koinot, yulduzlar turkumi, sayyoralar va galaktikalar.", theory: "Astronomiya koinotdagi osmon jismlari, yulduzlar, sayyoralar tizimi va ularning harakat qonuniyatlarini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 12, name: "12. Iqtisodiyot", desc: "Bozor iqtisodiyoti, mikro/makroiqtisodiyot, moliya va soliqlar.", theory: "Iqtisodiyot cheklangan resurslardan jamiyat ehtiyojlarini qondirish uchun samarali foydalanish yo'llarini o'rgatadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 13, name: "13. Huquqshunoslik", desc: "Konstitutsiya, fuqarolik, mehnat va jinoyat huquqi asoslari.", theory: "Huquqshunoslik jamiyatdagi huquqiy munosabatlarni, qonunlar tizimini va fuqarolarning burch hamda huquqlarini belgilaydi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 14, name: "14. Falsafa", desc: "Ontologiya, gnoseologiya, etika, estetika va mutafakkirlar.", theory: "Falsafa borliq, tafakkur, bilim va insonning dunyoqarashiga oid eng umumiy qonuniyatlarni tadqiq etadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { id: 15, name: "15. Psixologiya", desc: "Umumiy psixologiya, temperament, xotir va shaxs psixologiyasi.", theory: "Psixologiya inson ruhiyati, uning ichki kechinmalari, xulq-atvori va boshqalar bilan o'zaro munosabatlarini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
         ];
 
         const factBanks = {
@@ -220,12 +237,12 @@
         }
 
         function getRankInfo(xp) {
-            if (xp >= 4000) return { name: "⚡ Daho (Grandmaster)", color: "bg-purple-100 text-purple-800 border-purple-300" };
-            if (xp >= 2000) return { name: "👑 Professor (Master)", color: "bg-amber-100 text-amber-800 border-amber-300" };
-            if (xp >= 1000) return { name: "💎 Mutaxassis (Expert)", color: "bg-blue-100 text-blue-800 border-blue-300" };
-            if (xp >= 500)  return { name: "🥇 Bilimdon (Scholar)", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
-            if (xp >= 200)  return { name: "🥈 Talaba (Student)", color: "bg-sky-100 text-sky-800 border-sky-300" };
-            return { name: "🥉 Boshlang'ich (Novice)", color: "bg-slate-100 text-slate-700 border-slate-200" };
+            if (xp >= 4000) return { name: "⚡ Daho (Grandmaster)", color: "bg-purple-900/50 text-purple-200 border-purple-500/30" };
+            if (xp >= 2000) return { name: "👑 Professor (Master)", color: "bg-amber-900/50 text-amber-200 border-amber-500/30" };
+            if (xp >= 1000) return { name: "💎 Mutaxassis (Expert)", color: "bg-blue-900/50 text-blue-200 border-blue-500/30" };
+            if (xp >= 500)  return { name: "🥇 Bilimdon (Scholar)", color: "bg-emerald-900/50 text-emerald-200 border-emerald-500/30" };
+            if (xp >= 200)  return { name: "🥈 Talaba (Student)", color: "bg-sky-900/50 text-sky-200 border-sky-500/30" };
+            return { name: "🥉 Boshlang'ich (Novice)", color: "bg-slate-800 text-slate-300 border-slate-700" };
         }
 
         function updateUI() {
@@ -245,7 +262,6 @@
             }
         };
 
-        // ONLAYN SAQLASH VA YUKLASH (FIREBASE)
         function loginOrRegisterOnline() {
             let name = document.getElementById("usernameInput").value.trim();
             let pass = document.getElementById("passwordInput").value.trim();
@@ -253,7 +269,7 @@
 
             if (!name || !pass) {
                 statusEl.innerText = "⚠️ Iltimos, ism va parolni kiriting!";
-                statusEl.className = "text-xs font-semibold text-rose-600";
+                statusEl.className = "text-xs font-semibold text-rose-400";
                 return;
             }
 
@@ -262,7 +278,7 @@
             currentUser = name;
 
             statusEl.innerText = "⏳ Serverga ulanmoqda...";
-            statusEl.className = "text-xs font-semibold text-blue-600";
+            statusEl.className = "text-xs font-semibold text-blue-400";
 
             db.ref('users/' + userId).once('value').then((snapshot) => {
                 if (snapshot.exists()) {
@@ -279,7 +295,6 @@
                     }
                     statusEl.innerText = "✅ Profil muvaffaqiyatli yuklandi!";
                 } else {
-                    // Yangi foydalanuvchi yaratish
                     db.ref('users/' + userId).set({
                         name: currentUser,
                         xp: currentXp,
@@ -289,7 +304,7 @@
                     localStorage.setItem("portal_user_id", currentUserId);
                     statusEl.innerText = "🎉 Yangi onlayn profil ochildi!";
                 }
-                statusEl.className = "text-xs font-semibold text-emerald-600";
+                statusEl.className = "text-xs font-semibold text-emerald-400";
                 updateUI();
                 renderSubjects(subjects);
                 setTimeout(() => closeAuthModal(), 1200);
@@ -335,18 +350,18 @@
             list.forEach(subj => {
                 let savedQ = parseInt(localStorage.getItem(`subject_q_${subj.id}`)) || 1;
                 grid.innerHTML += `
-                    <div onclick="openModal(${subj.id})" class="bg-white p-7 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-slate-100 hover:border-blue-500 flex flex-col justify-between group">
+                    <div onclick="openModal(${subj.id})" class="bg-slate-900/60 backdrop-blur-md p-7 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-yellow-400 flex flex-col justify-between group">
                         <div>
                             <div class="flex justify-between items-start mb-3">
-                                <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full group-hover:bg-blue-600 group-hover:text-white transition">Modul #${subj.id}</span>
-                                <span class="text-xs font-bold text-blue-800 bg-blue-100 px-2.5 py-1 rounded-lg">Savol: #${savedQ}</span>
+                                <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30 group-hover:bg-yellow-400 group-hover:text-blue-950 transition">Modul #${subj.id}</span>
+                                <span class="text-xs font-bold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 px-2.5 py-1 rounded-lg">Savol: #${savedQ}</span>
                             </div>
-                            <h3 class="text-xl font-black text-blue-950 mb-2">${subj.name}</h3>
-                            <p class="text-slate-600 text-sm leading-relaxed mb-4">${subj.desc}</p>
+                            <h3 class="text-xl font-black text-white mb-2">${subj.name}</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-4">${subj.desc}</p>
                         </div>
-                        <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
-                            <span>∞ Barcha mavzular</span>
-                            <span>Davom etish →</span>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-yellow-400">
+                            <span>📺 Video + 📖 Tushuntirish</span>
+                            <span>Boshlash →</span>
                         </div>
                     </div>
                 `;
@@ -366,6 +381,7 @@
             document.getElementById("modalCategoryBadge").innerText = activeSubject.name;
             document.getElementById("modalTitle").innerText = activeSubject.name;
             document.getElementById("modalDesc").innerText = activeSubject.desc;
+            document.getElementById("modalTheory").innerText = activeSubject.theory;
             document.getElementById("modalVideo").src = activeSubject.video;
             
             loadNextQuestion();
@@ -432,7 +448,7 @@
             optionsDiv.innerHTML = "";
             options.forEach(opt => {
                 const safeOpt = opt.replace(/'/g, "\\'");
-                optionsDiv.innerHTML += `<button onclick="checkAnswer('${safeOpt}')" class="w-full text-left bg-white p-3.5 rounded-2xl border border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition font-bold shadow-sm">${opt}</button>`;
+                optionsDiv.innerHTML += `<button onclick="checkAnswer('${safeOpt}')" class="w-full text-left bg-slate-800 text-white p-3.5 rounded-2xl border border-white/10 hover:bg-yellow-400 hover:text-blue-950 hover:border-yellow-400 transition font-bold shadow-sm">${opt}</button>`;
             });
         }
 
@@ -447,17 +463,17 @@
 
                 updateUI();
                 renderSubjects(subjects);
-                syncDataToCloud(); // Onlayn bulutga avtomatik yuborish
+                syncDataToCloud();
 
                 resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP qo'shildi. Keyingi savol...`;
-                resultEl.className = "font-bold text-sm text-emerald-600 text-center";
+                resultEl.className = "font-bold text-sm text-emerald-400 text-center";
                 
                 setTimeout(() => {
                     loadNextQuestion();
                 }, 800);
             } else {
                 resultEl.innerText = "❌ Xato javob! Qayta urinib ko'ring.";
-                resultEl.className = "font-bold text-sm text-rose-600 text-center";
+                resultEl.className = "font-bold text-sm text-rose-400 text-center";
             }
         }
 
@@ -499,7 +515,7 @@
                                     <div class="text-[10px] font-normal opacity-75">${rank.name}</div>
                                 </div>
                             </div>
-                            <span class="text-blue-700">${p.xp} XP</span>
+                            <span class="text-yellow-400">${p.xp} XP</span>
                         </li>`;
                 });
             });
