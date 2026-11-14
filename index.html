@@ -3,103 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali — 15 ta asosiy fan</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
-        header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; text-align: center; padding: 2.5rem 1rem; }
-        header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
-        .search-box { max-width: 500px; margin: 1.5rem auto 0; }
-        .search-box input { width: 100%; padding: 12px 20px; border: none; border-radius: 25px; font-size: 1rem; outline: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; border-top: 4px solid #2a5298; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
-        .card h3 { color: #1e3c72; margin-bottom: 0.5rem; font-size: 1.3rem; }
-        .card p { font-size: 0.95rem; color: #666; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; padding: 1rem; z-index: 1000; }
-        .modal-content { background: white; padding: 2rem; border-radius: 12px; max-width: 500px; width: 100%; position: relative; animation: fadeIn 0.3s; }
-        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #888; }
-        .close-btn:hover { color: #000; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    </style>
+    <title>Bilimlar Portali — Ta'lim va Reyting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-100 min-h-screen text-slate-800">
 
-<header>
-    <h1>Bilimlar Portali</h1>
-    <p>15 ta asosiy fan bo'yicha o'quv qo'llanma va ma'lumotlar bazasi</p>
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Fizika, Tarix)...">
+    <!-- HEADER & USER STATS -->
+    <header class="bg-blue-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold">Bilimlar Portali</h1>
+                <p class="text-sm text-blue-200">15 ta asosiy fan bo'yicha ta'lim va XP reytingi</p>
+            </div>
+            
+            <div class="flex items-center gap-4 bg-blue-800 px-4 py-2 rounded-xl shadow-inner">
+                <div>
+                    <span id="userNameDisplay" class="font-semibold block">Mehmon</span>
+                    <span class="text-xs text-yellow-300 font-bold" id="userXpDisplay">XP: 0</span>
+                </div>
+                <button onclick="openAuthModal()" class="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-semibold px-3 py-1.5 rounded-lg text-sm transition">Kirish / Profil</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- SEARCH & LEADERBOARD BUTTON -->
+        <div class="flex flex-col md:flex-row gap-4 mb-8">
+            <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Fizika, Tarix)..." 
+                class="flex-grow px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm"
+                onkeyup="searchSubjects()">
+            <button onclick="openLeaderboard()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
+                🏆 Global Reyting (XP)
+            </button>
+        </div>
+
+        <!-- SUBJECTS GRID -->
+        <div id="subjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- JavaScript orqali fanlar chiqariladi -->
+        </div>
+    </main>
+
+    <!-- MODAL (DETAILS, VIDEO, QUIZ) -->
+    <div id="subjectModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
+            <h2 id="modalTitle" class="text-2xl font-bold text-blue-900 mb-2"></h2>
+            <p id="modalDesc" class="text-slate-600 mb-4"></p>
+            
+            <!-- Video dars bo'limi -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-lg text-blue-800 mb-2">📺 Video Dars</h3>
+                <div class="aspect-w-16 aspect-h-9 bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center text-white min-h-[200px]">
+                    <iframe id="modalVideo" class="w-full h-64 rounded-xl" src="" title="Video dars" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- Test / Misol bo'limi -->
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                <h3 class="font-semibold text-lg text-blue-800 mb-2">✍️ Mini Test (To'g'ri javob uchun +50 XP)</h3>
+                <p id="quizQuestion" class="font-medium text-slate-700 mb-3"></p>
+                <div id="quizOptions" class="space-y-2"></div>
+                <p id="quizResult" class="mt-3 font-semibold text-sm"></p>
+            </div>
+        </div>
     </div>
-</header>
 
-<div class="container">
-    <div class="grid" id="subjectsGrid"></div>
-</div>
-
-<div class="modal" id="subjectModal">
-    <div class="modal-content">
-        <span class="close-btn" id="closeModal">&times;</span>
-        <h2 id="modalTitle" style="color: #1e3c72; margin-bottom: 1rem;"></h2>
-        <p id="modalDesc" style="margin-bottom: 1rem;"></p>
-        <div id="modalTopics" style="background: #f0f4f8; padding: 1rem; border-radius: 8px; font-size: 0.9rem;"></div>
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 relative shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
+            <h2 class="text-xl font-bold text-blue-900 mb-4">Profilga kirish</h2>
+            <input type="text" id="usernameInput" placeholder="Ismingizni kiriting..." class="w-full px-4 py-2 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <button onclick="saveUser()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition">Saqlash va Boshlash</button>
+        </div>
     </div>
-</div>
 
-<script>
-    const fanlar = [
-        { nomi: "1. Matematika", qisqa: "Sonlar, tuzilmalar, fazo va o'zgarishlar haqidagi aniq fan.", mavzular: "Asosiy bo'limlar: Algebra, Geometriya, Matematik analiz, Ehtimollar nazariyasi." },
-        { nomi: "2. Fizika", qisqa: "Tabiatning eng umumiy qonunlari, materiya va energiya haqidagi fan.", mavzular: "Asosiy bo'limlar: Mexanika, Termodinamika, Elektrodinamika, Kvant fizikasi." },
-        { nomi: "3. Kimyo", qisqa: "Moddalarning tarkibi, tuzilishi, xossalari va o'zgarishlarini o'rganadi.", mavzular: "Asosiy bo'limlar: Anorganik kimyo, Organik kimyo, Analitik kimyo." },
-        { nomi: "4. Biologiya", qisqa: "Tiriklik va barcha tirik organizmlarning hayot faoliyati haqidagi fan.", mavzular: "Asosiy bo'limlar: Botanika, Zoologiya, Anatomiya, Genetika." },
-        { nomi: "5. Informatika", qisqa: "Axborotni kompyuterlar yordamida qayta ishlash va dasturlash asoslari.", mavzular: "Asosiy bo'limlar: Algoritmlar, Dasturlash tillari, Ma'lumotlar bazasi, Sun'iy intellekt." },
-        { nomi: "6. Tarix", qisqa: "Insoniyatning o'tmishi, sivilizatsiyalar rivojlanishi va tarixiy voqealar.", mavzular: "Asosiy bo'limlar: Qadimgi dunyo, O'rta asrlar, O'zbekiston tarixi, Jahon tarixi." },
-        { nomi: "7. Geografiya", qisqa: "Yer yuzasi tabiatini, aholisini va xo'jalik faoliyatini o'rganuvchi fan.", mavzular: "Asosiy bo'limlar: Tabiiy geografiya, Iqtisodiy geografiya, Kartografiya." },
-        { nomi: "8. Ona tili", qisqa: "Tilning grammatik qurilishi, imlo qoidalari va nutq madaniyati.", mavzular: "Asosiy bo'limlar: Fonetika, Leksikologiya, Morfologiya, Sintaksis." },
-        { nomi: "9. Adabiyot", qisqa: "So'z san'ati, badiiy asarlar tahlili va adabiyot tarixi.", mavzular: "Asosiy bo'limlar: Xalq og'zaki ijodi, Mumtoz adabiyot, Zamonaviy adabiyot." },
-        { nomi: "10. Ingliz tili", qisqa: "Xalqaro muloqot, ilm-fan va texnologiyalar tili.", mavzular: "Asosiy bo'limlar: Grammar, Vocabulary, Reading, Listening, Speaking." },
-        { nomi: "11. Astronomiya", qisqa: "Osmon jismlari, yulduzlar, sayyoralar va koinot tuzilishi haqidagi fan.", mavzular: "Asosiy bo'limlar: Quyosh tizimi, Astrofizika, Kosmologiya." },
-        { nomi: "12. Iqtisodiyot", qisqa: "Cheklangan resurslardan samarali foydalanish va bozor qonunlari.", mavzular: "Asosiy bo'limlar: Mikroiqtisodiyot, Makroiqtisodiyot, Moliya, Marketing." },
-        { nomi: "13. Huquqshunoslik", qisqa: "Jamiyatdagi huquqiy normalar, qonunlar va inson huquqlari asoslari.", mavzular: "Asosiy bo'limlar: Konstitutsiyaviy huquq, Fuqarolik huquqi, Jinoyat huquqi." },
-        { nomi: "14. Falsafa", qisqa: "Borliq, bilim, axloq va inson tafakkurining umumiy tamoyillari.", mavzular: "Asosiy bo'limlar: Ontologiya, Gnoseologiya, Etika, Mantiq." },
-        { nomi: "15. Psixologiya", qisqa: "Inson ruhiyati, xulq-atvori va ichki kechinmalarini o'rganuvchi fan.", mavzular: "Asosiy bo'limlar: Umumiy psixologiya, Yosh davrlari psixologiyasi, Ijtimoiy psixologiya." }
-    ];
+    <!-- LEADERBOARD MODAL -->
+    <div id="leaderboardModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 relative shadow-2xl">
+            <button onclick="closeLeaderboard()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-xl">✕</button>
+            <h2 class="text-2xl font-bold text-blue-900 mb-4 text-center">🏆 Dunyo bo'yicha XP Reytingi</h2>
+            <ul id="leaderboardList" class="space-y-2">
+                <!-- Reyting o'yinchilari -->
+            </ul>
+        </div>
+    </div>
 
-    const grid = document.getElementById('subjectsGrid');
-    const searchInput = document.getElementById('searchInput');
-    const modal = document.getElementById('subjectModal');
+    <script>
+        const subjects = [
+            { id: 1, name: "1. Matematika", desc: "Sonlar, tuzilmalar, fazo va o'zgarishlar haqidagi aniq fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "2 + 2 * 2 nechiga teng?", options: ["6", "8", "4"], correct: "6" } },
+            { id: 2, name: "2. Fizika", desc: "Tabiatning umumiy qonunlari, materiya va energiya haqidagi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "Tezlik formulasini toping?", options: ["S = v * t", "F = m * a", "E = mc^2"], correct: "S = v * t" } },
+            { id: 3, name: "3. Kimyo", desc: "Moddalarning tarkibi, tuzilishi, xossalari va o'zgarishlarini o'rganadi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "Suvning kimyoviy formulasi qanday?", options: ["CO2", "H2O", "O2"], correct: "H2O" } },
+            { id: 4, name: "4. Biologiya", desc: "Tiriklik va barcha tirik organizmlarning hayot faoliyati haqidagi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "Inson tanasidagi asosiy organ qaysi?", options: ["Yurak", "Tosh", "Temir"], correct: "Yurak" } },
+            { id: 5, name: "5. Informatika", desc: "Axborotni kompyuterlar yordamida qayta ishlash va dasturlash asoslari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "HTML nima?", options: ["Dasturlash tili", "Belgilash tili", "Brauzer"], correct: "Belgilash tili" } },
+            { id: 6, name: "6. Tarix", desc: "Insoniyatning o'tmishi, sivilizatsiyalar rivojlanishi va tarixiy voqealar.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "Amir Temur qaysi yilda tug'ilgan?", options: ["1336", "1405", "1219"], correct: "1336" } },
+            { id: 7, name: "7. Geografiya", desc: "Yer yuzasi tabiatini, aholisini va xo'jalik faoliyatini o'rganuvchi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "Eng katta okean qaysi?", options: ["Tinch okeani", "Atlantika", "Hind okeani"], correct: "Tinch okeani" } },
+            { id: 8, name: "8. Ona tili", desc: "Tilning grammatik qurilishi, imlo qoidalari va nutq madaniyati.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "O'zbek alifbosida nechta harf bor?", options: ["26", "29", "34"], correct: "29" } },
+            { id: 9, name: "9. Adabiyot", desc: "So'z san'ati, badiiy asarlar tahlili va adabiyot tarixi.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "'O'tkan kunlar' romanining muallifi kim?", options: ["Alisher Navoiy", "Abdulla Qodiriy", "Cho'lpon"], correct: "Abdulla Qodiriy" } },
+            { id: 10, name: "10. Ingliz tili", desc: "Xalqaro muloqot, ilm-fan va texnologiyalar tili.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "'Hello' so'zining ma'nosi?", options: ["Xayr", "Salom", "Rahmat"], correct: "Salom" } },
+            { id: 11, name: "11. Astronomiya", desc: "Osmon jismlari, yulduzlar, sayyoralar va koinot tuzilishi haqidagi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "Quyosh sistemasidagi eng katta sayyora?", options: ["Yer", "Mars", "Yupiter"], correct: "Yupiter" } },
+            { id: 12, name: "12. Iqtisodiyot", desc: "Cheklangan resurslardan samarali foydalanish va bozor qonunlari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "O'zbekiston milliy valyutasi?", options: ["Dollar", "So'm", "Yevro"], correct: "So'm" } },
+            { id: 13, name: "13. Huquqshunoslik", desc: "Jamiyatdagi huquqiy normalar, qonunlar va inson huquqlari asoslari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "O'zbekiston Respublikasining Asosiy qonuni?", options: ["Konstitutsiya", "Jinoyat kodeksi", "Mehnat kodeksi"], correct: "Konstitutsiya" } },
+            { id: 14, name: "14. Falsafa", desc: "Borliq, bilim, axloq va inson tafakkurining umumiy tamoyillari.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "Falsafa so'zining ma'nosi?", options: ["Donishmandlikni sevish", "Matematika", "Tarix o'qish"], correct: "Donishmandlikni sevish" } },
+            { id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati, xulq-atvori va ichki kechinmalarini o'rganuvchi fan.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ", quiz: { q: "Psixologiya nimani o'rganadi?", options: ["Mashinalarni", "Ruhiyatni", "Toshlarni"], correct: "Ruhiyatni" } }
+        ];
 
-    function renderCards(data) {
-        grid.innerHTML = '';
-        data.forEach(fan => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `<h3>${fan.nomi}</h3><p>${fan.qisqa}</p>`;
-            card.onclick = () => openModal(fan);
-            grid.appendChild(card);
-        });
-    }
+        let currentUser = localStorage.getItem("portal_user") || "Mehmon";
+        let currentXp = parseInt(localStorage.getItem("portal_xp")) || 0;
 
-    function openModal(fan) {
-        document.getElementById('modalTitle').innerText = fan.nomi;
-        document.getElementById('modalDesc').innerText = fan.qisqa;
-        document.getElementById('modalTopics').innerHTML = `<strong>O'rganiladigan yo'nalishlar:</strong><br>${fan.mavzular}`;
-        modal.style.display = 'flex';
-    }
+        function updateUI() {
+            document.getElementById("userNameDisplay").innerText = currentUser;
+            document.getElementById("userXpDisplay").innerText = "XP: " + currentXp;
+        }
 
-    document.getElementById('closeModal').onclick = () => modal.style.display = 'none';
-    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+        function renderSubjects(list) {
+            const grid = document.getElementById("subjectsGrid");
+            grid.innerHTML = "";
+            list.forEach(subj => {
+                grid.innerHTML += `
+                    <div onclick="openModal(${subj.id})" class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition cursor-pointer border border-slate-200 hover:border-blue-500 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900 mb-2">${subj.name}</h3>
+                            <p class="text-slate-600 text-sm">${subj.desc}</p>
+                        </div>
+                        <span class="mt-4 text-blue-600 font-semibold text-sm flex items-center gap-1">Darsni boshlash →</span>
+                    </div>
+                `;
+            });
+        }
 
-    searchInput.addEventListener('input', (e) => {
-        const val = e.target.value.toLowerCase();
-        const filtered = fanlar.filter(f => f.nomi.toLowerCase().includes(val) || f.qisqa.toLowerCase().includes(val));
-        renderCards(filtered);
-    });
+        function searchSubjects() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = subjects.filter(s => s.name.toLowerCase().includes(query) || s.desc.toLowerCase().includes(query));
+            renderSubjects(filtered);
+        }
 
-    renderCards(fanlar);
-</script>
+        function openModal(id) {
+            const subj = subjects.find(s => s.id === id);
+            document.getElementById("modalTitle").innerText = subj.name;
+            document.getElementById("modalDesc").innerText = subj.desc;
+            document.getElementById("modalVideo").src = subj.video;
+            
+            // Quiz setup
+            document.getElementById("quizQuestion").innerText = subj.quiz.q;
+            const optionsDiv = document.getElementById("quizOptions");
+            optionsDiv.innerHTML = "";
+            document.getElementById("quizResult").innerText = "";
 
+            subj.quiz.options.forEach(opt => {
+                optionsDiv.innerHTML += `<button onclick="checkAnswer('${opt}', '${subj.quiz.correct}')" class="w-full text-left bg-white p-2.5 rounded-lg border hover:bg-blue-100 transition font-medium">${opt}</button>`;
+            });
+
+            document.getElementById("subjectModal").classList.remove("hidden");
+            document.getElementById("subjectModal").classList.add("flex");
+        }
+
+        function closeModal() {
+            document.getElementById("subjectModal").classList.remove("flex");
+            document.getElementById("subjectModal").classList.add("hidden");
+            document.getElementById("modalVideo").src = "";
+        }
+
+        function checkAnswer(selected, correct) {
+            const resultEl = document.getElementById("quizResult");
+            if(selected === correct) {
+                resultEl.innerText = "✅ To'g'ri! +50 XP qo'shildi!";
+                resultEl.className = "mt-3 font-semibold text-sm text-green-600";
+                currentXp += 50;
+                localStorage.setItem("portal_xp", currentXp);
+                updateUI();
+            } else {
+                resultEl.innerText = "❌ Xato, qayta urinib ko'ring!";
+                resultEl.className = "mt-3 font-semibold text-sm text-red-600";
+            }
+        }
+
+        function openAuthModal() {
+            document.getElementById("authModal").classList.remove("hidden");
+            document.getElementById("authModal").classList.add("flex");
+        }
+
+        function closeAuthModal() {
+            document.getElementById("authModal").classList.remove("hidden");
+            document.getElementById("authModal").classList.add("hidden");
+            document.getElementById("authModal").classList.remove("flex");
+        }
+
+        function saveUser() {
+            const name = document.getElementById("usernameInput").value.trim();
+            if(name) {
+                currentUser = name;
+                localStorage.setItem("portal_user", currentUser);
+                updateUI();
+                closeAuthModal();
+            }
+        }
+
+        function openLeaderboard() {
+            const list = document.getElementById("leaderboardList");
+            // Dummy global players + current user
+            const players = [
+                { name: currentUser, xp: currentXp },
+                { name: "Azizbek", xp: 450 },
+                { name: "Madina", xp: 380 },
+                { name: "Jasur", xp: 300 },
+                { name: "Feruza", xp: 150 }
+            ].sort((a,b) => b.xp - a.xp);
+
+            list.innerHTML = "";
+            players.forEach((p, index) => {
+                list.innerHTML += `<li class="flex justify-between items-center p-3 bg-slate-50 rounded-xl border font-medium"><span>${index + 1}. ${p.name}</span><span class="text-blue-600 font-bold">${p.xp} XP</span></li>`;
+            });
+
+            document.getElementById("leaderboardModal").classList.remove("hidden");
+            document.getElementById("leaderboardModal").classList.add("flex");
+        }
+
+        function closeLeaderboard() {
+            document.getElementById("leaderboardModal").classList.remove("flex");
+            document.getElementById("leaderboardModal").classList.add("hidden");
+        }
+
+        updateUI();
+        renderSubjects(subjects);
+    </script>
 </body>
 </html>
