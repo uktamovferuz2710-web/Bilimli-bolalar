@@ -8,7 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
-        /* Megamindning juda tiniq va sifatli orqa fon rasmi */
+        /* Megamind tiniq orqa fon rasmi */
         .megamind-bg {
             background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.82), rgba(2, 6, 23, 0.90)), 
                               url('https://images.hdqwalls.com/wallpapers/megamind-4k-uhd.jpg');
@@ -24,10 +24,11 @@
     <header class="bg-slate-900/90 backdrop-blur-md border-b border-white/10 shadow-xl sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
-                <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
+                <!-- Megamind Logotipi -->
+                <img src="https://images.hdqwalls.com/wallpapers/megamind-4k-uhd.jpg" class="w-11 h-11 rounded-2xl object-cover border-2 border-yellow-400 shadow-lg" alt="Logo">
                 <div>
-                    <h1 class="text-2xl font-black tracking-tight text-white">Bilimlar Portali PRO</h1>
-                    <p class="text-xs text-blue-300">15 ta fan • 50 talik testlar • 60% o'tish sharti</p>
+                    <h1 class="text-2xl font-black tracking-tight text-white">Megamind Academy</h1>
+                    <p class="text-xs text-blue-300">15 ta fan • 60 ta savol • 60% o'tish sharti</p>
                 </div>
             </div>
             
@@ -76,18 +77,18 @@
             <h2 id="modalTitle" class="text-3xl font-black text-white mb-2"></h2>
             <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
             
-            <!-- Yozma Tushuntirish -->
+            <!-- Yozma Tushuntirish (Nazariya) -->
             <div class="bg-slate-800/90 border border-white/10 p-5 rounded-2xl mb-6 shadow-inner">
-                <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Nazariya va 50 talik Test Qoidalari</h3>
+                <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Mavzu bo'yicha yozma tushuntirish</h3>
                 <p id="modalTheory" class="text-sm text-slate-200 leading-relaxed"></p>
-                <p class="text-xs text-blue-300 mt-2 font-semibold">⚡ Eslatma: Keyingi mavzuga o'tish uchun 50 ta savoldan kamida 60% (30 ta to'g'ri javob) to'plashingiz kerak!</p>
+                <p class="text-xs text-blue-300 mt-2 font-semibold">⚡ Eslatma: Ushbu mavzudan muvaffaqiyatli o'tish uchun 60 ta savoldan kamida 60% (36 ta to'g'ri javob) to'plashingiz kerak!</p>
             </div>
 
-            <!-- Test Qismi -->
+            <!-- Test Qismi (60 ta savol) -->
             <div class="bg-gradient-to-br from-blue-900/50 to-indigo-900/50 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
                 <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol 1 / 50</span>
-                    <span id="quizScoreDisplay" class="text-xs font-bold bg-amber-500/20 text-amber-300 px-3 py-1.5 rounded-xl border border-amber-500/30">To'g'ri: 0 / 30 (60%)</span>
+                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol 1 / 60</span>
+                    <span id="quizScoreDisplay" class="text-xs font-bold bg-amber-500/20 text-amber-300 px-3 py-1.5 rounded-xl border border-amber-500/30">To'g'ri: 0 / 36 (60%)</span>
                     <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+1 XP</span>
                 </div>
                 
@@ -102,7 +103,9 @@
     <div id="profileModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="bg-slate-900/95 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
             <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
-            <div class="w-20 h-20 bg-yellow-400 text-blue-950 font-black text-3xl rounded-full mx-auto flex items-center justify-center mb-4 shadow-lg" id="profileAvatarLetter">M</div>
+            <div class="w-20 h-20 bg-yellow-400 text-blue-950 font-black text-3xl rounded-full mx-auto flex items-center justify-center mb-4 shadow-lg overflow-hidden border-2 border-yellow-400">
+                <span id="profileAvatarLetter">M</span>
+            </div>
             <h2 id="profileModalName" class="text-2xl font-black text-white mb-1">Mehmon</h2>
             <p id="profileModalRank" class="text-sm font-bold text-yellow-400 mb-6">🥉 Boshlang'ich</p>
             
@@ -154,11 +157,11 @@
 
         const subjects = [
             { id: 1, name: "1. Matematika", desc: "Arifmetika, qisqa ko'paytirish va kvadrat tenglamalar.", theory: "Matematika fanida savollar avtomatik ravishda oddiy arifmetikadan boshlanib, asta-sekin qisqa ko'paytirish formulalari va kvadrat tenglamalarga qarab qiyinlashib boraveradi." },
-            { id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, elektr va optika.", theory: "Fizika tabiat qonunlarini, tezlik, kuch va bosim hisob-kitoblarini o'rgatadi." },
-            { id: 3, name: "3. Kimyo", desc: "Elementlar jadvali va reaksiyalar.", theory: "Moddalar, atomlar, molekulalar va kimyoviy reaksiyalar tahlili." },
-            { id: 4, name: "4. Biologiya", desc: "Hujayra, anatomiya va tabiat.", theory: "Tirik organizmlar, hujayra tuzilishi va odam anatomiyasi." },
-            { id: 5, name: "5. Informatika", desc: "Algoritmlar va kompyuter.", theory: "Axborot o'lchov birliklari, dasturlash va tarmoqlar." },
-            { id: 6, name: "6. Tarix", desc: "O'zbekiston va jahon tarixi.", theory: "Tarixiy sanalar, buyuk sarkardalar va sivilizatsiyalar." },
+            { id: 2, name: "2. Tarix", desc: "Amir Temur, O'zbekiston tarixi va jahon sanalari.", theory: "Tarix fanidan asosiy e'tibor buyuk sarkardalar, xususan Amir Temur davri, uning yurishlari, tug'ilgan va vafot etgan yillariga qaratiladi." },
+            { id: 3, name: "3. Fizika", desc: "Mexanika, kinematika, elektr va optika.", theory: "Fizika tabiat qonunlarini, tezlik, kuch va bosim hisob-kitoblarini o'rgatadi." },
+            { id: 4, name: "4. Kimyo", desc: "Elementlar jadvali va reaksiyalar.", theory: "Moddalar, atomlar, molekulalar va kimyoviy reaksiyalar tahlili." },
+            { id: 5, name: "5. Biologiya", desc: "Hujayra, anatomiya va tabiat.", theory: "Tirik organizmlar, hujayra tuzilishi va odam anatomiyasi." },
+            { id: 6, name: "6. Informatika", desc: "Algoritmlar va kompyuter.", theory: "Axborot o'lchov birliklari, dasturlash va tarmoqlar." },
             { id: 7, name: "7. Geografiya", desc: "Materiklar, davlatlar va iqlim.", theory: "Yer yuzining tuzilishi, okeanlar va iqlim mintaqalari." },
             { id: 8, name: "8. Ona tili", desc: "Imlo, fonetika va so'z turkumlari.", theory: "O'zbek tili qoidalari, so'z turkumlari va sintaksis." },
             { id: 9, name: "9. Adabiyot", desc: "Mumtoz va zamonaviy asarlar.", theory: "O'zbek mumtoz adabiyoti va shoirlarning ijodi." },
@@ -170,6 +173,17 @@
             { id: 15, name: "15. Psixologiya", desc: "Inson ruhiyati va temperament.", theory: "Inson ruhiy holati va temperament turlari." }
         ];
 
+        // Tarix va boshqa fanlar uchun aniq savollar banki (Amir Temur va yillar)
+        const historyBank = [
+            { q: "Amir Temur qayerda tavallud topgan?", a: "Kesh (Shahrisabz) yaqinidagi Xoja Ilg'or qishlog'ida", w: ["Samarqandda", "Buxoroda", "Toshkentda"] },
+            { q: "Amir Temur qaysi yilda tavallud topgan?", a: "1336-yil 9-aprel", w: ["1370-yil", "1405-yil", "1389-yil"] },
+            { q: "Amir Temur qaysi yilda vafot etgan?", a: "1405-yil 18-fevral", w: ["1400-yil", "1410-yil", "1395-yil"] },
+            { q: "Amir Temur qayerda vafot etgan?", a: "O'tror shahrida", w: ["Samarqandda", "Hirotda", "Dehlida"] },
+            { q: "Amir Temur qaysi davlatlarga yurish qilgan va bo'ysundirgan?", a: "Eron, Iroq, Shom (Suriya), Oltin O'rda va Hindiston", w: ["Faqat Xitoyga", "Faqat Yevropaga", "Faqat Afrikaga"] },
+            { q: "To'xtamishxon boshchiligidagi Oltin O'rda ustidan qaysi yilda g'alaba qozonilgan?", a: "1395-yil Terek daryosi bo'yida", w: ["1370-yil", "1402-yil", "1380-yil"] },
+            { q: "Amir Temur Usmonli sultoni Boyazid Yildirimni qaysi yilda tor-mor etgan?", a: "1402-yil Anqara jangi", w: ["1398-yil", "1405-yil", "1391-yil"] }
+        ];
+
         const factBanks = {
             3: [
                 { q: "Vodorod (H) atom raqami nechiga teng?", a: "1", w: ["2", "4", "8"] },
@@ -178,35 +192,6 @@
             4: [
                 { q: "Odam yuragi nechta kameradan iborat?", a: "4 ta", w: ["2 ta", "3 ta", "5 ta"] },
                 { q: "Hujayraning energetik stansiyasi qaysi?", a: "Mitoxondriya", w: ["Ribosoma", "Yadro", "Vakuola"] }
-            ],
-            6: [
-                { q: "Amir Temur qaysi yilda tavallud topgan?", a: "1336-yil", w: ["1370-yil", "1405-yil", "1441-yil"] },
-                { q: "Alisher Navoiy qaysi yilda tug'ilgan?", a: "1441-yil", w: ["1483-yil", "1336-yil", "1501-yil"] }
-            ],
-            7: [
-                { q: "Yaponiyaning poytaxti qaysi shahar?", a: "Tokio", w: ["Seul", "Pekin", "Kioto"] },
-                { q: "Dunyodagi eng katta cho'l qaysi?", a: "Sahroi Kabir", w: ["Qizilqum", "Gobi", "Atakama"] }
-            ],
-            8: [
-                { q: "Qaysi so'z turkumi harakatni bildiradi?", a: "Fe'l", w: ["Ot", "Sifat", "Ravish"] }
-            ],
-            9: [
-                { q: "'Xamsa'ning birinchi dostoni qaysi?", a: "Hayrat ul-abror", w: ["Farhod va Shirin", "Layli va Majnun", "Sab'ai sayyor"] }
-            ],
-            10: [
-                { q: "'Knowledge' so'zining tarjimasi?", a: "Bilim", w: ["Kuch", "Kitob", "Maktab"] }
-            ],
-            11: [
-                { q: "Quyosh sistemasida nechta sayyora bor?", a: "8 ta", w: ["9 ta", "7 ta", "10 ta"] }
-            ],
-            13: [
-                { q: "O'zbekiston Konstitutsiyasi nechta moddadan iborat?", a: "155 modda", w: ["128 modda", "100 modda", "200 modda"] }
-            ],
-            14: [
-                { q: "'O'zingni angla' hikmati kimga tegishli?", a: "Suqrot", w: ["Arastu", "Platon", "Pifagor"] }
-            ],
-            15: [
-                { q: "Tez jahli chiqadigan temperament turi?", a: "Xolerik", w: ["Sangvinik", "Flegmatik", "Melanxolik"] }
             ]
         };
 
@@ -357,14 +342,14 @@
                             <div class="flex justify-between items-start mb-3">
                                 <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30 group-hover:bg-yellow-400 group-hover:text-blue-950 transition">Modul #${subj.id}</span>
                                 <span class="text-xs font-bold ${isPassed ? 'text-emerald-400 bg-emerald-400/10 border-emerald-500/30' : 'text-yellow-300 bg-yellow-400/10 border-yellow-400/30'} px-2.5 py-1 rounded-lg border">
-                                    ${isPassed ? "✅ O'tilgan (60%+)" : `Savol: ${savedQ}/50`}
+                                    ${isPassed ? "✅ O'tilgan (60%+)" : `Savol: ${savedQ}/60`}
                                 </span>
                             </div>
                             <h3 class="text-xl font-black text-white mb-2">${subj.name}</h3>
                             <p class="text-slate-300 text-sm leading-relaxed mb-4">${subj.desc}</p>
                         </div>
                         <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-yellow-400">
-                            <span>📚 50 ta Test (60% talab)</span>
+                            <span>📚 60 ta Test (60% talab)</span>
                             <span>Boshlash →</span>
                         </div>
                     </div>
@@ -382,7 +367,7 @@
             activeSubject = subjects.find(s => s.id === id);
             questionCount = parseInt(localStorage.getItem(`subj_${activeSubject.id}_q`)) || 1;
             correctCount = parseInt(localStorage.getItem(`subj_${activeSubject.id}_correct`)) || 0;
-            if (questionCount > 50) questionCount = 50;
+            if (questionCount > 60) questionCount = 60;
             
             document.getElementById("modalCategoryBadge").innerText = activeSubject.name;
             document.getElementById("modalTitle").innerText = activeSubject.name;
@@ -396,19 +381,19 @@
         }
 
         function loadNextQuestion() {
-            if (questionCount > 50) {
-                let percent = (correctCount / 50) * 100;
+            if (questionCount > 60) {
+                let percent = (correctCount / 60) * 100;
                 let passed = percent >= 60;
                 if (passed) {
                     localStorage.setItem(`subj_${activeSubject.id}_passed`, "true");
                 }
 
-                document.getElementById("quizCounter").innerText = "Tugatildi (50/50)";
-                document.getElementById("quizScoreDisplay").innerText = `To'g'ri: ${correctCount} / 50 (${percent.toFixed(0)}%)`;
+                document.getElementById("quizCounter").innerText = "Tugatildi (60/60)";
+                document.getElementById("quizScoreDisplay").innerText = `To'g'ri: ${correctCount} / 60 (${percent.toFixed(0)}%)`;
                 
                 let msg = passed 
                     ? `🎉 Tabriklaymiz! Siz ${percent.toFixed(0)}% natija ko'rsatib (60% talabini bajarib) ushbu mavzudan muvaffaqiyatli o'tdingiz!`
-                    : `⚠️ Siz ${percent.toFixed(0)}% to'pladingiz. Keyingi mavzuga o'tish uchun kamida 60% (30 ta to'g'ri) kerak. Qaytadan urinib ko'ring!`;
+                    : `⚠️ Siz ${percent.toFixed(0)}% to'pladingiz. Keyingi mavzuga o'tish uchun kamida 60% (36 ta to'g'ri) kerak. Qaytadan urinib ko'ring!`;
                 
                 document.getElementById("quizQuestion").innerText = msg;
                 document.getElementById("quizOptions").innerHTML = `<button onclick="resetSubjectTest()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold py-3.5 rounded-2xl transition">Testni qaytadan boshlash</button>`;
@@ -419,20 +404,21 @@
             let rewardTier = Math.floor((questionCount - 1) / 10) + 1;
             currentXpReward = rewardTier;
 
-            document.getElementById("quizCounter").innerText = `Savol ${questionCount} / 50`;
-            document.getElementById("quizScoreDisplay").innerText = `To'g'ri: ${correctCount} / 30 (60%)`;
+            document.getElementById("quizCounter").innerText = `Savol ${questionCount} / 60`;
+            document.getElementById("quizScoreDisplay").innerText = `To'g'ri: ${correctCount} / 36 (60%)`;
             document.getElementById("quizXpReward").innerText = `+${currentXpReward} XP`;
 
             let q = "", correct = "", options = [];
 
+            // 1. MATEMATIKA
             if (activeSubject.id === 1) {
-                if (questionCount <= 15) {
+                if (questionCount <= 20) {
                     let a = rand(10 * rewardTier, 50 * rewardTier), b = rand(5 * rewardTier, 40 * rewardTier);
                     q = `${a} + ${b} nechiga teng?`;
                     correct = String(a + b);
                     let num = Number(correct);
                     options = shuffle([correct, String(num + rand(2, 10)), String(num - rand(2, 8)), String(num + rand(12, 20))]);
-                } else if (questionCount <= 30) {
+                } else if (questionCount <= 40) {
                     let a = rand(2, 8), b = rand(1, 6);
                     let res = (a + b) * (a + b);
                     q = `(${a} + ${b})² ifodaning qiymatini toping:`;
@@ -448,12 +434,23 @@
                     correct = String(x1);
                     options = shuffle([correct, String(x2), String(x1 + 2), String(Math.abs(x1 - 3) || 5)]);
                 }
-            } else if (activeSubject.id === 2) {
+            } 
+            // 2. TARIX (Amir Temur va aniq yillar)
+            else if (activeSubject.id === 2) {
+                const item = historyBank[(questionCount - 1) % historyBank.length];
+                q = item.q;
+                correct = item.a;
+                options = shuffle([item.a, ...item.w]);
+            } 
+            // 3. FIZIKA
+            else if (activeSubject.id === 3) {
                 let v = rand(10, 20 * rewardTier), t = rand(2, 10);
                 q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. Bosib o'tgan yo'li qancha?`;
                 correct = `${v * t} m`;
                 options = shuffle([correct, `${v * t + 15} m`, `${v + t} m`, `${Math.abs(v * t - 10)} m`]);
-            } else {
+            } 
+            // BOSHQA FANLAR
+            else {
                 const bank = factBanks[activeSubject.id] || [{ q: `${activeSubject.name} faniga oid savol #${questionCount}: To'g'ri javobni tanlang.`, a: "To'g'ri javob", w: ["Xato 1", "Xato 2", "Xato 3"] }];
                 const item = bank[rand(0, bank.length - 1)];
                 q = item.q;
