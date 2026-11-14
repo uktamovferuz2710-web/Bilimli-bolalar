@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilimlar Portali PRO — Cheksiz Qiyinlashuvchi Testlar</title>
+    <title>Bilimlar Portali PRO — Megamind Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <style>
+        /* Megamind fon rasmi va qoraytirilgan qatlam */
+        .megamind-bg {
+            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.95)), 
+                              url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
 </head>
-<body class="bg-slate-950 min-h-screen text-slate-100 font-sans selection:bg-yellow-400 selection:text-blue-950">
+<body class="megamind-bg min-h-screen text-slate-100 font-sans selection:bg-yellow-400 selection:text-blue-950">
 
     <!-- HEADER & NAVBAR -->
     <header class="bg-slate-900/90 backdrop-blur-md border-b border-white/10 shadow-xl sticky top-0 z-40">
@@ -17,7 +27,7 @@
                 <div class="bg-yellow-400 text-blue-950 font-black text-xl p-2.5 rounded-2xl shadow-lg">BP</div>
                 <div>
                     <h1 class="text-2xl font-black tracking-tight text-white">Bilimlar Portali PRO</h1>
-                    <p class="text-xs text-blue-300">15 ta fan • Avtomatik qiyinlashuvchi testlar</p>
+                    <p class="text-xs text-blue-300">15 ta fan • 50 talik testlar • 60% o'tish sharti</p>
                 </div>
             </div>
             
@@ -40,7 +50,7 @@
             <div class="relative flex-grow">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">🔍</span>
                 <input type="text" id="searchInput" placeholder="Fanni qidiring (masalan: Matematika, Fizika, Tarix)..." 
-                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-white/10 bg-slate-900 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 shadow-sm transition"
+                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 shadow-sm transition"
                     onkeyup="searchSubjects()">
             </div>
             <button onclick="openProfileModal()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
@@ -57,7 +67,7 @@
 
     <!-- MODAL (SUBJECT LEARNING HUB) -->
     <div id="subjectModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50 overflow-y-auto">
-        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-3xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl">
+        <div class="bg-slate-900/95 border border-white/10 text-slate-100 rounded-3xl max-w-3xl w-full p-6 md:p-8 max-h-[92vh] overflow-y-auto relative shadow-2xl">
             <button onclick="closeModal()" class="absolute top-5 right-5 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full font-bold flex items-center justify-center transition">✕</button>
             
             <div class="flex items-center gap-3 mb-2">
@@ -67,16 +77,18 @@
             <p id="modalDesc" class="text-slate-300 mb-6 leading-relaxed"></p>
             
             <!-- Yozma Tushuntirish -->
-            <div class="bg-slate-800/80 border border-white/10 p-5 rounded-2xl mb-6 shadow-inner">
-                <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Qisqacha Nazariya va Tushuntirish</h3>
+            <div class="bg-slate-800/90 border border-white/10 p-5 rounded-2xl mb-6 shadow-inner">
+                <h3 class="font-bold text-base text-yellow-400 mb-2 flex items-center gap-2">📖 Nazariya va 50 talik Test Qoidalari</h3>
                 <p id="modalTheory" class="text-sm text-slate-200 leading-relaxed"></p>
+                <p class="text-xs text-blue-300 mt-2 font-semibold">⚡ Eslatma: Keyingi mavzuga o'tish uchun 50 ta savoldan kamida 60% (30 ta to'g'ri javob) to'plashingiz kerak!</p>
             </div>
 
-            <!-- Test Qismi (Avtomatik qiyinlashib boruvchi) -->
-            <div class="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
+            <!-- Test Qismi -->
+            <div class="bg-gradient-to-br from-blue-900/50 to-indigo-900/50 p-6 rounded-2xl border border-blue-500/30 shadow-inner">
                 <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol #1</span>
-                    <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+1 XP Mukofot</span>
+                    <span id="quizCounter" class="text-xs font-bold bg-slate-900 text-blue-200 px-3 py-1.5 rounded-xl border border-white/10">Savol 1 / 50</span>
+                    <span id="quizScoreDisplay" class="text-xs font-bold bg-amber-500/20 text-amber-300 px-3 py-1.5 rounded-xl border border-amber-500/30">To'g'ri: 0 / 30 (60%)</span>
+                    <span id="quizXpReward" class="text-xs font-bold bg-emerald-500 text-white px-3 py-1.5 rounded-xl shadow-sm">+1 XP</span>
                 </div>
                 
                 <p id="quizQuestion" class="font-bold text-xl text-white mb-6 leading-snug"></p>
@@ -88,7 +100,7 @@
 
     <!-- PROFILE MODAL -->
     <div id="profileModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
+        <div class="bg-slate-900/95 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
             <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
             <div class="w-20 h-20 bg-yellow-400 text-blue-950 font-black text-3xl rounded-full mx-auto flex items-center justify-center mb-4 shadow-lg" id="profileAvatarLetter">M</div>
             <h2 id="profileModalName" class="text-2xl font-black text-white mb-1">Mehmon</h2>
@@ -104,13 +116,13 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL (ISM VA PAROL BILAN KIRISH) -->
+    <!-- AUTH MODAL -->
     <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
+        <div class="bg-slate-900/95 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl text-center">
             <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
             <div class="bg-blue-500/20 text-blue-400 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black mb-3 border border-blue-500/30">🔑</div>
             <h2 class="text-2xl font-black text-white mb-2">Onlayn Profilga Kirish</h2>
-            <p class="text-xs text-slate-400 mb-6">Ism va parolingizni kiriting — ballaringiz avtomatik saqlanadi!</p>
+            <p class="text-xs text-slate-400 mb-6">Ism va parolingizni kiriting — ballaringiz saqlanadi!</p>
             
             <input type="text" id="usernameInput" placeholder="Ismingiz (masalan: Alisher)..." class="w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-slate-800 text-white placeholder-slate-400 mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium text-center">
             <input type="password" id="passwordInput" placeholder="Maxfiy parol..." class="w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-slate-800 text-white placeholder-slate-400 mb-5 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium text-center">
@@ -122,7 +134,7 @@
 
     <!-- LEADERBOARD MODAL -->
     <div id="leaderboardModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
+        <div class="bg-slate-900/95 border border-white/10 text-slate-100 rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
             <button onclick="closeLeaderboard()" class="absolute top-5 right-5 text-slate-400 hover:text-white font-bold text-xl">✕</button>
             <div class="text-center mb-6">
                 <span class="text-4xl">🏆</span>
@@ -144,7 +156,7 @@
             { id: 1, name: "1. Matematika", desc: "Arifmetika, qisqa ko'paytirish va kvadrat tenglamalar.", theory: "Matematika fanida savollar avtomatik ravishda oddiy arifmetikadan boshlanib, asta-sekin qisqa ko'paytirish formulalari va kvadrat tenglamalarga qarab qiyinlashib boraveradi." },
             { id: 2, name: "2. Fizika", desc: "Mexanika, kinematika, elektr va optika.", theory: "Fizika tabiat qonunlarini, tezlik, kuch va bosim hisob-kitoblarini o'rgatadi." },
             { id: 3, name: "3. Kimyo", desc: "Elementlar jadvali va reaksiyalar.", theory: "Moddalar, atomlar, molekulalar va kimyoviy reaksiyalar tahlili." },
-            { id: 4, name: "4. Biologiya", desc: "Hujayra, anatomiya va tabiat.", QtWidgets: true, theory: "Tirik organizmlar, hujayra tuzilishi va odam anatomiyasi." },
+            { id: 4, name: "4. Biologiya", desc: "Hujayra, anatomiya va tabiat.", theory: "Tirik organizmlar, hujayra tuzilishi va odam anatomiyasi." },
             { id: 5, name: "5. Informatika", desc: "Algoritmlar va kompyuter.", theory: "Axborot o'lchov birliklari, dasturlash va tarmoqlar." },
             { id: 6, name: "6. Tarix", desc: "O'zbekiston va jahon tarixi.", theory: "Tarixiy sanalar, buyuk sarkardalar va sivilizatsiyalar." },
             { id: 7, name: "7. Geografiya", desc: "Materiklar, davlatlar va iqlim.", theory: "Yer yuzining tuzilishi, okeanlar va iqlim mintaqalari." },
@@ -203,6 +215,7 @@
         let currentXp = parseInt(localStorage.getItem("portal_xp")) || 0;
         let activeSubject = null;
         let questionCount = 1;
+        let correctCount = 0;
         let currentLevel = 1;
         let currentCorrectAnswer = "";
         let currentXpReward = 1;
@@ -337,18 +350,21 @@
             grid.innerHTML = "";
             list.forEach(subj => {
                 let savedQ = parseInt(localStorage.getItem(`subj_${subj.id}_q`)) || 1;
+                let isPassed = localStorage.getItem(`subj_${subj.id}_passed`) === "true";
                 grid.innerHTML += `
-                    <div onclick="openModal(${subj.id})" class="bg-slate-900/60 backdrop-blur-md p-7 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-yellow-400 flex flex-col justify-between group">
+                    <div onclick="openModal(${subj.id})" class="bg-slate-900/80 backdrop-blur-md p-7 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-white/10 hover:border-yellow-400 flex flex-col justify-between group">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30 group-hover:bg-yellow-400 group-hover:text-blue-950 transition">Modul #${subj.id}</span>
-                                <span class="text-xs font-bold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 px-2.5 py-1 rounded-lg">Savol: #${savedQ}</span>
+                                <span class="text-xs font-bold ${isPassed ? 'text-emerald-400 bg-emerald-400/10 border-emerald-500/30' : 'text-yellow-300 bg-yellow-400/10 border-yellow-400/30'} px-2.5 py-1 rounded-lg border">
+                                    ${isPassed ? "✅ O'tilgan (60%+)" : `Savol: ${savedQ}/50`}
+                                </span>
                             </div>
                             <h3 class="text-xl font-black text-white mb-2">${subj.name}</h3>
                             <p class="text-slate-300 text-sm leading-relaxed mb-4">${subj.desc}</p>
                         </div>
                         <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-yellow-400">
-                            <span>♾️ Cheksiz Testlar</span>
+                            <span>📚 50 ta Test (60% talab)</span>
                             <span>Boshlash →</span>
                         </div>
                     </div>
@@ -365,6 +381,8 @@
         function openModal(id) {
             activeSubject = subjects.find(s => s.id === id);
             questionCount = parseInt(localStorage.getItem(`subj_${activeSubject.id}_q`)) || 1;
+            correctCount = parseInt(localStorage.getItem(`subj_${activeSubject.id}_correct`)) || 0;
+            if (questionCount > 50) questionCount = 50;
             
             document.getElementById("modalCategoryBadge").innerText = activeSubject.name;
             document.getElementById("modalTitle").innerText = activeSubject.name;
@@ -378,32 +396,50 @@
         }
 
         function loadNextQuestion() {
+            if (questionCount > 50) {
+                let percent = (correctCount / 50) * 100;
+                let passed = percent >= 60;
+                if (passed) {
+                    localStorage.setItem(`subj_${activeSubject.id}_passed`, "true");
+                }
+
+                document.getElementById("quizCounter").innerText = "Tugatildi (50/50)";
+                document.getElementById("quizScoreDisplay").innerText = `To'g'ri: ${correctCount} / 50 (${percent.toFixed(0)}%)`;
+                document.getElementById("quizQuestion.innerHTML") = "";
+                
+                let msg = passed 
+                    ? `🎉 Tabriklaymiz! Siz ${percent.toFixed(0)}% natija ko'rsatib (60% talabini bajarib) ushbu mavzudan muvaffaqiyatli o'tdingiz!`
+                    : `⚠️ Siz ${percent.toFixed(0)}% to'pladingiz. Keyingi mavzuga o'tish uchun kamida 60% (30 ta to'g'ri) kerak. Qaytadan urinib ko'ring!`;
+                
+                document.getElementById("quizQuestion").innerText = msg;
+                document.getElementById("quizOptions").innerHTML = `<button onclick="resetSubjectTest()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-950 font-bold py-3.5 rounded-2xl transition">Testni qaytadan boshlash</button>`;
+                document.getElementById("quizResult").innerText = "";
+                return;
+            }
+
             let rewardTier = Math.floor((questionCount - 1) / 10) + 1;
             currentXpReward = rewardTier;
 
-            document.getElementById("quizCounter").innerText = `Savol #${questionCount} • Daraja ${rewardTier}`;
-            document.getElementById("quizXpReward").innerText = `+${currentXpReward} XP Mukofot`;
+            document.getElementById("quizCounter").innerText = `Savol ${questionCount} / 50`;
+            document.getElementById("quizScoreDisplay").innerText = `To'g'ri: ${correctCount} / 30 (60%)`;
+            document.getElementById("quizXpReward").innerText = `+${currentXpReward} XP`;
 
             let q = "", correct = "", options = [];
 
-            // 1. MATEMATIKA: AVTOMATIK RAVISHDA QIYINLASHIB BORUVCHI REJIM (Arifmetika -> Qisqa ko'paytirish -> Kvadrat tenglama)
             if (activeSubject.id === 1) {
                 if (questionCount <= 15) {
-                    // 1-bosqich: Oddiy arifmetika
                     let a = rand(10 * rewardTier, 50 * rewardTier), b = rand(5 * rewardTier, 40 * rewardTier);
                     q = `${a} + ${b} nechiga teng?`;
                     correct = String(a + b);
                     let num = Number(correct);
                     options = shuffle([correct, String(num + rand(2, 10)), String(num - rand(2, 8)), String(num + rand(12, 20))]);
                 } else if (questionCount <= 30) {
-                    // 2-bosqich: Qisqa ko'paytirish formulalari
                     let a = rand(2, 8), b = rand(1, 6);
                     let res = (a + b) * (a + b);
                     q = `(${a} + ${b})² ifodaning qiymatini toping:`;
                     correct = String(res);
                     options = shuffle([correct, String(res + rand(2, 10)), String(res - rand(2, 6)), String(res + rand(12, 20))]);
                 } else {
-                    // 3-bosqich: Kvadrat tenglamalar
                     let x1 = rand(1, 6), x2 = rand(1, 6);
                     let bCoeff = -(x1 + x2);
                     let cCoeff = x1 * x2;
@@ -413,17 +449,13 @@
                     correct = String(x1);
                     options = shuffle([correct, String(x2), String(x1 + 2), String(Math.abs(x1 - 3) || 5)]);
                 }
-            } 
-            // 2. FIZIKA - CHEKSIZ GENERATOR
-            else if (activeSubject.id === 2) {
+            } else if (activeSubject.id === 2) {
                 let v = rand(10, 20 * rewardTier), t = rand(2, 10);
                 q = `Jism ${v} m/s tezlik bilan ${t} sekund harakatlandi. Bosib o'tgan yo'li qancha?`;
                 correct = `${v * t} m`;
                 options = shuffle([correct, `${v * t + 15} m`, `${v + t} m`, `${Math.abs(v * t - 10)} m`]);
-            }
-            // BOSHQA FANLAR
-            else {
-                const bank = factBanks[activeSubject.id] || [{ q: `${activeSubject.name} faniga oid asosiy tushunchani tanlang:`, a: "To'g'ri javob", w: ["Xato 1", "Xato 2", "Xato 3"] }];
+            } else {
+                const bank = factBanks[activeSubject.id] || [{ q: `${activeSubject.name} faniga oid savol #${questionCount}: To'g'ri javobni tanlang.`, a: "To'g'ri javob", w: ["Xato 1", "Xato 2", "Xato 3"] }];
                 const item = bank[rand(0, bank.length - 1)];
                 q = item.q;
                 correct = item.a;
@@ -446,7 +478,9 @@
             const resultEl = document.getElementById("quizResult");
             if (selected === currentCorrectAnswer) {
                 currentXp += currentXpReward;
+                correctCount++;
                 localStorage.setItem("portal_xp", currentXp);
+                localStorage.setItem(`subj_${activeSubject.id}_correct`, correctCount);
                 
                 questionCount++;
                 localStorage.setItem(`subj_${activeSubject.id}_q`, questionCount);
@@ -454,16 +488,29 @@
                 updateUI();
                 syncDataToCloud();
 
-                resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP qo'shildi. Keyingi savol...`;
+                resultEl.innerHTML = `✅ To'g'ri! +${currentXpReward} XP. Keyingi...`;
                 resultEl.className = "font-bold text-sm text-emerald-400 text-center";
                 
                 setTimeout(() => {
                     loadNextQuestion();
                 }, 800);
             } else {
-                resultEl.innerText = "❌ Xato javob! Qayta urinib ko'ring.";
+                questionCount++;
+                localStorage.setItem(`subj_${activeSubject.id}_q`, questionCount);
+
+                resultEl.innerText = "❌ Xato javob!";
                 resultEl.className = "font-bold text-sm text-rose-400 text-center";
+                
+                setTimeout(() => {
+                    loadNextQuestion();
+                }, 800);
             }
+        }
+
+        function resetSubjectTest() {
+            localStorage.setItem(`subj_${activeSubject.id}_q`, 1);
+            localStorage.setItem(`subj_${activeSubject.id}_correct`, 0);
+            openModal(activeSubject.id);
         }
 
         function closeModal() {
