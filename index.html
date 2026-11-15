@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -9,7 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <style>
-:root{color-scheme:dark;--bg:#080a18;--panel:#14172c;--panel2:#1d2040;--line:#35395f;--purple:#ad8cff;--cyan:#4be5f4;--green:#59e6a5;--red:#ff758b;--muted:#a6abc4}
+:root{color-scheme:dark;--bg:#080a18;--panel:#14172c;--line:#35395f;--purple:#ad8cff;--cyan:#4be5f4;--green:#59e6a5;--red:#ff758b;--muted:#a6abc4}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -15%,#30245f 0,#111329 42%,var(--bg) 78%);color:#f8f8ff;font-family:Inter,system-ui,Arial,sans-serif}
 button,input{font:inherit}
@@ -68,246 +69,247 @@ footer{text-align:center;padding:25px;color:#737993;font-size:12px}
 </head>
 <body>
 <header>
-  <div class="logo">🧠 MEGA<span>MIYYA</span></div>
-  <div id="userTop" class="top-user">BILIM • TAJRIBA • G'ALABA</div>
+<div class="logo">🧠 MEGA<span>MIYYA</span></div>
+<div id="userTop" class="top-user">BILIM • TAJRIBA • G'ALABA</div>
 </header>
 
 <main class="container">
 <section id="authSection">
-  <div class="card auth-card">
-    <div class="brain">🧠</div>
-    <h1>MEGAMIYYA QUIZ</h1>
-    <p class="muted">Bilimingni sinovdan o'tkaz. EXP yig'. Yangi darajaga chiq!</p>
-    <div class="field"><label for="username">Foydalanuvchi nomi</label><input id="username" autocomplete="username" maxlength="24" placeholder="Ismingiz"></div>
-    <div class="field"><label for="password">Parol</label><input id="password" type="password" autocomplete="current-password" placeholder="Kamida 6 ta belgi"></div>
-    <div class="auth-actions">
-      <button id="registerBtn" type="button">AKKAUNT YARATISH</button>
-      <button class="secondary" id="loginBtn" type="button">KIRISH</button>
-    </div>
-    <p id="authMsg" class="message" aria-live="polite"></p>
-    <p class="small">Akkauntingiz bo'lsa — Kirish tugmasini bosing.</p>
-  </div>
+<div class="card auth-card">
+<div class="brain">🧠</div>
+<h1>MEGAMIYYA QUIZ</h1>
+<p class="muted">Bilimingni sinovdan o'tkaz. EXP yig'. Yangi darajaga chiq!</p>
+<div class="field"><label for="username">Foydalanuvchi nomi</label><input id="username" autocomplete="username" maxlength="24" placeholder="Ismingiz"></div>
+<div class="field"><label for="password">Parol</label><input id="password" type="password" autocomplete="current-password" placeholder="Kamida 6 ta belgi"></div>
+<div class="auth-actions">
+<button id="registerBtn" type="button">AKKAUNT YARATISH</button>
+<button class="secondary" id="loginBtn" type="button">KIRISH</button>
+</div>
+<p id="authMsg" class="message" aria-live="polite"></p>
+<p class="small">Akkauntingiz bo'lsa — Kirish tugmasini bosing.</p>
+</div>
 </section>
 
 <section id="appSection" class="hidden">
-  <div class="card">
-    <div class="hero">
-      <div class="hero-copy">
-        <p class="small">SHAXSIY PROFIL</p>
-        <h1 id="welcome">Xush kelibsiz!</h1>
-        <p>Har bir to'g'ri javob sizni yangi bosqichga olib chiqadi. Bilimingizni muntazam sinab boring.</p>
-        <p id="nextRank" class="small"></p>
-        <div class="progress"><div id="rankProgress"></div></div>
-        <button class="secondary" id="logoutBtn" type="button">CHIQISH</button>
-      </div>
-      <div class="hero-art" style="text-align:center"><div class="brain">🧠</div><div class="small">YOUR MIND. YOUR POWER.</div></div>
-    </div>
-    <div class="stats">
-      <div class="stat-box"><div class="stat" id="expValue">0</div><div class="stat-label">JAMI EXP</div></div>
-      <div class="stat-box"><div class="stat" id="rankValue">BRONZE</div><div class="stat-label">RANK</div></div>
-      <div class="stat-box"><div class="stat" id="levelValue">1</div><div class="stat-label">LEVEL</div></div>
-    </div>
-  </div>
+<div class="card">
+<div class="hero">
+<div class="hero-copy">
+<p class="small">SHAXSIY PROFIL</p>
+<h1 id="welcome">Xush kelibsiz!</h1>
+<p>Har bir to'g'ri javob sizni yangi bosqichga olib chiqadi.</p>
+<p id="nextRank" class="small"></p>
+<div class="progress"><div id="rankProgress"></div></div>
+<button class="secondary" id="logoutBtn" type="button">CHIQISH</button>
+</div>
+<div class="hero-art" style="text-align:center"><div class="brain">🧠</div><div class="small">YOUR MIND. YOUR POWER.</div></div>
+</div>
+<div class="stats">
+<div class="stat-box"><div class="stat" id="expValue">0</div><div class="stat-label">JAMI EXP</div></div>
+<div class="stat-box"><div class="stat" id="rankValue">BRONZE</div><div class="stat-label">RANK</div></div>
+<div class="stat-box"><div class="stat" id="levelValue">1</div><div class="stat-label">LEVEL</div></div>
+</div>
+</div>
 
-  <div class="card">
-    <div class="section-head"><div><h2>📚 FANLAR</h2><p class="small">15 ta yo'nalishdan birini tanlang.</p></div><span class="rank-pill">15 SUBJECTS</span></div>
-    <div class="subject-grid" id="subjects"></div>
-  </div>
+<div class="card">
+<div class="section-head"><div><h2>📚 FANLAR</h2><p class="small">15 ta yo'nalishdan birini tanlang.</p></div><span class="rank-pill">15 SUBJECTS</span></div>
+<div class="subject-grid" id="subjects"></div>
+</div>
 
-  <div class="card hidden" id="quizCard">
-    <div class="quiz-top"><div><h2 id="quizTitle">Test</h2><p id="difficulty" class="small"></p></div><span class="rank-pill" id="questionCounter">1 / 5</span></div>
-    <div class="progress"><div id="quizProgress"></div></div>
-    <div class="question" id="questionText"></div>
-    <div id="options"></div>
-    <p id="feedback" class="feedback" aria-live="polite"></p>
-    <div class="quiz-actions">
-      <button id="checkBtn" type="button">JAVOBNI TEKSHIRISH</button>
-      <button id="nextBtn" class="hidden" type="button">KEYINGI SAVOL →</button>
-      <button class="secondary" id="closeQuizBtn" type="button">TESTNI YOPISH</button>
-    </div>
-  </div>
+<div class="card hidden" id="quizCard">
+<div class="quiz-top"><div><h2 id="quizTitle">Test</h2><p id="difficulty" class="small"></p></div><span class="rank-pill" id="questionCounter">1 / ∞</span></div>
+<div class="progress"><div id="quizProgress"></div></div>
+<div class="question" id="questionText"></div>
+<div id="options"></div>
+<p id="feedback" class="feedback" aria-live="polite"></p>
+<div class="quiz-actions">
+<button id="checkBtn" type="button">JAVOBNI TEKSHIRISH</button>
+<button id="nextBtn" class="hidden" type="button">KEYINGI SAVOL →</button>
+<button class="secondary" id="closeQuizBtn" type="button">TESTNI YAKUNLASH</button>
+</div>
+</div>
 
-  <div class="card hidden" id="resultCard">
-    <h2>🏁 TEST YAKUNLANDI</h2>
-    <p id="resultTitle">Natijangiz</p>
-    <div class="result-grid">
-      <div class="result-item"><strong id="resultCorrect">0</strong><span class="small">To'g'ri</span></div>
-      <div class="result-item"><strong id="resultWrong">0</strong><span class="small">Xato</span></div>
-      <div class="result-item"><strong id="resultPercent">0%</strong><span class="small">Natija</span></div>
-    </div>
-    <p id="resultExp" class="muted"></p>
-    <button id="againBtn" type="button">YANA TEST ISHLASH</button>
-  </div>
+<div class="card hidden" id="resultCard">
+<h2>🏁 TEST YAKUNLANDI</h2>
+<p id="resultTitle">Natijangiz</p>
+<div class="result-grid">
+<div class="result-item"><strong id="resultCorrect">0</strong><span class="small">To'g'ri</span></div>
+<div class="result-item"><strong id="resultWrong">0</strong><span class="small">Xato</span></div>
+<div class="result-item"><strong id="resultPercent">0%</strong><span class="small">Natija</span></div>
+</div>
+<p id="resultExp" class="muted"></p>
+<button id="againBtn" type="button">YANA TEST ISHLASH</button>
+</div>
 
-  <div class="card">
-    <div class="section-head"><div><h2>🏆 GLOBAL REYTING</h2><p class="small">Eng ko'p EXP to'plagan o'yinchilar.</p></div><span class="rank-pill">TOP 100</span></div>
-    <div class="table-wrap"><table>
-      <thead><tr><th>#</th><th>O'yinchi</th><th>Rank</th><th>EXP</th></tr></thead>
-      <tbody id="leaderboard"><tr><td colspan="4" class="small">Reyting yuklanmoqda...</td></tr></tbody>
-    </table></div>
-  </div>
+<div class="card">
+<div class="section-head"><div><h2>🏆 GLOBAL REYTING</h2><p class="small">Eng ko'p EXP to'plagan o'yinchilar.</p></div><span class="rank-pill">TOP 100</span></div>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>O'yinchi</th><th>Rank</th><th>EXP</th></tr></thead>
+<tbody id="leaderboard"><tr><td colspan="4" class="small">Reyting yuklanmoqda...</td></tr></tbody>
+</table></div>
+</div>
 </section>
 </main>
 <footer>🧠 MEGAMIYYA QUIZ © 2026 • Bilim — eng katta kuch.</footer>
 
 <script>
-// FIREBASE SOZLAMALARI: Firebase Console -> Project settings -> Your apps.
 const firebaseConfig = {
-  apiKey: "AIzaSyBhj2kptMDZe3ENBsIIp9O5dazQw4NsDbs",
-  authDomain: "megamiyya-quiz.firebaseapp.com",
-  projectId: "megamiyya-quiz",
-  storageBucket: "megamiyya-quiz.firebasestorage.app",
-  messagingSenderId: "31000832304",
-  appId: "1:31000832304:web:6fa262d38a2cca97af00f5",
-  measurementId: "G-1C3JMP7MPF"
+ apiKey:"AIzaSyBhj2kptMDZe3ENBsIIp9O5dazQw4NsDbs",
+ authDomain:"megamiyya-quiz.firebaseapp.com",
+ projectId:"megamiyya-quiz",
+ storageBucket:"megamiyya-quiz.firebasestorage.app",
+ messagingSenderId:"31000832304",
+ appId:"1:31000832304:web:6fa262d38a2cca97af00f5",
+ measurementId:"G-1C3JMP7MPF"
 };
 
-const $ = id => document.getElementById(id);
-let auth = null, db = null, currentUser = null, playerData = null;
-let profileUnsubscribe = null, leaderboardUnsubscribe = null;
-let currentSubject = "", currentQuestions = [], currentIndex = 0;
-let selectedAnswer = -1, answered = false, correctCount = 0, wrongCount = 0;
-let quizExpEarned = 0, lastQuizSubject = "";
+const $=id=>document.getElementById(id);
+let auth=null,db=null,currentUser=null,playerData=null;
+let profileUnsubscribe=null,leaderboardUnsubscribe=null;
+let currentSubject="",currentQuestions=[],currentIndex=0;
+let selectedAnswer=-1,answered=false,correctCount=0,wrongCount=0;
+let quizExpEarned=0,lastQuizSubject="",questionsAnswered=0;
+let questionHistory=new Set();
 
-const subjectsData = {
- "Matematika":{icon:"➗",questions:[
-  ["7 × 8 nechchi?",["54","56","64","48"],1],
-  ["144 ning kvadrat ildizi?",["10","11","12","14"],2],
-  ["2x + 7 = 25. x ni toping.",["8","9","10","11"],1],
-  ["15 ning 20 foizi qancha?",["2","3","4","5"],2],
-  ["Uchburchak ichki burchaklari yig'indisi?",["90°","180°","270°","360°"],1],
-  ["3² + 4² nechaga teng?",["12","25","49","7"],1],
-  ["0,25 kasrining foizdagi qiymati?",["2,5%","25%","50%","75%"],1]
- ]},
- "Fizika":{icon:"⚛️",questions:[
-  ["Kuch birligi nima?",["Joul","Nyuton","Vatt","Paskal"],1],
-  ["Tezlik formulasi?",["s/t","m×v","F/m","t/s"],0],
-  ["Tok kuchi birligi?",["Volt","Om","Amper","Vatt"],2],
-  ["Yorug'lik vakuumda taxminan qanday tezlikda tarqaladi?",["300 km/s","3000 km/s","300 000 km/s","30 000 km/s"],2],
-  ["Energiya birligi?",["Joul","Nyuton","Amper","Tesla"],0],
-  ["Zichlik formulasi qaysi?",["m/V","V/m","F/S","s/t"],0],
-  ["Elektr kuchlanish birligi?",["Amper","Volt","Om","Vatt"],1]
- ]},
- "Kimyo":{icon:"🧪",questions:[
-  ["Suv formulasi?",["CO₂","H₂O","O₂","NaCl"],1],
-  ["Kislorodning kimyoviy belgisi?",["K","C","O","N"],2],
-  ["Atom yadrosida nimalar bor?",["Elektronlar","Proton va neytronlar","Faqat elektron","Molekulalar"],1],
-  ["pH = 7 bo'lgan muhit qanday?",["Kislotali","Ishqoriy","Neytral","Kuchli kislotali"],2],
-  ["Osh tuzining formulasi?",["NaCl","HCl","KOH","CaCO₃"],0],
-  ["Davriy jadvalni kim yaratgan?",["Nyuton","Mendeleyev","Dalton","Lavuazye"],1],
-  ["CO₂ qanday gaz?",["Kislorod","Vodorod","Karbonat angidrid","Azot"],2]
- ]},
- "Biologiya":{icon:"🧬",questions:[
-  ["Hujayraning energiya markazi?",["Yadro","Mitoxondriya","Ribosoma","Membrana"],1],
-  ["Fotosintez qayerda kechadi?",["Xloroplast","Yadro","Vakuola","Lizosoma"],0],
-  ["Inson yuragi nechta kamerali?",["2","3","4","5"],2],
-  ["Irsiy axborotning asosiy tashuvchisi?",["Lipid","DNK","Glyukoza","Suv"],1],
-  ["Oqsil sintezi qaysi organoidda amalga oshadi?",["Ribosoma","Lizosoma","Sentriola","Vakuola"],0],
-  ["Qonning kislorod tashuvchi hujayralari?",["Leykotsitlar","Trombotsitlar","Eritrotsitlar","Neyronlar"],2],
-  ["Odam tana hujayrasida odatda nechta xromosoma bor?",["23","44","46","48"],2]
- ]},
- "Tarix":{icon:"📜",questions:[
-  ["Amir Temur qachon tug'ilgan?",["1336","1405","1220","1441"],0],
-  ["O'zbekiston mustaqilligi qachon e'lon qilingan?",["1990","1991","1992","1989"],1],
-  ["Buyuk ipak yo'li nima?",["Savdo yo'li","Daryo","Davlat","Shahar"],0],
-  ["Mirzo Ulug'bek qaysi sohada mashhur?",["Astronomiya","Kimyo","Tibbiyot","Musiqa"],0],
-  ["O'zbekiston Respublikasi Konstitutsiyasi ilk bor qachon qabul qilingan?",["1991-yil","1992-yil","1993-yil","1995-yil"],1],
-  ["Jadidchilik harakati asosan qaysi davrda rivojlandi?",["XIX asr oxiri — XX asr boshida","XV asrda","XVII asrda","XXI asrda"],0],
-  ["Zahiriddin Muhammad Bobur qaysi asar muallifi?",["Boburnoma","Xamsa","Qutadg'u bilig","Temur tuzuklari"],0]
- ]},
- "Geografiya":{icon:"🌍",questions:[
-  ["Eng katta okean?",["Atlantika","Hind","Tinch","Shimoliy Muz"],2],
-  ["O'zbekiston poytaxti?",["Samarqand","Buxoro","Toshkent","Xiva"],2],
-  ["Eng katta materik?",["Afrika","Yevrosiyo","Avstraliya","Antarktida"],1],
-  ["Dunyodagi eng baland tog' cho'qqisi?",["K2","Everest","Elbrus","Kilimanjaro"],1],
-  ["O'zbekiston nechta davlat bilan chegaradosh?",["4","5","6","7"],1],
-  ["Nil daryosi qaysi qit'ada joylashgan?",["Osiyo","Afrika","Yevropa","Janubiy Amerika"],1],
-  ["Yer yuzidagi eng katta issiq cho'l?",["Gobi","Sahroi Kabir","Qizilqum","Kalahari"],1]
- ]},
- "Informatika":{icon:"💻",questions:[
-  ["HTML nima?",["Dasturlash tili","Belgilash tili","Operatsion tizim","Brauzer"],1],
-  ["CPU nimani anglatadi?",["Markaziy protsessor","Xotira","Monitor","Disk"],0],
-  ["Ikkilik sanoq tizimining asosi?",["2","8","10","16"],0],
-  ["CSS asosan nima uchun ishlatiladi?",["Ma'lumot saqlash","Veb sahifa dizayni","Serverni yoqish","Virus aniqlash"],1],
-  ["JavaScript qayerda ishlashi mumkin?",["Faqat printerda","Brauzerda va serverda","Faqat BIOSda","Faqat kalkulyatorda"],1],
-  ["RAM qanday xotira?",["Doimiy","Tezkor","Optik","Tashqi"],1],
-  ["URL nimani bildiradi?",["Veb manzil","Fayl turi","Protsessor","Dasturlash tili"],0]
- ]},
- "Ingliz tili":{icon:"🇬🇧",questions:[
-  ["Apple tarjimasi?",["Olma","Nok","Uzum","Anor"],0],
-  ["Past tense of GO?",["Goed","Gone","Went","Going"],2],
-  ["Choose correct: She ___ a student.",["am","are","is","be"],2],
-  ["Choose the synonym of 'begin'.",["Finish","Start","Close","Stop"],1],
-  ["If I ___ more time, I would travel.",["have","had","will have","has"],1],
-  ["Choose the correct passive form: 'The book ___ by Ali.'",["wrote","was written","is writing","has write"],1],
-  ["What does 'although' mean?",["Shuning uchun","Garchi","Chunki","Agar"],1]
- ]},
- "Adabiyot":{icon:"📚",questions:[
-  ["Alisher Navoiy qaysi asrlarda yashagan?",["XIV–XV","XVI–XVII","XIII–XIV","XVIII"],0],
-  ["Xamsa nechta dostondan iborat?",["3","4","5","6"],2],
-  ["'O'tkan kunlar' muallifi?",["Cho'lpon","Abdulla Qodiriy","Oybek","Fitrat"],1],
-  ["'Kecha va kunduz' romanining muallifi?",["Cho'lpon","Oybek","G'afur G'ulom","Hamza"],0],
-  ["Alisher Navoiyning turkiy tildagi devoni?",["Xazoyin ul-maoniy","Boburnoma","Qutadg'u bilig","Hibat ul-haqoyiq"],0],
-  ["'Mehrobdan chayon' asari muallifi?",["Abdulla Qodiriy","Cho'lpon","Oybek","Fitrat"],0],
-  ["'Shum bola' qissasi muallifi?",["G'afur G'ulom","Hamza","Oybek","Abdulla Qahhor"],0]
- ]},
- "Astronomiya":{icon:"🔭",questions:[
-  ["Quyosh nima?",["Sayyora","Yulduz","Yo'ldosh","Kometa"],1],
-  ["Yerning tabiiy yo'ldoshi?",["Mars","Oy","Quyosh","Venera"],1],
-  ["Quyosh tizimida nechta sayyora bor?",["7","8","9","10"],1],
-  ["Qizil sayyora deb qaysi sayyoraga aytiladi?",["Venera","Mars","Yupiter","Saturn"],1],
-  ["Yer Quyosh atrofini taxminan qancha vaqtda aylanadi?",["24 soat","30 kun","365 kun","12 soat"],2],
-  ["Quyosh tizimidagi eng katta sayyora?",["Yer","Saturn","Yupiter","Neptun"],2],
-  ["Yerning o'z o'qi atrofida aylanishi taxminan qancha?",["24 soat","365 kun","30 kun","12 oy"],0]
- ]},
- "Ona tili":{icon:"✍️",questions:[
-  ["Ot nimani bildiradi?",["Harakat","Belgi","Shaxs va narsa","Miqdor"],2],
-  ["O'zbek adabiy tilida nechta unli fonema bor?",["5","6","7","8"],1],
-  ["Fe'l nimani bildiradi?",["Harakat va holat","Narsa","Belgi","Son"],0],
-  ["Sifat qanday so'roqlarga javob bo'ladi?",["Kim? Nima?","Qanday? Qanaqa?","Necha?","Qachon?"],1],
-  ["Gapning bosh bo'laklari qaysilar?",["Aniqlovchi va to'ldiruvchi","Ega va kesim","Hol va aniqlovchi","Undalma va kirish so'z"],1],
-  ["Ravish asosan nimani bildiradi?",["Harakatning belgisini","Shaxsni","Narsani","Miqdor sonni"],0],
-  ["'Kitoblar' so'zidagi -lar qo'shimchasi nima bildiradi?",["Egalik","Ko'plik","Kelishik","Shaxs"],1]
- ]},
- "Huquq":{icon:"⚖️",questions:[
-  ["Konstitutsiya nima?",["Asosiy qonun","Farmon","Buyruq","Shartnoma"],0],
-  ["O'zbekiston Respublikasining davlat tili?",["Rus tili","Ingliz tili","O'zbek tili","Tojik tili"],2],
-  ["Qonun chiqaruvchi oliy davlat vakillik organi?",["Vazirlik","Oliy Majlis","Sud","Hokimlik"],1],
-  ["O'zbekiston davlat ramzlariga nimalar kiradi?",["Bayroq, gerb, madhiya","Pasport, pul, muhr","Gerb va pasport","Bayroq va xarita"],0],
-  ["Referendum nima?",["Sud majlisi","Umumxalq ovoz berishi","Vazirlar yig'ilishi","Saylovoldi uchrashuvi"],1],
-  ["Davlat hokimiyati bo'linishi qaysi tarmoqlarni nazarda tutadi?",["Qonun chiqaruvchi, ijro etuvchi, sud","Faqat sud","Faqat ijro","Mahalliy va xususiy"],0],
-  ["Inson huquqlari kimga tegishli?",["Faqat fuqarolarga","Har bir insonga","Faqat saylovchilarga","Faqat davlat xizmatchilariga"],1]
- ]},
- "Iqtisodiyot":{icon:"📈",questions:[
-  ["Talab oshsa, boshqa shartlar teng bo'lganda narx odatda?",["Oshadi","Pasayadi","O'zgarmaydi","Yo'qoladi"],0],
-  ["Inflyatsiya nima?",["Narxlar umumiy darajasining oshishi","Ishsizlik","Eksport","Soliq"],0],
-  ["Daromad minus xarajat nima?",["Zarar","Foyda","Qarz","Soliq"],1],
-  ["Bozor iqtisodiyotida narx asosan nimaga bog'liq?",["Talab va taklifga","Faqat ob-havoga","Faqat aholiga","Tasodifga"],0],
-  ["Eksport nima?",["Tovarni chetdan olib kirish","Tovar va xizmatlarni chetga sotish","Soliq to'lash","Pul almashtirish"],1],
-  ["Budjet nima?",["Daromad va xarajatlar rejasi","Faqat qarz","Faqat soliq","Faqat eksport"],0],
-  ["Monopoliya nima?",["Ko'p sotuvchilar bozori","Bitta sotuvchining ustunligi","Erkin raqobat","Xalqaro savdo"],1]
- ]},
- "Mantiq":{icon:"🧩",questions:[
-  ["2, 4, 8, 16, ?",["20","24","32","30"],2],
-  ["Barcha mushuklar hayvon. Momiq mushuk. Demak?",["Momiq hayvon","Momiq qush","Aniq emas","Momiq o'simlik"],0],
-  ["1, 1, 2, 3, 5, 8, ?",["10","11","13","15"],2],
-  ["Agar bugun chorshanba bo'lsa, 10 kundan keyin qaysi kun?",["Juma","Shanba","Yakshanba","Dushanba"],1],
-  ["Qaysi son boshqalaridan farq qiladi: 2, 3, 5, 9, 11?",["2","3","9","11"],2],
-  ["5 ta mashina 5 daqiqada 5 ta detal yasasa, 100 ta mashina 100 ta detalni necha daqiqada yasaydi?",["5","20","100","1"],0],
-  ["Ketma-ketlikni davom ettiring: 3, 6, 12, 24, ?",["30","36","48","42"],2]
- ]},
- "Musiqa":{icon:"🎵",questions:[
-  ["Pianinoda qanday klavishlar bor?",["Oq va qora","Faqat oq","Faqat qora","Ko'k va oq"],0],
-  ["An'anaviy musiqiy tizimda nechta asosiy nota bor?",["5","6","7","8"],2],
-  ["Simfonik orkestrni kim boshqaradi?",["Dirijyor","Shoir","Rassom","Aktyor"],0],
-  ["Skripka qaysi cholg'u oilasiga kiradi?",["Puflama","Torli-kamonli","Zarbli","Klaviaturali"],1],
-  ["Musiqada temp nimani anglatadi?",["Tovush balandligi","Ijro tezligi","Ovoz rangi","Kuy matni"],1],
-  ["Pianino qaysi cholg'u turiga kiradi?",["Klaviaturali torli-zarbli","Puflama","Faqat zarbli","Kamonli"],0],
-  ["Notada 'forte' belgisi nimani bildiradi?",["Sekin","Baland ovozda","Juda tez","To'xtash"],1]
- ]}
+const subjectsData={
+"Matematika":{icon:"➗",questions:[
+["7 × 8 nechchi?",["54","56","64","48"],1],
+["144 ning kvadrat ildizi?",["10","11","12","14"],2],
+["2x + 7 = 25. x ni toping.",["8","9","10","11"],1],
+["15 ning 20 foizi qancha?",["2","3","4","5"],2],
+["Uchburchak ichki burchaklari yig'indisi?",["90°","180°","270°","360°"],1],
+["3² + 4² nechaga teng?",["12","25","49","7"],1],
+["0,25 kasrining foizdagi qiymati?",["2,5%","25%","50%","75%"],1]
+]},
+"Fizika":{icon:"⚛️",questions:[
+["Kuch birligi nima?",["Joul","Nyuton","Vatt","Paskal"],1],
+["Tezlik formulasi?",["s/t","m×v","F/m","t/s"],0],
+["Tok kuchi birligi?",["Volt","Om","Amper","Vatt"],2],
+["Yorug'lik vakuumda taxminan qanday tezlikda tarqaladi?",["300 km/s","3000 km/s","300 000 km/s","30 000 km/s"],2],
+["Energiya birligi?",["Joul","Nyuton","Amper","Tesla"],0],
+["Zichlik formulasi qaysi?",["m/V","V/m","F/S","s/t"],0],
+["Elektr kuchlanish birligi?",["Amper","Volt","Om","Vatt"],1]
+]},
+"Kimyo":{icon:"🧪",questions:[
+["Suv formulasi?",["CO₂","H₂O","O₂","NaCl"],1],
+["Kislorodning kimyoviy belgisi?",["K","C","O","N"],2],
+["Atom yadrosida nimalar bor?",["Elektronlar","Proton va neytronlar","Faqat elektron","Molekulalar"],1],
+["pH = 7 bo'lgan muhit qanday?",["Kislotali","Ishqoriy","Neytral","Kuchli kislotali"],2],
+["Osh tuzining formulasi?",["NaCl","HCl","KOH","CaCO₃"],0],
+["Davriy jadvalni kim yaratgan?",["Nyuton","Mendeleyev","Dalton","Lavuazye"],1],
+["CO₂ qanday gaz?",["Kislorod","Vodorod","Karbonat angidrid","Azot"],2]
+]},
+"Biologiya":{icon:"🧬",questions:[
+["Hujayraning energiya markazi?",["Yadro","Mitoxondriya","Ribosoma","Membrana"],1],
+["Fotosintez qayerda kechadi?",["Xloroplast","Yadro","Vakuola","Lizosoma"],0],
+["Inson yuragi nechta kamerali?",["2","3","4","5"],2],
+["Irsiy axborotning asosiy tashuvchisi?",["Lipid","DNK","Glyukoza","Suv"],1],
+["Oqsil sintezi qaysi organoidda amalga oshadi?",["Ribosoma","Lizosoma","Sentriola","Vakuola"],0],
+["Qonning kislorod tashuvchi hujayralari?",["Leykotsitlar","Trombotsitlar","Eritrotsitlar","Neyronlar"],2],
+["Odam tana hujayrasida odatda nechta xromosoma bor?",["23","44","46","48"],2]
+]},
+"Tarix":{icon:"📜",questions:[
+["Amir Temur qachon tug'ilgan?",["1336","1405","1220","1441"],0],
+["O'zbekiston mustaqilligi qachon e'lon qilingan?",["1990","1991","1992","1989"],1],
+["Buyuk ipak yo'li nima?",["Savdo yo'li","Daryo","Davlat","Shahar"],0],
+["Mirzo Ulug'bek qaysi sohada mashhur?",["Astronomiya","Kimyo","Tibbiyot","Musiqa"],0],
+["O'zbekiston Respublikasi Konstitutsiyasi ilk bor qachon qabul qilingan?",["1991-yil","1992-yil","1993-yil","1995-yil"],1],
+["Jadidchilik harakati asosan qaysi davrda rivojlandi?",["XIX asr oxiri — XX asr boshida","XV asrda","XVII asrda","XXI asrda"],0],
+["Zahiriddin Muhammad Bobur qaysi asar muallifi?",["Boburnoma","Xamsa","Qutadg'u bilig","Temur tuzuklari"],0]
+]},
+"Geografiya":{icon:"🌍",questions:[
+["Eng katta okean?",["Atlantika","Hind","Tinch","Shimoliy Muz"],2],
+["O'zbekiston poytaxti?",["Samarqand","Buxoro","Toshkent","Xiva"],2],
+["Eng katta materik?",["Afrika","Yevrosiyo","Avstraliya","Antarktida"],1],
+["Dunyodagi eng baland tog' cho'qqisi?",["K2","Everest","Elbrus","Kilimanjaro"],1],
+["O'zbekiston nechta davlat bilan chegaradosh?",["4","5","6","7"],1],
+["Nil daryosi qaysi qit'ada joylashgan?",["Osiyo","Afrika","Yevropa","Janubiy Amerika"],1],
+["Yer yuzidagi eng katta issiq cho'l?",["Gobi","Sahroi Kabir","Qizilqum","Kalahari"],1]
+]},
+"Informatika":{icon:"💻",questions:[
+["HTML nima?",["Dasturlash tili","Belgilash tili","Operatsion tizim","Brauzer"],1],
+["CPU nimani anglatadi?",["Markaziy protsessor","Xotira","Monitor","Disk"],0],
+["Ikkilik sanoq tizimining asosi?",["2","8","10","16"],0],
+["CSS asosan nima uchun ishlatiladi?",["Ma'lumot saqlash","Veb sahifa dizayni","Serverni yoqish","Virus aniqlash"],1],
+["JavaScript qayerda ishlashi mumkin?",["Faqat printerda","Brauzerda va serverda","Faqat BIOSda","Faqat kalkulyatorda"],1],
+["RAM qanday xotira?",["Doimiy","Tezkor","Optik","Tashqi"],1],
+["URL nimani bildiradi?",["Veb manzil","Fayl turi","Protsessor","Dasturlash tili"],0]
+]},
+"Ingliz tili":{icon:"🇬🇧",questions:[
+["Apple tarjimasi?",["Olma","Nok","Uzum","Anor"],0],
+["Past tense of GO?",["Goed","Gone","Went","Going"],2],
+["Choose correct: She ___ a student.",["am","are","is","be"],2],
+["Choose the synonym of 'begin'.",["Finish","Start","Close","Stop"],1],
+["If I ___ more time, I would travel.",["have","had","will have","has"],1],
+["Choose the correct passive form: 'The book ___ by Ali.'",["wrote","was written","is writing","has write"],1],
+["What does 'although' mean?",["Shuning uchun","Garchi","Chunki","Agar"],1]
+]},
+"Adabiyot":{icon:"📚",questions:[
+["Alisher Navoiy qaysi asrlarda yashagan?",["XIV–XV","XVI–XVII","XIII–XIV","XVIII"],0],
+["Xamsa nechta dostondan iborat?",["3","4","5","6"],2],
+["'O'tkan kunlar' muallifi?",["Cho'lpon","Abdulla Qodiriy","Oybek","Fitrat"],1],
+["'Kecha va kunduz' romanining muallifi?",["Cho'lpon","Oybek","G'afur G'ulom","Hamza"],0],
+["Alisher Navoiyning turkiy tildagi devoni?",["Xazoyin ul-maoniy","Boburnoma","Qutadg'u bilig","Hibat ul-haqoyiq"],0],
+["'Mehrobdan chayon' asari muallifi?",["Abdulla Qodiriy","Cho'lpon","Oybek","Fitrat"],0],
+["'Shum bola' qissasi muallifi?",["G'afur G'ulom","Hamza","Oybek","Abdulla Qahhor"],0]
+]},
+"Astronomiya":{icon:"🔭",questions:[
+["Quyosh nima?",["Sayyora","Yulduz","Yo'ldosh","Kometa"],1],
+["Yerning tabiiy yo'ldoshi?",["Mars","Oy","Quyosh","Venera"],1],
+["Quyosh tizimida nechta sayyora bor?",["7","8","9","10"],1],
+["Qizil sayyora deb qaysi sayyoraga aytiladi?",["Venera","Mars","Yupiter","Saturn"],1],
+["Yer Quyosh atrofini taxminan qancha vaqtda aylanadi?",["24 soat","30 kun","365 kun","12 soat"],2],
+["Quyosh tizimidagi eng katta sayyora?",["Yer","Saturn","Yupiter","Neptun"],2],
+["Yerning o'z o'qi atrofida aylanishi taxminan qancha?",["24 soat","365 kun","30 kun","12 oy"],0]
+]},
+"Ona tili":{icon:"✍️",questions:[
+["Ot nimani bildiradi?",["Harakat","Belgi","Shaxs va narsa","Miqdor"],2],
+["O'zbek adabiy tilida nechta unli fonema bor?",["5","6","7","8"],1],
+["Fe'l nimani bildiradi?",["Harakat va holat","Narsa","Belgi","Son"],0],
+["Sifat qanday so'roqlarga javob bo'ladi?",["Kim? Nima?","Qanday? Qanaqa?","Necha?","Qachon?"],1],
+["Gapning bosh bo'laklari qaysilar?",["Aniqlovchi va to'ldiruvchi","Ega va kesim","Hol va aniqlovchi","Undalma va kirish so'z"],1],
+["Ravish asosan nimani bildiradi?",["Harakatning belgisini","Shaxsni","Narsani","Miqdor sonni"],0],
+["'Kitoblar' so'zidagi -lar qo'shimchasi nima bildiradi?",["Egalik","Ko'plik","Kelishik","Shaxs"],1]
+]},
+"Huquq":{icon:"⚖️",questions:[
+["Konstitutsiya nima?",["Asosiy qonun","Farmon","Buyruq","Shartnoma"],0],
+["O'zbekiston Respublikasining davlat tili?",["Rus tili","Ingliz tili","O'zbek tili","Tojik tili"],2],
+["Qonun chiqaruvchi oliy davlat vakillik organi?",["Vazirlik","Oliy Majlis","Sud","Hokimlik"],1],
+["O'zbekiston davlat ramzlariga nimalar kiradi?",["Bayroq, gerb, madhiya","Pasport, pul, muhr","Gerb va pasport","Bayroq va xarita"],0],
+["Referendum nima?",["Sud majlisi","Umumxalq ovoz berishi","Vazirlar yig'ilishi","Saylovoldi uchrashuvi"],1],
+["Davlat hokimiyati bo'linishi qaysi tarmoqlarni nazarda tutadi?",["Qonun chiqaruvchi, ijro etuvchi, sud","Faqat sud","Faqat ijro","Mahalliy va xususiy"],0],
+["Inson huquqlari kimga tegishli?",["Faqat fuqarolarga","Har bir insonga","Faqat saylovchilarga","Faqat davlat xizmatchilariga"],1]
+]},
+"Iqtisodiyot":{icon:"📈",questions:[
+["Talab oshsa, boshqa shartlar teng bo'lganda narx odatda?",["Oshadi","Pasayadi","O'zgarmaydi","Yo'qoladi"],0],
+["Inflyatsiya nima?",["Narxlar umumiy darajasining oshishi","Ishsizlik","Eksport","Soliq"],0],
+["Daromad minus xarajat nima?",["Zarar","Foyda","Qarz","Soliq"],1],
+["Bozor iqtisodiyotida narx asosan nimaga bog'liq?",["Talab va taklifga","Faqat ob-havoga","Faqat aholiga","Tasodifga"],0],
+["Eksport nima?",["Tovarni chetdan olib kirish","Tovar va xizmatlarni chetga sotish","Soliq to'lash","Pul almashtirish"],1],
+["Budjet nima?",["Daromad va xarajatlar rejasi","Faqat qarz","Faqat soliq","Faqat eksport"],0],
+["Monopoliya nima?",["Ko'p sotuvchilar bozori","Bitta sotuvchining ustunligi","Erkin raqobat","Xalqaro savdo"],1]
+]},
+"Mantiq":{icon:"🧩",questions:[
+["2, 4, 8, 16, ?",["20","24","32","30"],2],
+["Barcha mushuklar hayvon. Momiq mushuk. Demak?",["Momiq hayvon","Momiq qush","Aniq emas","Momiq o'simlik"],0],
+["1, 1, 2, 3, 5, 8, ?",["10","11","13","15"],2],
+["Agar bugun chorshanba bo'lsa, 10 kundan keyin qaysi kun?",["Juma","Shanba","Yakshanba","Dushanba"],1],
+["Qaysi son boshqalaridan farq qiladi: 2, 3, 5, 9, 11?",["2","3","9","11"],2],
+["5 ta mashina 5 daqiqada 5 ta detal yasasa, 100 ta mashina 100 ta detalni necha daqiqada yasaydi?",["5","20","100","1"],0],
+["Ketma-ketlikni davom ettiring: 3, 6, 12, 24, ?",["30","36","48","42"],2]
+]},
+"Musiqa":{icon:"🎵",questions:[
+["Pianinoda qanday klavishlar bor?",["Oq va qora","Faqat oq","Faqat qora","Ko'k va oq"],0],
+["An'anaviy musiqiy tizimda nechta asosiy nota bor?",["5","6","7","8"],2],
+["Simfonik orkestrni kim boshqaradi?",["Dirijyor","Shoir","Rassom","Aktyor"],0],
+["Skripka qaysi cholg'u oilasiga kiradi?",["Puflama","Torli-kamonli","Zarbli","Klaviaturali"],1],
+["Musiqada temp nimani anglatadi?",["Tovush balandligi","Ijro tezligi","Ovoz rangi","Kuy matni"],1],
+["Pianino qaysi cholg'u turiga kiradi?",["Klaviaturali torli-zarbli","Puflama","Faqat zarbli","Kamonli"],0],
+["Notada 'forte' belgisi nimani bildiradi?",["Sekin","Baland ovozda","Juda tez","To'xtash"],1]
+]}
 };
 
 const rankThresholds=[50,150,300,500,700,1000];
+
 function getRank(exp){
  if(exp>=1000)return "👑 LEGEND";
  if(exp>=700)return "🔥 MASTER";
@@ -317,6 +319,7 @@ function getRank(exp){
  if(exp>=50)return "🥈 SILVER";
  return "🥉 BRONZE";
 }
+
 function updateStats(){
  const exp=Math.max(0,Number(playerData?.exp)||0);
  $("expValue").textContent=exp;
@@ -328,19 +331,38 @@ function updateStats(){
  const target=next||1000;
  $("rankProgress").style.width=(next?Math.max(0,Math.min(100,(exp-previous)/(target-previous)*100)):100)+"%";
 }
+
 function renderSubjects(){
- const box=$("subjects");box.innerHTML="";
+ const box=$("subjects");
+ box.innerHTML="";
  Object.entries(subjectsData).forEach(([name,subject])=>{
-  const el=document.createElement("button");el.type="button";el.className="subject";
-  const icon=document.createElement("div");icon.className="emoji";icon.textContent=subject.icon;
+  const el=document.createElement("button");
+  el.type="button";el.className="subject";
+  const icon=document.createElement("div");
+  icon.className="emoji";icon.textContent=subject.icon;
   const title=document.createElement("b");title.textContent=name;
-  const count=document.createElement("div");count.className="small";count.textContent=subject.questions.length+" ta savol";
-  el.append(icon,title,count);el.addEventListener("click",()=>startQuiz(name));box.appendChild(el);
+  const count=document.createElement("div");
+  count.className="small";count.textContent=subject.questions.length+" ta savol bazada";
+  el.append(icon,title,count);
+  el.addEventListener("click",()=>startQuiz(name));
+  box.appendChild(el);
  });
 }
-function safeEmail(name){return name.trim().toLowerCase().replace(/[^a-z0-9]/g,"")+"@megamiya.local"}
-function setAuthMessage(text,ok=false){$("authMsg").textContent=text;$("authMsg").style.color=ok?"#65edb3":"#ffb6c2"}
-function setAuthBusy(busy){$("registerBtn").disabled=busy;$("loginBtn").disabled=busy}
+
+function safeEmail(name){
+ return name.trim().toLowerCase().replace(/[^a-z0-9]/g,"")+"@megamiya.local";
+}
+
+function setAuthMessage(text,ok=false){
+ $("authMsg").textContent=text;
+ $("authMsg").style.color=ok?"#65edb3":"#ffb6c2";
+}
+
+function setAuthBusy(busy){
+ $("registerBtn").disabled=busy;
+ $("loginBtn").disabled=busy;
+}
+
 function friendlyError(error){
  const map={
   "auth/email-already-in-use":"Bu foydalanuvchi nomi band. Boshqa nom tanlang.",
@@ -355,15 +377,18 @@ function friendlyError(error){
  };
  return map[error?.code]||error?.message||"Noma'lum xatolik yuz berdi.";
 }
+
 function validateAuth(){
  const name=$("username").value.trim(),pass=$("password").value;
  if(name.length<3)return "Ism kamida 3 ta belgidan iborat bo'lsin.";
  if(!/^[a-zA-Z0-9 _.-]+$/.test(name))return "Ismda lotin harflari, raqam, bo'sh joy, nuqta, _ yoki - ishlating.";
- if(pass.length<6)return "Parol kamida 6 ta belgidan iborat bo'lsin.";
+ if(pass.length<6)return "Parol kamida 6 ta belgidan iborat bo'lishi kerak.";
  return "";
 }
+
 async function register(){
- const error=validateAuth();if(error)return setAuthMessage(error);
+ const error=validateAuth();
+ if(error)return setAuthMessage(error);
  setAuthBusy(true);setAuthMessage("Akkaunt yaratilmoqda...",true);
  const name=$("username").value.trim(),pass=$("password").value;
  try{
@@ -375,55 +400,107 @@ async function register(){
  }catch(e){setAuthMessage(friendlyError(e))}
  finally{setAuthBusy(false)}
 }
+
 async function login(){
- const error=validateAuth();if(error)return setAuthMessage(error);
+ const error=validateAuth();
+ if(error)return setAuthMessage(error);
  setAuthBusy(true);setAuthMessage("Akkauntga kirilmoqda...",true);
- try{await auth.signInWithEmailAndPassword(safeEmail($("username").value.trim()),$("password").value)}
- catch(e){setAuthMessage(friendlyError(e))}
+ try{
+  await auth.signInWithEmailAndPassword(safeEmail($("username").value.trim()),$("password").value);
+ }catch(e){setAuthMessage(friendlyError(e))}
  finally{setAuthBusy(false)}
 }
-async function logout(){try{await auth.signOut()}catch(e){alert(friendlyError(e))}}
+
+async function logout(){
+ try{await auth.signOut()}
+ catch(e){alert(friendlyError(e))}
+}
+
 function stopListeners(){
  if(profileUnsubscribe){profileUnsubscribe();profileUnsubscribe=null}
  if(leaderboardUnsubscribe){leaderboardUnsubscribe();leaderboardUnsubscribe=null}
 }
+
 function listenLeaderboard(){
  if(leaderboardUnsubscribe){leaderboardUnsubscribe();leaderboardUnsubscribe=null}
- $("leaderboard").innerHTML='<tr><td colspan="4" class="small">Reyting yuklanmoqda...</td></tr>';
+ $("leaderboard").innerHTML='<tr><td colspan="4">Reyting yuklanmoqda...</td></tr>';
  leaderboardUnsubscribe=db.collection("players").orderBy("exp","desc").limit(100).onSnapshot(snapshot=>{
   const body=$("leaderboard");body.innerHTML="";
-  if(snapshot.empty){body.innerHTML='<tr><td colspan="4">Hozircha o\'yinchilar yo\'q.</td></tr>';return}
+  if(snapshot.empty){
+   body.innerHTML='<tr><td colspan="4">Hozircha o\'yinchilar yo\'q.</td></tr>';
+   return;
+  }
   snapshot.forEach((doc,index)=>{
    const p=doc.data(),tr=document.createElement("tr");
    [index+1,p.name||"O'yinchi",getRank(Number(p.exp)||0),(Number(p.exp)||0)+" EXP"].forEach((value,i)=>{
     const td=document.createElement("td");
-    if(i===2){const pill=document.createElement("span");pill.className="rank-pill";pill.textContent=value;td.appendChild(pill)}
-    else td.textContent=value;
+    if(i===2){
+     const pill=document.createElement("span");
+     pill.className="rank-pill";pill.textContent=value;td.appendChild(pill);
+    }else td.textContent=value;
     tr.appendChild(td);
    });
    body.appendChild(tr);
   });
- },error=>{$("leaderboard").innerHTML=`<tr><td colspan="4">Reyting yuklanmadi: ${friendlyError(error)}</td></tr>`});
+ },error=>{
+  $("leaderboard").innerHTML=`<tr><td colspan="4">Reyting yuklanmadi: ${friendlyError(error)}</td></tr>`;
+ });
 }
+
+function shuffleQuestions(questions){
+ const shuffled=[...questions];
+ for(let i=shuffled.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];
+ }
+ return shuffled;
+}
+
 function startQuiz(subject){
- currentSubject=subject;lastQuizSubject=subject;currentQuestions=subjectsData[subject].questions;
- currentIndex=0;correctCount=0;wrongCount=0;quizExpEarned=0;
- $("resultCard").classList.add("hidden");$("quizCard").classList.remove("hidden");
+ currentSubject=subject;
+ lastQuizSubject=subject;
+ currentQuestions=shuffleQuestions(subjectsData[subject].questions);
+ currentIndex=0;
+ selectedAnswer=-1;
+ answered=false;
+ correctCount=0;
+ wrongCount=0;
+ quizExpEarned=0;
+ questionsAnswered=0;
+ questionHistory=new Set();
+
+ $("resultCard").classList.add("hidden");
+ $("quizCard").classList.remove("hidden");
  $("quizTitle").textContent=subjectsData[subject].icon+" "+subject;
- showQuestion();$("quizCard").scrollIntoView({behavior:"smooth",block:"start"});
+ showQuestion();
+ $("quizCard").scrollIntoView({behavior:"smooth",block:"start"});
 }
+
 function showQuestion(){
- selectedAnswer=-1;answered=false;
- const q=currentQuestions[currentIndex],total=currentQuestions.length;
- $("difficulty").textContent="⚡ "+(currentIndex<2?"BOSHLANG'ICH":currentIndex<5?"O'RTA":"MURAKKAB");
- $("questionCounter").textContent=`${currentIndex+1} / ${total}`;
- $("quizProgress").style.width=((currentIndex+1)/total*100)+"%";
- $("questionText").textContent=q[0];$("feedback").textContent="";
- $("checkBtn").classList.remove("hidden");$("checkBtn").disabled=false;
+ selectedAnswer=-1;
+ answered=false;
+
+ const q=currentQuestions[currentIndex];
+ const stage=questionsAnswered<5?"OSON":
+             questionsAnswered<10?"O'RTA":
+             questionsAnswered<15?"MURAKKAB":"JUDA QIYIN";
+
+ $("difficulty").textContent="⚡ BOSQICH: "+stage;
+ $("questionCounter").textContent=`${questionsAnswered+1} / ∞`;
+ $("quizProgress").style.width=((currentIndex+1)/currentQuestions.length*100)+"%";
+ $("questionText").textContent=q[0];
+ $("feedback").textContent="";
+ $("checkBtn").classList.remove("hidden");
+ $("checkBtn").disabled=false;
  $("nextBtn").classList.add("hidden");
- const box=$("options");box.innerHTML="";
+
+ const box=$("options");
+ box.innerHTML="";
+
  q[1].forEach((answer,index)=>{
-  const button=document.createElement("button");button.type="button";button.className="option";
+  const button=document.createElement("button");
+  button.type="button";
+  button.className="option";
   button.textContent=String.fromCharCode(65+index)+". "+answer;
   button.addEventListener("click",()=>{
    if(answered)return;
@@ -434,64 +511,145 @@ function showQuestion(){
   box.appendChild(button);
  });
 }
+
+async function saveExp(delta){
+ const ref=db.collection("players").doc(currentUser.uid);
+ return db.runTransaction(async transaction=>{
+  const doc=await transaction.get(ref);
+  if(!doc.exists)throw new Error("Foydalanuvchi profili topilmadi.");
+  const oldExp=Math.max(0,Number(doc.data().exp)||0);
+  const newExp=Math.max(0,oldExp+delta);
+  transaction.update(ref,{exp:newExp});
+  return {oldExp,newExp,actualDelta:newExp-oldExp};
+ });
+}
+
 async function checkAnswer(){
  if(selectedAnswer<0)return alert("Avval javob variantini tanlang.");
  if(answered)return;
- answered=true;$("checkBtn").disabled=true;
- const q=currentQuestions[currentIndex],correct=selectedAnswer===q[2];
+
+ answered=true;
+ $("checkBtn").disabled=true;
+ $("options").querySelectorAll(".option").forEach(button=>button.disabled=true);
+
+ const q=currentQuestions[currentIndex];
+ const correct=selectedAnswer===q[2];
+
  $("options").querySelectorAll(".option").forEach((button,index)=>{
-  button.disabled=true;
   if(index===q[2])button.classList.add("correct");
   if(index===selectedAnswer&&!correct)button.classList.add("wrong");
  });
+
+ questionsAnswered++;
+
  if(correct){
-  correctCount++;quizExpEarned++;
-  $("feedback").textContent="🎉 To'g'ri javob! +1 EXP";
+  correctCount++;
+  $("feedback").textContent="🎉 To'g'ri javob! EXP saqlanmoqda...";
   $("feedback").style.color="var(--green)";
-  try{
-   // Demo uchun mijoz tomondan increment. Productionda EXP server/Cloud Functions orqali berilishi shart.
-   await db.collection("players").doc(currentUser.uid).update({exp:firebase.firestore.FieldValue.increment(1)});
-  }catch(e){
-   $("feedback").textContent="Javob to'g'ri, ammo EXP saqlanmadi: "+friendlyError(e);
-   $("feedback").style.color="var(--red)";
-  }
  }else{
-  wrongCount++;$("feedback").textContent="❌ Noto'g'ri. To'g'ri javob: "+q[1][q[2]];
+  wrongCount++;
+  $("feedback").textContent="❌ Noto'g'ri. To'g'ri javob: "+q[1][q[2]];
   $("feedback").style.color="var(--red)";
  }
- $("checkBtn").classList.add("hidden");$("nextBtn").classList.remove("hidden");
- $("nextBtn").textContent=currentIndex===currentQuestions.length-1?"NATIJANI KO'RISH":"KEYINGI SAVOL →";
+
+ try{
+  const result=await saveExp(correct?1:-1);
+  quizExpEarned+=result.actualDelta;
+
+  if(correct){
+   $("feedback").textContent="🎉 To'g'ri javob! +1 EXP";
+  }else if(result.actualDelta===0){
+   $("feedback").textContent="❌ Noto'g'ri. EXP 0 dan pastga tushmaydi. To'g'ri javob: "+q[1][q[2]];
+  }else{
+   $("feedback").textContent="❌ Noto'g'ri. −1 EXP. To'g'ri javob: "+q[1][q[2]];
+  }
+ }catch(error){
+  $("feedback").textContent="EXP saqlanmadi: "+friendlyError(error);
+  $("feedback").style.color="var(--red)";
+ }
+
+ $("nextBtn").classList.remove("hidden");
+ $("nextBtn").textContent="KEYINGI SAVOL →";
+ $("checkBtn").classList.add("hidden");
 }
-function nextQuestion(){currentIndex++;if(currentIndex>=currentQuestions.length){finishQuiz();return}showQuestion()}
+
+function nextQuestion(){
+ currentIndex++;
+
+ if(currentIndex>=currentQuestions.length){
+  const previousQuestion=currentQuestions[currentQuestions.length-1];
+  currentQuestions=shuffleQuestions(subjectsData[currentSubject].questions);
+
+  if(currentQuestions.length>1&&currentQuestions[0][0]===previousQuestion[0]){
+   [currentQuestions[0],currentQuestions[1]]=[currentQuestions[1],currentQuestions[0]];
+  }
+  currentIndex=0;
+ }
+
+ showQuestion();
+}
+
 function finishQuiz(){
  $("quizCard").classList.add("hidden");
- const total=currentQuestions.length,percent=Math.round(correctCount/total*100);
+
+ const total=questionsAnswered;
+ const percent=total?Math.round(correctCount/total*100):0;
+
  $("resultTitle").textContent=currentSubject+" bo'yicha natijangiz";
- $("resultCorrect").textContent=correctCount;$("resultWrong").textContent=wrongCount;$("resultPercent").textContent=percent+"%";
- $("resultExp").textContent=`Siz ${quizExpEarned} EXP to'pladingiz. ${percent>=80?"Ajoyib natija! Davom eting!":percent>=50?"Yaxshi natija. Yana mashq qiling!":"Ko'proq mashq qiling — albatta uddalaysiz!"}`;
- $("resultCard").classList.remove("hidden");$("resultCard").scrollIntoView({behavior:"smooth",block:"center"});
+ $("resultCorrect").textContent=correctCount;
+ $("resultWrong").textContent=wrongCount;
+ $("resultPercent").textContent=percent+"%";
+
+ const sign=quizExpEarned>0?"+":"";
+ $("resultExp").textContent=`Jami ${total} ta savol. Sof EXP: ${sign}${quizExpEarned}. ${percent>=80?"Ajoyib natija!":percent>=50?"Yaxshi natija!":"Ko'proq mashq qiling!"}`;
+
+ $("resultCard").classList.remove("hidden");
+ $("resultCard").scrollIntoView({behavior:"smooth",block:"center"});
 }
-function closeQuiz(){$("quizCard").classList.add("hidden")}
+
+function closeQuiz(){
+ if(questionsAnswered===0){
+  $("quizCard").classList.add("hidden");
+  return;
+ }
+ finishQuiz();
+}
+
 function initFirebase(){
- const missing=Object.values(firebaseConfig).some(v=>String(v).startsWith("BU_YERGA"));
- if(missing){setAuthMessage("Firebase sozlamalari kiritilmagan. firebaseConfig ichidagi 6 ta qiymatni to'ldiring.");return}
  try{
   if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
-  auth=firebase.auth();db=firebase.firestore();
+  auth=firebase.auth();
+  db=firebase.firestore();
+
   auth.onAuthStateChanged(user=>{
-   stopListeners();currentUser=user;playerData=null;
+   stopListeners();
+   currentUser=user;
+   playerData=null;
+
    $("authSection").classList.toggle("hidden",!!user);
    $("appSection").classList.toggle("hidden",!user);
    $("userTop").textContent=user?"🟢 ONLINE":"BILIM • TAJRIBA • G'ALABA";
+
    if(!user)return;
+
    $("welcome").textContent="Xush kelibsiz!";
+
    profileUnsubscribe=db.collection("players").doc(user.uid).onSnapshot(doc=>{
-    if(!doc.exists){$("welcome").textContent="Profil topilmadi";return}
-    playerData=doc.data();$("welcome").textContent="Xush kelibsiz, "+(playerData.name||"O'yinchi")+"!";updateStats();
+    if(!doc.exists){
+     $("welcome").textContent="Profil topilmadi";
+     return;
+    }
+    playerData=doc.data();
+    $("welcome").textContent="Xush kelibsiz, "+(playerData.name||"O'yinchi")+"!";
+    updateStats();
    },error=>alert("Profilni yuklashda xatolik: "+friendlyError(error)));
-   renderSubjects();listenLeaderboard();
+
+   renderSubjects();
+   listenLeaderboard();
   });
- }catch(error){setAuthMessage("Firebase ishga tushmadi: "+friendlyError(error))}
+ }catch(error){
+  setAuthMessage("Firebase ishga tushmadi: "+friendlyError(error));
+ }
 }
 
 $("registerBtn").addEventListener("click",register);
@@ -500,8 +658,14 @@ $("logoutBtn").addEventListener("click",logout);
 $("checkBtn").addEventListener("click",checkAnswer);
 $("nextBtn").addEventListener("click",nextQuestion);
 $("closeQuizBtn").addEventListener("click",closeQuiz);
-$("againBtn").addEventListener("click",()=>{ $("resultCard").classList.add("hidden"); if(lastQuizSubject)startQuiz(lastQuizSubject); });
-$("password").addEventListener("keydown",event=>{if(event.key==="Enter")login()});
+$("againBtn").addEventListener("click",()=>{
+ $("resultCard").classList.add("hidden");
+ if(lastQuizSubject)startQuiz(lastQuizSubject);
+});
+$("password").addEventListener("keydown",event=>{
+ if(event.key==="Enter")login();
+});
+
 renderSubjects();
 initFirebase();
 </script>
